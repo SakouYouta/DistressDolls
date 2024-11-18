@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 83987192}
   - component: {fileID: 83987191}
   - component: {fileID: 83987193}
+  - component: {fileID: 83987194}
   m_Layer: 5
   m_Name: PlayerFieldPanel
   m_TagString: Untagged
@@ -219,6 +220,18 @@ MonoBehaviour:
   m_Spacing: {x: 10, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &83987194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 83987189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33dd66ecd837443488bc3a54a85f1d5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &94132886
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,8 +552,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e903dca0e1aa14a8b30b747e3ab9e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardPrefab: {fileID: 8627652497310613348, guid: 3f24f10433b087643958ceccb9ec60b4, type: 3}
+  cardPrefab: {fileID: 1003898851616374241, guid: 3f24f10433b087643958ceccb9ec60b4, type: 3}
   playerHand: {fileID: 1166110186}
+  enemyHand: {fileID: 1119146779}
   playerField: {fileID: 83987190}
   enemyField: {fileID: 602898718}
 --- !u!4 &580911063
@@ -570,6 +584,7 @@ GameObject:
   - component: {fileID: 602898720}
   - component: {fileID: 602898719}
   - component: {fileID: 602898721}
+  - component: {fileID: 602898722}
   m_Layer: 5
   m_Name: EnemyFieldPanel
   m_TagString: Untagged
@@ -658,6 +673,18 @@ MonoBehaviour:
   m_Spacing: {x: 10, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &602898722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602898717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33dd66ecd837443488bc3a54a85f1d5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &852401513
 GameObject:
   m_ObjectHideFlags: 0
