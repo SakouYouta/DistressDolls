@@ -8,5 +8,6 @@ public class CardEntity : ScriptableObject
 {
     public int cardId;
     public new string name;
+    public string abilty;
     public Sprite icon;
 }

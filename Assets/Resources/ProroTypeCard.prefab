@@ -487,4 +487,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 5848558023643909367}
+  ablityText: {fileID: 4229832358612822673}
   iconImage: {fileID: 2299318056523426464}

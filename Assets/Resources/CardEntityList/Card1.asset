@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardId: 1
   name: first
+  abilty: first
   icon: {fileID: 0}
