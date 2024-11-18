@@ -395,6 +395,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1879706839496121757}
   - component: {fileID: 8734935526851880712}
+  - component: {fileID: 6192686919888856957}
+  - component: {fileID: -454428794634648050}
   m_Layer: 5
   m_Name: ProroTypeCard
   m_TagString: Untagged
@@ -432,3 +434,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8627652497310613348}
   m_CullTransparentMesh: 1
+--- !u!114 &6192686919888856957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8627652497310613348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d8b18373c4a7a841bbeff26e589c944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardParent: {fileID: 0}
+--- !u!225 &-454428794634648050
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8627652497310613348}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
