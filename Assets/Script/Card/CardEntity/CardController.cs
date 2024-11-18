@@ -17,4 +17,9 @@ public class CardController : MonoBehaviour
         model = new CardModel(cardID); // カードデータを生成
         view.Show(model); // 表示
     }
+
+    public void DestroyCard(CardController card)
+    {
+        Destroy(card.gameObject);
+    }
 }
