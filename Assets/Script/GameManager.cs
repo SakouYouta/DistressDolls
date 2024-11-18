@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
 
     public int playerHP, enemyHP;
 
-    bool isPlayerTurn = true; //
+    public bool isPlayerTurn = true; //
     List<int> deck = new List<int>() { 1, 2, 3, 1, 1, 2, 2, 3, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3 };  //
 
     public static GameManager instance;
@@ -44,6 +44,8 @@ public class GameManager : MonoBehaviour
     {
         CardController card = Instantiate(cardPrefab, place);
         card.Init(cardID);
+
+
     }
 
     void DrawCard(Transform hand) // カードを引く
@@ -106,6 +108,10 @@ public class GameManager : MonoBehaviour
         if (enemyFieldCardList.Length < 5)
         {
             CreateCard(1, enemyField);
+
+            // ダメージ処理: 敵カード生成時にプレイヤーのHPを減少させる
+            int damage = 1; // 各カード生成時のダメージ量
+            DecreaseHP(true, damage);
         }
 
         ChangeTurn(); // ターンエンドする
