@@ -397,6 +397,8 @@ GameObject:
   - component: {fileID: 8734935526851880712}
   - component: {fileID: 6192686919888856957}
   - component: {fileID: -454428794634648050}
+  - component: {fileID: 1003898851616374241}
+  - component: {fileID: 264708206610603919}
   m_Layer: 5
   m_Name: ProroTypeCard
   m_TagString: Untagged
@@ -459,3 +461,30 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1003898851616374241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8627652497310613348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88443698d54899c4aaf61ba860d289a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  view: {fileID: 0}
+--- !u!114 &264708206610603919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8627652497310613348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f77a798de7c2b7441b1551c9f9814f9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameText: {fileID: 5848558023643909367}
+  iconImage: {fileID: 2299318056523426464}
