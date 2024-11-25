@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] CardController cardPrefab;
-    [SerializeField] public Transform playerHand,enemyHand, playerField, enemyField;
+    [SerializeField] public Transform playerHand,enemyHand, playerField, enemyField, playerGraveyard, enemyGraveyard;
     [SerializeField] Text playerHPText, enemyHPText;
 
     public int playerHP, enemyHP;
@@ -204,12 +204,15 @@ public class GameManager : MonoBehaviour
 
         // Protectカードによるダメージ軽減
         int damageReduction = 0;
+        bool protectCardUsed = false; // Protectカードが使用されたかを追跡
+
         foreach (CardController card in handCards)
         {
-            // Protectカードがあれば、ダメージ軽減
-            if (card.model.effectType == CardEffectType.Protect)
+            // 最初のProtectカードが見つかればその効果を適用
+            if (card.model.effectType == CardEffectType.Protect && !protectCardUsed)
             {
                 damageReduction += card.model.effectValue; // Protectカードの効果値を軽減に使用
+                protectCardUsed = true; // Protectカードが使用されたとマーク
                 Destroy(card.gameObject); // Protectカードを消費
             }
         }
@@ -242,10 +245,7 @@ public class GameManager : MonoBehaviour
         // HPのUIを更新
         ShowLeaderHP();
     }
-
-
-
-
+    
     public void ShowLeaderHP()
     {
         if (playerHP <= 0)

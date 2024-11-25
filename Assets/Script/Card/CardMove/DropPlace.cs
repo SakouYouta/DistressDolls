@@ -22,7 +22,6 @@ public class DropPlace : MonoBehaviour, IDropHandler
             switch (cardModel.effectType)
             {
                 case CardEffectType.Damage:
-
                     // ダメージ処理
                     int damage = cardModel.effectValue; // effectValue はダメージ量
                     if (isPlayerField)
@@ -38,7 +37,6 @@ public class DropPlace : MonoBehaviour, IDropHandler
                     break;
 
                 case CardEffectType.Protect:
-
                     // 保護処理（仮の処理としてログ出力）
                     Debug.Log("カードの効果: ダメージをおさえる");
                     // ここに保護処理を追加（ダメージを軽減するなど）
@@ -63,6 +61,21 @@ public class DropPlace : MonoBehaviour, IDropHandler
                     Debug.LogWarning("未対応のカード効果");
                     break;
             }
+
+            // カードが使用された後、墓地に移動させる
+            if (isPlayerField)
+            {
+                // プレイヤーフィールドに配置された場合、カードをプレイヤーの墓地に移動
+                cardMovement.transform.SetParent(GameManager.instance.playerGraveyard);
+            }
+            else
+            {
+                // エネミーフィールドに配置された場合、カードをエネミーの墓地に移動
+                cardMovement.transform.SetParent(GameManager.instance.enemyGraveyard);
+            }
+
+            // カードを削除する
+            Destroy(cardMovement.gameObject);
         }
     }
 }
