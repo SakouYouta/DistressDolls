@@ -631,12 +631,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 1003898851616374241, guid: 3f24f10433b087643958ceccb9ec60b4, type: 3}
   playerHand: {fileID: 1166110186}
+  enemyHand: {fileID: 1119146779}
   playerField: {fileID: 83987190}
   enemyField: {fileID: 602898718}
   playerHPText: {fileID: 1892062872}
   enemyHPText: {fileID: 1271187787}
   playerHP: 0
   enemyHP: 0
+  isPlayerTurn: 1
 --- !u!4 &580911063
 Transform:
   m_ObjectHideFlags: 0
@@ -1118,6 +1120,7 @@ GameObject:
   - component: {fileID: 1119146779}
   - component: {fileID: 1119146781}
   - component: {fileID: 1119146780}
+  - component: {fileID: 1119146782}
   m_Layer: 5
   m_Name: EnemyHand
   m_TagString: Untagged
@@ -1182,6 +1185,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1119146778}
   m_CullTransparentMesh: 1
+--- !u!114 &1119146782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1119146778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 120, y: 180}
+  m_Spacing: {x: -5, y: 0}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1 &1141820003
 GameObject:
   m_ObjectHideFlags: 0
@@ -1412,7 +1439,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 120, y: 180}
-  m_Spacing: {x: 10, y: 0}
+  m_Spacing: {x: -5, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &1252830479

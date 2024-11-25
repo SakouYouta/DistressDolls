@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] CardController cardPrefab;
-    [SerializeField] Transform playerHand, playerField, enemyField;
+    [SerializeField] Transform playerHand,enemyHand, playerField, enemyField;
     [SerializeField] Text playerHPText, enemyHPText;
 
     public int playerHP, enemyHP;
@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
         playerHP = 20;
         enemyHP = 20;
 
+        Shuffle();
+
         // 初期手札を配る
         SetStartHand();
 
@@ -40,12 +42,26 @@ public class GameManager : MonoBehaviour
         TurnCalc();
     }
 
+    void Shuffle()
+    {
+        int n = deck.Count;
+
+        while(n > 1)
+        {
+            n--;
+
+            int k = UnityEngine.Random.Range(0, n + 1);
+
+            int temp = deck[k];
+            deck[k] = deck[n];
+            deck[n] = temp;
+        }
+    }
+
     void CreateCard(int cardID, Transform place)
     {
         CardController card = Instantiate(cardPrefab, place);
         card.Init(cardID);
-
-
     }
 
     void DrawCard(Transform hand) // カードを引く
@@ -71,6 +87,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             DrawCard(playerHand);
+            DrawCard(enemyHand);
         }
     }
 
@@ -103,18 +120,35 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Enemyのターン");
 
-        CardController[] enemyFieldCardList = enemyField.GetComponentsInChildren<CardController>();
+        // 敵手札のカードを取得
+        CardController[] enemyHandCardList = enemyHand.GetComponentsInChildren<CardController>();
 
-        if (enemyFieldCardList.Length < 5)
+        // 手札にカードがある場合、1枚をフィールドに移動
+        if (enemyHandCardList.Length > 0)
         {
-            CreateCard(1, enemyField);
+            // 最初のカードを選択（またはランダムなカードでも可）
+            CardController cardToPlay = enemyHandCardList[0];
 
-            // ダメージ処理: 敵カード生成時にプレイヤーのHPを減少させる
-            int damage = 1; // 各カード生成時のダメージ量
-            DecreaseHP(true, damage);
+            // フィールドのスロットが空いているかチェック
+            if (enemyField.childCount < 5) // 最大フィールド数を5と仮定
+            {
+                cardToPlay.transform.SetParent(enemyField); // カードをフィールドに移動
+                //Debug.Log($"敵がカード {cardToPlay.cardID} をフィールドに出しました");
+            }
+            else
+            {
+                Debug.Log("敵フィールドが満杯のためカードをプレイできません");
+            }
         }
 
-        ChangeTurn(); // ターンエンドする
+        // 新しいカードを敵の手札に追加（最大手札数9を超えないようにする）
+        if (enemyHand.childCount < 9)
+        {
+            DrawCard(enemyHand);
+        }
+
+        // ターン終了
+        ChangeTurn();
     }
 
 
