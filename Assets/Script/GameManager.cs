@@ -12,7 +12,18 @@ public class GameManager : MonoBehaviour
     public int playerHP, enemyHP;
     public bool isPlayerTurn = true; 
 
-    List<int> deck = new List<int>() { 43, 44, 45, 43, 44, 45, 44, 43, 49, 49, 49, 49, 49, 53, 53, 53, 53, 53 };  //
+    List<int> deck = new List<int>() {  43, 43, 43,
+                                        44, 44, 44,
+                                        45, 45, 45,
+                                        46, 46, 46,
+                                        47, 47, 47,
+                                        48, 48, 48,
+                                        49, 49, 49,
+                                        50, 50, 50,
+                                        51, 51, 51,
+                                        52, 52, 52,
+                                        53, 53, 53,
+                                        54, 54, 54};  //
 
     public static GameManager instance;
     public void Awake()
