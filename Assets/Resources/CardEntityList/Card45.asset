@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ada679b763bfe2041bae56d6061929da, type: 3}
-  m_Name: Card3
+  m_Name: Card45
   m_EditorClassIdentifier: 
-  cardId: 3
-  name: third
-  abilty: third
+  cardId: 45
+  name: "\u7A81\u6483"
+  abilty: "2\u30C0\u30E1\u30FC\u30B8\u4E0E\u3048\u308B"
   icon: {fileID: 0}
+  effectType: 0
+  effectValue: 2

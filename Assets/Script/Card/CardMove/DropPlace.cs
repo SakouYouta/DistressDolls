@@ -10,23 +10,59 @@ public class DropPlace : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData) // ドロップされた時に行う処理
     {
-        CardMovement card = eventData.pointerDrag.GetComponent<CardMovement>(); // ドラッグしてきた情報からCardMovementを取得
-        if (card != null) // もしカードがあれば、
+        CardMovement cardMovement = eventData.pointerDrag.GetComponent<CardMovement>(); // ドラッグしてきた情報からCardMovementを取得
+        if (cardMovement != null) // もしカードがあれば
         {
-            card.cardParent = this.transform; // カードの親要素を自分（アタッチされてるオブジェクト）にする
-        }
+            cardMovement.cardParent = this.transform; // カードの親要素を自分（アタッチされてるオブジェクト）にする
 
-        // ダメージ処理を呼び出す
-        int damage = 1; // 仮に固定ダメージ1
-        if (isPlayerField)
-        {
-            // プレイヤーフィールドに配置された場合、エネミーにダメージ
-            GameManager.instance.DecreaseHP(false, damage);
-        }
-        else
-        {
-            // エネミーフィールドに配置された場合、プレイヤーにダメージ
-            GameManager.instance.DecreaseHP(true, damage);
+            // カードの効果を取得
+            CardModel cardModel = cardMovement.GetComponent<CardController>().model;
+
+            // カード効果に基づく処理
+            switch (cardModel.effectType)
+            {
+                case CardEffectType.Damage:
+
+                    // ダメージ処理
+                    int damage = cardModel.effectValue; // effectValue はダメージ量
+                    if (isPlayerField)
+                    {
+                        // プレイヤーフィールドに配置された場合、エネミーにダメージ
+                        GameManager.instance.DecreaseHP(false, damage);
+                    }
+                    else
+                    {
+                        // エネミーフィールドに配置された場合、プレイヤーにダメージ
+                        GameManager.instance.DecreaseHP(true, damage);
+                    }
+                    break;
+
+                case CardEffectType.Protect:
+
+                    // 保護処理（仮の処理としてログ出力）
+                    Debug.Log("カードの効果: ダメージをおさえる");
+                    // ここに保護処理を追加（ダメージを軽減するなど）
+                    break;
+
+                case CardEffectType.DrawCard:
+                    // カード引き処理
+                    Debug.Log("カードの効果: カードを引く");
+                    if (isPlayerField)
+                    {
+                        // プレイヤーフィールドに配置された場合、カードを引く
+                        GameManager.instance.DrawCard(GameManager.instance.playerHand);
+                    }
+                    else
+                    {
+                        // エネミーフィールドに配置された場合、カードを引く
+                        GameManager.instance.DrawCard(GameManager.instance.enemyHand);
+                    }
+                    break;
+
+                default:
+                    Debug.LogWarning("未対応のカード効果");
+                    break;
+            }
         }
     }
 }

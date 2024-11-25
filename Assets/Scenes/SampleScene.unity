@@ -631,12 +631,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 1003898851616374241, guid: 3f24f10433b087643958ceccb9ec60b4, type: 3}
   playerHand: {fileID: 1166110186}
+  enemyHand: {fileID: 1119146779}
   playerField: {fileID: 83987190}
   enemyField: {fileID: 602898718}
   playerHPText: {fileID: 1892062872}
   enemyHPText: {fileID: 1271187787}
   playerHP: 0
   enemyHP: 0
+  isPlayerTurn: 1
 --- !u!4 &580911063
 Transform:
   m_ObjectHideFlags: 0

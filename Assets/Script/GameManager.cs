@@ -6,13 +6,13 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] CardController cardPrefab;
-    [SerializeField] Transform playerHand, playerField, enemyField;
+    [SerializeField] public Transform playerHand,enemyHand, playerField, enemyField;
     [SerializeField] Text playerHPText, enemyHPText;
 
     public int playerHP, enemyHP;
+    public bool isPlayerTurn = true; 
 
-    public bool isPlayerTurn = true; //
-    List<int> deck = new List<int>() { 1, 2, 3, 1, 1, 2, 2, 3, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3 };  //
+    List<int> deck = new List<int>() { 43, 44, 45, 43, 44, 45, 44, 43, 49, 49, 49, 49, 49, 53, 53, 53, 53, 53 };  //
 
     public static GameManager instance;
     public void Awake()
@@ -33,11 +33,29 @@ public class GameManager : MonoBehaviour
         playerHP = 20;
         enemyHP = 20;
 
+        //デッキをシャッフル
+        Shuffle();
+
         // 初期手札を配る
         SetStartHand();
 
         // ターンの決定
         TurnCalc();
+    }
+
+    //シャッフル
+    void Shuffle()
+    {
+        int n = deck.Count;
+
+        while (n > 1)
+        {
+            n--;
+            int k = Random.Range(0, n + 1);
+            int temp = deck[k];
+            deck[k] = deck[n];
+            deck[n] = temp;
+        }
     }
 
     void CreateCard(int cardID, Transform place)
@@ -48,7 +66,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    void DrawCard(Transform hand) // カードを引く
+    public void DrawCard(Transform hand) // カードを引く
     {
         // デッキがないなら引かない
         if (deck.Count == 0)
@@ -71,6 +89,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             DrawCard(playerHand);
+            DrawCard(enemyHand);
         }
     }
 
@@ -103,45 +122,129 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Enemyのターン");
 
-        CardController[] enemyFieldCardList = enemyField.GetComponentsInChildren<CardController>();
+        // 敵手札からカードを1枚フィールドにプレイ
+        CardController[] enemyHandCards = enemyHand.GetComponentsInChildren<CardController>();
 
-        if (enemyFieldCardList.Length < 5)
+        if (enemyHandCards.Length > 0 && enemyField.childCount < 5)
         {
-            CreateCard(1, enemyField);
+            // 最初のカードをフィールドに移動
+            CardController cardToPlay = enemyHandCards[0];
+            cardToPlay.transform.SetParent(enemyField);
 
-            // ダメージ処理: 敵カード生成時にプレイヤーのHPを減少させる
-            int damage = 1; // 各カード生成時のダメージ量
-            DecreaseHP(true, damage);
+            // カード効果を適用
+            ApplyCardEffect(cardToPlay.model, false); // 敵のターンなのでfalseを渡す
+
+            Debug.Log($"敵がカード {cardToPlay.model.name} をプレイしました");
         }
 
-        ChangeTurn(); // ターンエンドする
+        // 手札を補充
+        DrawCard(enemyHand);
+
+        // ターン終了
+        ChangeTurn();
+    }
+
+    void ApplyCardEffect(CardModel card, bool isPlayerTurn)
+    {
+        // プレイヤーターンか敵ターンかで適用するカード効果を変える
+        if (isPlayerTurn)
+        {
+            // プレイヤーターンの場合
+            switch (card.effectType)
+            {
+                case CardEffectType.Damage:
+                    DecreaseHP(true, 2); // ダメージ量は仮
+                    break;
+
+                case CardEffectType.Protect:
+                    Debug.Log("プレイヤー: プロテクト効果: 次のダメージを軽減します");
+                    // 防御のロジックを追加
+                    break;
+
+                case CardEffectType.DrawCard:
+                    DrawCard(playerHand);
+                    break;
+
+                default:
+                    Debug.Log("プレイヤー: 未知の効果です");
+                    break;
+            }
+        }
+        else
+        {
+            // 敵ターンの場合
+            switch (card.effectType)
+            {
+                case CardEffectType.Damage:
+                    DecreaseHP(false, 2); // ダメージ量は仮
+                    break;
+
+                case CardEffectType.Protect:
+                    Debug.Log("エネミー: プロテクト効果: 次のダメージを軽減します");
+                    // 防御のロジックを追加
+                    break;
+
+                case CardEffectType.DrawCard:
+                    DrawCard(enemyHand);
+                    break;
+
+                default:
+                    Debug.Log("エネミー: 未知の効果です");
+                    break;
+            }
+        }
     }
 
 
     public void DecreaseHP(bool isPlayer, int damage)
     {
-        if (isPlayer)
+        // プレイヤーまたはエネミーの手札を取得
+        Transform hand = isPlayer ? playerHand : enemyHand;
+        CardController[] handCards = hand.GetComponentsInChildren<CardController>();
+
+        // Protectカードによるダメージ軽減
+        int damageReduction = 0;
+        foreach (CardController card in handCards)
         {
-            playerHP -= damage;
-            Debug.Log($"プレイヤーのHPが {damage} 減少しました: 残りHP {playerHP}");
-            if (playerHP <= 0)
+            // Protectカードがあれば、ダメージ軽減
+            if (card.model.effectType == CardEffectType.Protect)
             {
-                EndGame(false);
+                damageReduction += card.model.effectValue; // Protectカードの効果値を軽減に使用
+                Destroy(card.gameObject); // Protectカードを消費
             }
         }
-        else
+
+        // 最終的なダメージを計算（軽減後）
+        int finalDamage = Mathf.Max(0, damage - damageReduction); // ダメージが0未満にならないようにする
+
+        // スイッチ文内でHPの減少を処理
+        switch (isPlayer)
         {
-            enemyHP -= damage;
-            Debug.Log($"エネミーのHPが {damage} 減少しました: 残りHP {enemyHP}");
-            if (enemyHP <= 0)
-            {
-                EndGame(true);
-            }
+            case true:
+                playerHP -= finalDamage;
+                Debug.Log($"プレイヤーのHPが {finalDamage} 減少しました: 残りHP {playerHP}");
+                if (playerHP <= 0)
+                {
+                    EndGame(false);
+                }
+                break;
+
+            case false:
+                enemyHP -= finalDamage;
+                Debug.Log($"エネミーのHPが {finalDamage} 減少しました: 残りHP {enemyHP}");
+                if (enemyHP <= 0)
+                {
+                    EndGame(true);
+                }
+                break;
         }
 
         // HPのUIを更新
         ShowLeaderHP();
     }
+
+
+
 
     public void ShowLeaderHP()
     {

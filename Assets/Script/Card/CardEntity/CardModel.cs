@@ -9,6 +9,8 @@ public class CardModel
     public string name;
     public string ablity;
     public Sprite icon;
+    public CardEffectType effectType;   // カード効果の種類
+    public int effectValue;             // 効果の値
 
     public CardModel(int cardID)
     {
@@ -18,5 +20,7 @@ public class CardModel
         name = cardEntity.name;
         ablity = cardEntity.abilty;
         icon = cardEntity.icon;
+        effectType = cardEntity.effectType;
+        effectValue = cardEntity.effectValue;
     }
 }
