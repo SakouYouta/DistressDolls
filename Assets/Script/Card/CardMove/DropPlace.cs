@@ -8,20 +8,20 @@ public class DropPlace : MonoBehaviour, IDropHandler
 {
     [SerializeField] private bool isPlayerField; // このフィールドがプレイヤー用かエネミー用か
 
-    public void OnDrop(PointerEventData eventData) // ドロップされた時に行う処理
+    public void OnDrop(PointerEventData eventData)
     {
-        CardMovement cardMovement = eventData.pointerDrag.GetComponent<CardMovement>(); // ドラッグしてきた情報からCardMovementを取得
-        if (cardMovement != null) // もしカードがあれば
+        CardMovement cardMovement = eventData.pointerDrag.GetComponent<CardMovement>();
+        if (cardMovement != null)
         {
             CardModel cardModel = cardMovement.GetComponent<CardController>().model;
 
-            // フィールドの種類とカードの所有者を確認
+            // 所有者チェック: プレイヤーフィールドならプレイヤーのカードのみ、エネミーフィールドならエネミーのカードのみ
             if (isPlayerField && cardModel.isPlayerCard || !isPlayerField && !cardModel.isPlayerCard)
             {
                 // 正しいフィールドにカードを配置
-                cardMovement.cardParent = this.transform; // カードの親要素を自分（アタッチされてるオブジェクト）にする
+                cardMovement.cardParent = this.transform;
 
-                // カード効果に基づく処理
+                // カード効果の適用処理（既存のコード）
                 switch (cardModel.effectType)
                 {
                     case CardEffectType.Damage:
@@ -41,27 +41,48 @@ public class DropPlace : MonoBehaviour, IDropHandler
                         break;
 
                     case CardEffectType.DrawCard:
+                        // カード引き処理
                         Debug.Log("カードの効果: カードを引く");
+                        int drawAmount = cardModel.effectValue; // カード効果の値を引く枚数として使用
                         if (isPlayerField)
                         {
-                            GameManager.instance.DrawCard(GameManager.instance.playerHand);
+                            // プレイヤーフィールドに配置された場合、カードを引く
+                            GameManager.instance.DrawCard(GameManager.instance.playerHand, drawAmount);
                         }
                         else
                         {
-                            GameManager.instance.DrawCard(GameManager.instance.enemyHand);
+                            // エネミーフィールドに配置された場合、カードを引く
+                            GameManager.instance.DrawCard(GameManager.instance.enemyHand, drawAmount);
                         }
                         break;
+
 
                     default:
                         Debug.LogWarning("未対応のカード効果");
                         break;
                 }
+
+                // カードが使用された後、墓地に移動させる
+                if (isPlayerField)
+                {
+                    // プレイヤーフィールドに配置された場合、カードをプレイヤーの墓地に移動
+                    cardMovement.transform.SetParent(GameManager.instance.playerGraveyard);
+                }
+                else
+                {
+                    // エネミーフィールドに配置された場合、カードをエネミーの墓地に移動
+                    cardMovement.transform.SetParent(GameManager.instance.enemyGraveyard);
+                }
+
+                // カードを削除する
+                Destroy(cardMovement.gameObject);
+
             }
             else
             {
-                Debug.LogWarning("このフィールドには配置できません。");
+                Debug.LogWarning("このフィールドにはカードを配置できません。");
             }
         }
-    }
 
+    }
 }
