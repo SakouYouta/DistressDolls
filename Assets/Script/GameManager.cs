@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
                                         51, 51, 51,
                                         52, 52, 52,
                                         53, 53, 53,
-                                        54, 54, 54};  //
+                                        54, 54, 54};  //proto
 
     public static GameManager instance;
     public void Awake()
@@ -74,26 +74,37 @@ public class GameManager : MonoBehaviour
         CardController card = Instantiate(cardPrefab, place);
         card.Init(cardID);
 
-
+        // カードがどちらの所有者かを設定
+        bool isPlayer = (place == playerHand); // プレイヤーの手札に追加する場合はtrue
+        card.model.isPlayerCard = isPlayer;
     }
 
-    public void DrawCard(Transform hand) // カードを引く
+
+    public void DrawCard(Transform hand, int drawAmount = 1) // カードを引く（引く枚数を指定可能）
     {
         // デッキがないなら引かない
         if (deck.Count == 0)
         {
             return;
         }
-        CardController[] playerHandCardList = playerHand.GetComponentsInChildren<CardController>();
 
-        if (playerHandCardList.Length < 9)
+        // 手札のカード数が9未満の場合にカードを引く
+        CardController[] handCardList = hand.GetComponentsInChildren<CardController>();
+        if (handCardList.Length < 9)
         {
-            // デッキの一番上のカードを抜き取り、手札に加える
-            int cardID = deck[0];
-            deck.RemoveAt(0);
-            CreateCard(cardID, hand);
+            // 引く枚数分カードを引く
+            for (int i = 0; i < drawAmount; i++)
+            {
+                if (deck.Count == 0) break; // デッキが空ならそれ以上引かない
+
+                // デッキの一番上のカードを抜き取り、手札に加える
+                int cardID = deck[0];
+                deck.RemoveAt(0);
+                CreateCard(cardID, hand);
+            }
         }
     }
+
 
     void SetStartHand() // 手札を3枚配る
     {
@@ -134,75 +145,42 @@ public class GameManager : MonoBehaviour
         Debug.Log("Enemyのターン");
 
         // 敵手札からカードを1枚フィールドにプレイ
-        CardController[] enemyHandCards = enemyHand.GetComponentsInChildren<CardController>();
+        //CardController[] enemyHandCards = enemyHand.GetComponentsInChildren<CardController>();
 
-        if (enemyHandCards.Length > 0 && enemyField.childCount < 5)
-        {
-            // 最初のカードをフィールドに移動
-            CardController cardToPlay = enemyHandCards[0];
-            cardToPlay.transform.SetParent(enemyField);
-
-            // カード効果を適用
-            ApplyCardEffect(cardToPlay.model, false); // 敵のターンなのでfalseを渡す
-
-            Debug.Log($"敵がカード {cardToPlay.model.name} をプレイしました");
-        }
-
+        //if (enemyHandCards.Length > 0 && enemyField.childCount < 5)
+        //    // 最初のカードをフィールドに移動
+        //    CardController cardToPlay = enemyHandCards[0];
+        //    cardToPlay.transform.SetParent(enemyField);
+        //    // カード効果を適用
+        //    ApplyCardEffect(cardToPlay.model, false); // 敵のターンなのでfalseを渡す
+        //    Debug.Log($"敵がカード {cardToPlay.model.name} をプレイしました");
+        //}
         // 手札を補充
         DrawCard(enemyHand);
-
-        // ターン終了
-        ChangeTurn();
     }
 
     void ApplyCardEffect(CardModel card, bool isPlayerTurn)
     {
-        // プレイヤーターンか敵ターンかで適用するカード効果を変える
-        if (isPlayerTurn)
+        
+        // 敵ターンの場合
+        switch (card.effectType)
         {
-            // プレイヤーターンの場合
-            switch (card.effectType)
-            {
-                case CardEffectType.Damage:
-                    DecreaseHP(true, 2); // ダメージ量は仮
-                    break;
+            case CardEffectType.Damage:
+                DecreaseHP(false, 2); // ダメージ量は仮
+                break;
 
-                case CardEffectType.Protect:
-                    Debug.Log("プレイヤー: プロテクト効果: 次のダメージを軽減します");
-                    // 防御のロジックを追加
-                    break;
+           case CardEffectType.Protect:
+                Debug.Log("エネミー: プロテクト効果: 次のダメージを軽減します");
+                // 防御のロジックを追加
+                break;
 
-                case CardEffectType.DrawCard:
-                    DrawCard(playerHand);
-                    break;
+            case CardEffectType.DrawCard:
+                DrawCard(enemyHand);
+                break;
 
-                default:
-                    Debug.Log("プレイヤー: 未知の効果です");
-                    break;
-            }
-        }
-        else
-        {
-            // 敵ターンの場合
-            switch (card.effectType)
-            {
-                case CardEffectType.Damage:
-                    DecreaseHP(false, 2); // ダメージ量は仮
-                    break;
-
-                case CardEffectType.Protect:
-                    Debug.Log("エネミー: プロテクト効果: 次のダメージを軽減します");
-                    // 防御のロジックを追加
-                    break;
-
-                case CardEffectType.DrawCard:
-                    DrawCard(enemyHand);
-                    break;
-
-                default:
-                    Debug.Log("エネミー: 未知の効果です");
-                    break;
-            }
+            default:
+               Debug.Log("エネミー: 未知の効果です");
+                break;
         }
     }
 

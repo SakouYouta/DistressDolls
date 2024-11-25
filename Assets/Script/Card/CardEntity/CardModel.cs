@@ -11,6 +11,8 @@ public class CardModel
     public Sprite icon;
     public CardEffectType effectType;   // カード効果の種類
     public int effectValue;             // 効果の値
+    public bool isPlayerCard; // true: プレイヤーのカード, false: エネミーのカード
+
 
     public CardModel(int cardID)
     {
