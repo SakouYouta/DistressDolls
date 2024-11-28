@@ -75,7 +75,7 @@ public class DropPlace : MonoBehaviour, IDropHandler
                 }
 
                 // ƒJ[ƒh‚ğíœ‚·‚é
-                Destroy(cardMovement.gameObject);
+                //Destroy(cardMovement.gameObject);
 
             }
             else

@@ -134,8 +134,35 @@ public class GameManager : MonoBehaviour
 
     public void ChangeTurn() // ターンエンドボタンにつける処理
     {
-        isPlayerTurn = !isPlayerTurn; // ターンを逆にする
-        TurnCalc(); // ターンを相手に回す
+        // 現在のターンのカードを墓地に移動
+        if (isPlayerTurn)
+        {
+            EndTurnForAllCards(playerField, playerGraveyard);  // プレイヤーのフィールドからカードを墓地に移動
+        }
+        else
+        {
+            EndTurnForAllCards(enemyField, enemyGraveyard);  // エネミーのフィールドからカードを墓地に移動
+        }
+
+        // ターンを逆にする
+        isPlayerTurn = !isPlayerTurn;
+
+        // ターンの処理を行う
+        TurnCalc();
+    }
+
+    // プレイヤーまたはエネミーのフィールド上の全カードを墓地に移動させるメソッド
+    private void EndTurnForAllCards(Transform field, Transform graveyard)
+    {
+        // フィールド上の全てのカードを取得
+        CardController[] cardsOnField = field.GetComponentsInChildren<CardController>();
+
+        foreach (CardController card in cardsOnField)
+        {
+            // 各カードを墓地に移動させ、再生成する
+            CreateCard(card.model.cardId, graveyard);
+            Destroy(card.gameObject);  // 元のカードを削除
+        }
     }
 
     void PlayerTurn()
@@ -172,7 +199,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    void ApplyCardEffect(CardModel card, bool isPlayerTurn)
+    /*void ApplyCardEffect(CardModel card, bool isPlayerTurn)
     {
         
         // 敵ターンの場合
@@ -196,7 +223,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
-
+    */
 
     public void DecreaseHP(bool isPlayer, int damage)
     {
@@ -247,7 +274,7 @@ public class GameManager : MonoBehaviour
         // HPのUIを更新
         ShowLeaderHP();
     }
-    
+
     public void ShowLeaderHP()
     {
         if (playerHP <= 0)
