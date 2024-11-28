@@ -2,16 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
-
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] CardController cardPrefab;
     [SerializeField] public Transform playerHand,enemyHand, playerField, enemyField, playerGraveyard, enemyGraveyard;
     [SerializeField] Text playerHPText, enemyHPText;
-
-    [SerializeField] private PopupManager popupManager;
 
     public int playerHP, enemyHP;
     public bool isPlayerTurn = true; 
@@ -66,13 +62,12 @@ public class GameManager : MonoBehaviour
         while (n > 1)
         {
             n--;
-            int k = UnityEngine.Random.Range(0, n + 1); // UnityEngine.Random を明示
+            int k = Random.Range(0, n + 1);
             int temp = deck[k];
             deck[k] = deck[n];
             deck[n] = temp;
         }
     }
-
 
     void CreateCard(int cardID, Transform place)
     {
@@ -190,68 +185,57 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
     public void DecreaseHP(bool isPlayer, int damage)
     {
-        // Protectカードが手札にあるか確認
-        List<CardController> protectCards = GetProtectCards(isPlayer);
-        if (protectCards.Count > 0)
-        {
-            // PopupManagerを使って選択処理を依頼
-            popupManager.ShowPopup(protectCards, (selectedCard) =>
-            {
-                // ユーザーがProtectカードを選んだ場合
-                int damageReduction = 0;
-                if (selectedCard != null)
-                {
-                    damageReduction = selectedCard.model.effectValue;
-                    Destroy(selectedCard.gameObject); // 使用したカードを破壊
-                    Debug.Log($"カード「{selectedCard.model.name}」を使用してダメージを軽減しました！");
-                }
-
-                // 軽減後のダメージを計算
-                int finalDamage = Mathf.Max(0, damage - damageReduction);
-                ApplyDamage(isPlayer, finalDamage); // ダメージを適用
-            });
-        }
-        else
-        {
-            // Protectカードがない場合、そのままダメージ適用
-            ApplyDamage(isPlayer, damage);
-        }
-    }
-
-    private List<CardController> GetProtectCards(bool isPlayer)
-    {
+        // プレイヤーまたはエネミーの手札を取得
         Transform hand = isPlayer ? playerHand : enemyHand;
-        List<CardController> protectCards = new List<CardController>();
-        foreach (CardController card in hand.GetComponentsInChildren<CardController>())
+        CardController[] handCards = hand.GetComponentsInChildren<CardController>();
+
+        // Protectカードによるダメージ軽減
+        int damageReduction = 0;
+        bool protectCardUsed = false; // Protectカードが使用されたかを追跡
+
+        foreach (CardController card in handCards)
         {
-            if (card.model.effectType == CardEffectType.Protect)
+            // 最初のProtectカードが見つかればその効果を適用
+            if (card.model.effectType == CardEffectType.Protect && !protectCardUsed)
             {
-                protectCards.Add(card);
+                damageReduction += card.model.effectValue; // Protectカードの効果値を軽減に使用
+                protectCardUsed = true; // Protectカードが使用されたとマーク
+                Destroy(card.gameObject); // Protectカードを消費
             }
         }
-        return protectCards;
-    }
 
-    private void ApplyDamage(bool isPlayer, int finalDamage)
-    {
-        if (isPlayer)
+        // 最終的なダメージを計算（軽減後）
+        int finalDamage = Mathf.Max(0, damage - damageReduction); // ダメージが0未満にならないようにする
+
+        // スイッチ文内でHPの減少を処理
+        switch (isPlayer)
         {
-            playerHP -= finalDamage;
-            Debug.Log($"プレイヤーのHPが {finalDamage} 減少しました: 残りHP {playerHP}");
-            if (playerHP <= 0) EndGame(false);
+            case true:
+                playerHP -= finalDamage;
+                Debug.Log($"プレイヤーのHPが {finalDamage} 減少しました: 残りHP {playerHP}");
+                if (playerHP <= 0)
+                {
+                    EndGame(false);
+                }
+                break;
+
+            case false:
+                enemyHP -= finalDamage;
+                Debug.Log($"エネミーのHPが {finalDamage} 減少しました: 残りHP {enemyHP}");
+                if (enemyHP <= 0)
+                {
+                    EndGame(true);
+                }
+                break;
         }
-        else
-        {
-            enemyHP -= finalDamage;
-            Debug.Log($"エネミーのHPが {finalDamage} 減少しました: 残りHP {enemyHP}");
-            if (enemyHP <= 0) EndGame(true);
-        }
+
+        // HPのUIを更新
         ShowLeaderHP();
     }
-
-
+    
     public void ShowLeaderHP()
     {
         if (playerHP <= 0)

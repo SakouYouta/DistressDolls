@@ -18,7 +18,6 @@ public class CardController : MonoBehaviour
         view.Show(model); // •\Ž¦
     }
 
-
     public void DestroyCard(CardController card)
     {
         Destroy(card.gameObject);
