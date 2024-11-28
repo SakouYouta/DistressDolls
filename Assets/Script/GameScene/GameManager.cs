@@ -8,10 +8,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] CardController cardPrefab;
     [SerializeField] public Transform playerHand,enemyHand, playerField, enemyField, playerGraveyard, enemyGraveyard;
     [SerializeField] Text playerHPText, enemyHPText;
-
     public int playerHP, enemyHP;
-    public bool isPlayerTurn = true; 
+    
+    //ターン管理フラグ
+    public bool isPlayerTurn = true;
+    // Damageカード使用フラグ
+    private bool canUseDamageCard = true;
 
+    //デッキリスト
     List<int> deck = new List<int>() {  43, 43, 43,
                                         44, 44, 44,
                                         45, 45, 45,
@@ -69,7 +73,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void CreateCard(int cardID, Transform place)
+    public void CreateCard(int cardID, Transform place)
     {
         CardController card = Instantiate(cardPrefab, place);
         card.Init(cardID);
@@ -138,12 +142,21 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Playerのターン");
 
+        // ターン開始時にDamageカード使用可フラグをリセット
+        canUseDamageCard = true;
+
         DrawCard(playerHand); // 手札を一枚加える
     }
 
     void EnemyTurn()
     {
         Debug.Log("Enemyのターン");
+
+        // ターン開始時にDamageカード使用可フラグをリセット
+        canUseDamageCard = true;
+
+        // 手札を補充
+        DrawCard(enemyHand);
 
         // 敵手札からカードを1枚フィールドにプレイ
         //CardController[] enemyHandCards = enemyHand.GetComponentsInChildren<CardController>();
@@ -156,8 +169,7 @@ public class GameManager : MonoBehaviour
         //    ApplyCardEffect(cardToPlay.model, false); // 敵のターンなのでfalseを渡す
         //    Debug.Log($"敵がカード {cardToPlay.model.name} をプレイしました");
         //}
-        // 手札を補充
-        DrawCard(enemyHand);
+
     }
 
     void ApplyCardEffect(CardModel card, bool isPlayerTurn)
