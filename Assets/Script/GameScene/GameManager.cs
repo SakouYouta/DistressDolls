@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] CardController cardPrefab;
-    [SerializeField] public Transform playerHand,enemyHand, playerField, enemyField, playerGraveyard, enemyGraveyard;
+    [SerializeField] public Transform playerHand, enemyHand, playerField, enemyField, playerGraveyard, enemyGraveyard;
     [SerializeField] Text playerHPText, enemyHPText;
     public int playerHP, enemyHP;
-    
+
     //ターン管理フラグ
     public bool isPlayerTurn = true;
     // Damageカード使用フラグ
@@ -138,9 +138,11 @@ public class GameManager : MonoBehaviour
         if (isPlayerTurn)
         {
             EndTurnForAllCards(playerField, playerGraveyard);  // プレイヤーのフィールドからカードを墓地に移動
+            EndTurnForAllCards(enemyField, enemyGraveyard);  // エネミーのフィールドからカードを墓地に移動
         }
         else
         {
+            EndTurnForAllCards(playerField, playerGraveyard);  // プレイヤーのフィールドからカードを墓地に移動
             EndTurnForAllCards(enemyField, enemyGraveyard);  // エネミーのフィールドからカードを墓地に移動
         }
 
@@ -229,22 +231,9 @@ public class GameManager : MonoBehaviour
     {
         // プレイヤーまたはエネミーの手札を取得
         Transform hand = isPlayer ? playerHand : enemyHand;
-        CardController[] handCards = hand.GetComponentsInChildren<CardController>();
 
         // Protectカードによるダメージ軽減
-        int damageReduction = 0;
-        bool protectCardUsed = false; // Protectカードが使用されたかを追跡
-
-        foreach (CardController card in handCards)
-        {
-            // 最初のProtectカードが見つかればその効果を適用
-            if (card.model.effectType == CardEffectType.Protect && !protectCardUsed)
-            {
-                damageReduction += card.model.effectValue; // Protectカードの効果値を軽減に使用
-                protectCardUsed = true; // Protectカードが使用されたとマーク
-                Destroy(card.gameObject); // Protectカードを消費
-            }
-        }
+        int damageReduction = ApplyProtectCard(hand);
 
         // 最終的なダメージを計算（軽減後）
         int finalDamage = Mathf.Max(0, damage - damageReduction); // ダメージが0未満にならないようにする
@@ -273,6 +262,40 @@ public class GameManager : MonoBehaviour
 
         // HPのUIを更新
         ShowLeaderHP();
+    }
+
+    // Protectカードを適用するメソッド
+    private int ApplyProtectCard(Transform hand)
+    {
+        int damageReduction = 0;
+        bool protectCardUsed = false; // Protectカードが使用されたかを追跡
+
+        // 手札にあるカードを確認
+        CardController[] handCards = hand.GetComponentsInChildren<CardController>();
+
+
+        foreach (CardController card in handCards)
+        {
+            // 最初のProtectカードが見つかればその効果を適用
+            if (card.model.effectType == CardEffectType.Protect && !protectCardUsed)
+            {
+
+                if (Input.GetKeyDown(KeyCode.Y))
+                {
+                    damageReduction += card.model.effectValue; // Protectカードの効果値を軽減に使用
+                    protectCardUsed = true; // Protectカードが使用されたとマーク
+                    Destroy(card.gameObject); // Protectカードを消費
+                }
+                else if(Input.GetKeyDown(KeyCode.N))
+                {
+                    // ガードカードを使用しない
+                    Debug.Log("Protectカードは使用されませんでした");
+                    protectCardUsed = true; // 使わないときもループを終了
+                }
+            }
+        }
+
+        return damageReduction; // 軽減されたダメージ値を返す
     }
 
     public void ShowLeaderHP()

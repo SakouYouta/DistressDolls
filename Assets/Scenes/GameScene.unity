@@ -460,8 +460,9 @@ GameObject:
   - component: {fileID: 338055458}
   - component: {fileID: 338055460}
   - component: {fileID: 338055459}
+  - component: {fileID: 338055461}
   m_Layer: 5
-  m_Name: Panel (1)
+  m_Name: playerGraveyard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -524,6 +525,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 338055457}
   m_CullTransparentMesh: 1
+--- !u!114 &338055461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338055457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 120, y: 180}
+  m_Spacing: {x: -80, y: 0}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1 &487577166
 GameObject:
   m_ObjectHideFlags: 0
@@ -709,8 +734,8 @@ MonoBehaviour:
   enemyHand: {fileID: 1119146779}
   playerField: {fileID: 83987190}
   enemyField: {fileID: 602898718}
-  playerGraveyard: {fileID: 1547191419}
-  enemyGraveyard: {fileID: 338055458}
+  playerGraveyard: {fileID: 338055458}
+  enemyGraveyard: {fileID: 1547191419}
   playerHPText: {fileID: 1892062872}
   enemyHPText: {fileID: 1271187787}
   playerHP: 0
@@ -1762,8 +1787,9 @@ GameObject:
   - component: {fileID: 1547191419}
   - component: {fileID: 1547191421}
   - component: {fileID: 1547191420}
+  - component: {fileID: 1547191422}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: enemyGraveyard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1826,6 +1852,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1547191418}
   m_CullTransparentMesh: 1
+--- !u!114 &1547191422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1547191418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 120, y: 180}
+  m_Spacing: {x: 0, y: 0}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1 &1892062870
 GameObject:
   m_ObjectHideFlags: 0
