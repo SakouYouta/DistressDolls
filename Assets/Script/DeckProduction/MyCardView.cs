@@ -6,7 +6,7 @@ using Debug = UnityEngine.Debug;
 
 public class MyCardView : MonoBehaviour
 {
-    [SerializeField] CardController cardPrefab;
+    [SerializeField] private CardController cardPrefab;
     [SerializeField] private Transform panel; // Panel
 
     public void DisplayCards(List<int> cardIds)
