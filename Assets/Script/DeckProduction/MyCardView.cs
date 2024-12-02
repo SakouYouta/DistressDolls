@@ -14,7 +14,7 @@ public class MyCardView : MonoBehaviour
         foreach (int cardID in cardIds)
         {
             CardController card = Instantiate(cardPrefab, panel);
-            card.Init(cardID);
+            card.Init(cardID);// カードを表示
         }
     }
 }
