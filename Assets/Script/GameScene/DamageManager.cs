@@ -10,7 +10,6 @@ public class DamageManager : MonoBehaviour
     private int pendingDamage = 0; // ダメージ値
     private int damageReduction = 0; // 保護カードによる軽減値
     private bool pendingDamageIsPlayer; // ダメージ対象がプレイヤーかエネミーか
-
     private float responseTimer = 0f; // ガードカード応答タイマー
     private float guardResponseTime = 5f; // ガードカード応答時間（5秒）
     private bool guardApplied = false; // ガードが適用されたかどうかのフラグ
@@ -22,7 +21,7 @@ public class DamageManager : MonoBehaviour
         instance = this;
     }
 
-    //ダメージカードが使われたらガードカードを待つタイマーをスタートさせる
+    #region StartDamageProcess() - ダメージカードが使われたらガードカードを待つタイマーをスタートさせる
     public void StartDamageProcess(bool isPlayerTarget, int damage)
     {
         // すでにダメージプロセスが進行中の場合は無視
@@ -41,8 +40,9 @@ public class DamageManager : MonoBehaviour
         // タイマーの監視を開始
         StartCoroutine(DamageCountdown());
     }
+    #endregion
 
-    //相手がガードカードを使うかの処理
+    #region UseProtectCard() - 相手がガードカードを使うかの処理
     public void UseProtectCard(int protectValue)
     {
         // ダメージプロセスが進行中かつ応答時間内の場合のみ適用可能
@@ -57,8 +57,9 @@ public class DamageManager : MonoBehaviour
             Debug.LogWarning("ガードカードの応答時間を超過しました。軽減は適用されません。");
         }
     }
+    #endregion
 
-    //ガードカードが待機時間が終了したのちダメージ処理に移動
+    #region DamageCountdown() - ガードカードが待機時間が終了したのちダメージ処理に移動
     private IEnumerator DamageCountdown()
     {
         while (responseTimer > 0)
@@ -71,11 +72,22 @@ public class DamageManager : MonoBehaviour
         ApplyDamage();
         damageProcessActive = false; // ダメージプロセス終了
     }
+    #endregion
 
-    // ダメージの適用
+    #region ApplyDamage() - ダメージの適用
     private void ApplyDamage()
     {
         int finalDamage = Mathf.Max(pendingDamage - damageReduction, 0); // 最終ダメージ計算
+
+        // ガード適用状況をログ出力
+        if (guardApplied)
+        {
+            Debug.Log("ガードが成功し、ダメージが軽減されました。");
+        }
+        else
+        {
+            Debug.Log("ガードが適用されず、ダメージがそのまま適用されます。");
+        }
 
         Debug.Log($"最終ダメージ計算: 元のダメージ {pendingDamage}, 軽減値 {damageReduction}, 最終ダメージ {finalDamage}");
 
@@ -91,4 +103,5 @@ public class DamageManager : MonoBehaviour
         // HPの表示を更新
         GameManager.instance.ShowLeaderHP();
     }
+    #endregion
 }

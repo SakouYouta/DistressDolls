@@ -5,20 +5,14 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    //フィールドの宣言
     [SerializeField] CardController cardPrefab;
     [SerializeField] public Transform playerHand, enemyHand, playerField, enemyField, playerGraveyard, enemyGraveyard;
     [SerializeField] Text playerHPText, enemyHPText;
     public int playerHP, enemyHP;
-
-    //ターン管理フラグ
     public bool isPlayerTurn = true;
     public bool canUseDamageCardThisTurn = true;
-
-    //デッキリスト（仮）
-    // デッキリスト（プレイヤー用、エネミー用）
-    public List<int> playerDeck;
-    public List<int> enemyDeck;
-
+    public List<int> playerDeck, enemyDeck;
     public static GameManager instance;
 
     // Awake() - インスタンスの初期化
@@ -30,17 +24,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    #region Start() - ゲーム開始時の初期設定を行う
     void Start()
     {
-        StartGame(); // ゲーム開始時の初期設定を行う
+        StartGame();
     }
+    #endregion
 
-    // StartGame() - ゲーム開始時の初期設定
+    #region StartGame() - ゲーム開始時の初期設定
     void StartGame()
     {
+        // デッキの初期化
         playerDeck = new List<int>() { 43, 43, 43, 44, 44, 44, 45, 45, 45, 46, 46, 46, 47, 47, 47, 48, 48, 48, 49, 49, 49, 50, 50, 50, 51, 51, 51, 52, 52, 52, 53, 53, 53, 54, 54, 54 };
         enemyDeck = new List<int>() { 43, 43, 43, 44, 44, 44, 45, 45, 45, 46, 46, 46, 47, 47, 47, 48, 48, 48, 49, 49, 49, 50, 50, 50, 51, 51, 51, 52, 52, 52, 53, 53, 53, 54, 54, 54 };
 
+        // プレイヤーと敵のHP初期値
         playerHP = 20;
         enemyHP = 20;
 
@@ -51,11 +49,12 @@ public class GameManager : MonoBehaviour
         // 初期手札を配布
         SetStartHand();
 
-        // ターン計算
+        // ターン計算を開始
         TurnCalc();
     }
+    #endregion
 
-    // Shuffle() - デッキをシャッフルする
+    #region Shuffle() - デッキをシャッフルする
     void Shuffle(List<int> deck)
     {
         int n = deck.Count;
@@ -69,8 +68,9 @@ public class GameManager : MonoBehaviour
             deck[n] = temp;
         }
     }
+    #endregion
 
-    // CreateCard() - カードを生成して指定された場所に配置する
+    #region  CreateCard() - カードを生成して指定された場所に配置する
     public void CreateCard(int cardID, Transform place)
     {
         CardController card = Instantiate(cardPrefab, place); // カードをインスタンス化
@@ -79,8 +79,9 @@ public class GameManager : MonoBehaviour
         bool isPlayer = (place == playerHand); // プレイヤーかどうかを判定
         card.model.isPlayerCard = isPlayer;
     }
+    #endregion
 
-    // DrawCard() - 手札にカードを引く処理
+    #region DrawCard() - 手札にカードを引く処理
     public void DrawCard(Transform hand, List<int> deck, int drawAmount = 1)
     {
         if (deck.Count == 0) return; // デッキが空なら引かない
@@ -98,8 +99,9 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    #endregion
 
-    // SetStartHand() - 初期手札を3枚配布する
+    #region SetStartHand() - 初期手札を3枚配布する
     void SetStartHand()
     {
         for (int i = 0; i < 3; i++)
@@ -108,8 +110,9 @@ public class GameManager : MonoBehaviour
             DrawCard(enemyHand, enemyDeck);
         }
     }
+    #endregion
 
-    // TurnCalc() - プレイヤーまたは敵のターンを計算し、それぞれのターンを実行する
+    #region  TurnCalc() - プレイヤーまたは敵のターンを計算し、それぞれのターンを実行する
     void TurnCalc()
     {
         if (isPlayerTurn)
@@ -121,22 +124,23 @@ public class GameManager : MonoBehaviour
             EnemyTurn(); // 敵のターンを開始
         }
     }
+    #endregion
 
-    // ChangeTurn() - ターンを終了し、次のターンに切り替える
+    #region ChangeTurn() - ターンを終了し、次のターンに切り替える
     public void ChangeTurn()
     {
-        
         EndTurnForAllCards(playerField, playerGraveyard);  // プレイヤーのフィールドからカードを墓地に移動
         EndTurnForAllCards(enemyField, enemyGraveyard);  // エネミーのフィールドからカードを墓地に移動
-        
+
         // ターンを逆にする
         isPlayerTurn = !isPlayerTurn;
 
         // 次のターンの処理を実行
         TurnCalc();
     }
+    #endregion
 
-    // EndTurnForAllCards() - フィールド上のカードを全て墓地に移動させる
+    #region EndTurnForAllCards() - フィールド上のカードを全て墓地に移動させる
     public void EndTurnForAllCards(Transform field, Transform graveyard)
     {
         CardController[] cardsOnField = field.GetComponentsInChildren<CardController>();
@@ -147,8 +151,9 @@ public class GameManager : MonoBehaviour
             Destroy(card.gameObject);  // 元のカードを削除
         }
     }
+    #endregion
 
-    // PlayerTurn() - プレイヤーのターンを開始する
+    #region  PlayerTurn() - プレイヤーのターンを開始する
     void PlayerTurn()
     {
         Debug.Log("Playerのターン");
@@ -157,19 +162,20 @@ public class GameManager : MonoBehaviour
 
         DrawCard(playerHand, playerDeck); // 手札を1枚加える
     }
+    #endregion
 
-    // EnemyTurn() - 敵のターンを開始する
+    #region EnemyTurn() - 敵のターンを開始する
     void EnemyTurn()
     {
         Debug.Log("Enemyのターン");
 
-        // ターン開始時にDamageカード使用可フラグをリセット
         canUseDamageCardThisTurn = true;
 
         DrawCard(enemyHand, enemyDeck); // 敵の手札を1枚加える
     }
+    #endregion
 
-    // DecreaseHP() - ダメージを受けた場合のHPを減らす処理
+    #region DecreaseHP() - ダメージを受けた場合のHPを減らす処理
     public void DecreaseHP(bool isPlayer, int damage)
     {
         if (isPlayer)
@@ -182,8 +188,9 @@ public class GameManager : MonoBehaviour
         }
         ShowLeaderHP();
     }
+    #endregion
 
-    // ShowLeaderHP() - プレイヤーと敵のHPをUIに表示する
+    #region ShowLeaderHP() - プレイヤーと敵のHPをUIに表示する
     public void ShowLeaderHP()
     {
         if (playerHP <= 0) playerHP = 0;
@@ -192,8 +199,9 @@ public class GameManager : MonoBehaviour
         playerHPText.text = playerHP.ToString();
         enemyHPText.text = enemyHP.ToString();
     }
+    #endregion
 
-    // EndGame() - ゲーム終了処理
+    #region  EndGame() - ゲーム終了処理
     private void EndGame(bool isPlayerWinner)
     {
         if (isPlayerWinner)
@@ -207,4 +215,5 @@ public class GameManager : MonoBehaviour
 
         // 必要ならリスタートやシーン遷移処理を追加
     }
+    #endregion
 }
