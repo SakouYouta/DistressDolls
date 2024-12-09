@@ -15,7 +15,9 @@ public class GameManager : MonoBehaviour
     public bool canUseDamageCardThisTurn = true;
 
     //デッキリスト（仮）
-    List<int> deck = new List<int>() { 43, 43, 43, 44, 44, 44, 45, 45, 45, 46, 46, 46, 47, 47, 47, 48, 48, 48, 49, 49, 49, 50, 50, 50, 51, 51, 51, 52, 52, 52, 53, 53, 53, 54, 54, 54 };
+    // デッキリスト（プレイヤー用、エネミー用）
+    public List<int> playerDeck;
+    public List<int> enemyDeck;
 
     public static GameManager instance;
 
@@ -36,11 +38,15 @@ public class GameManager : MonoBehaviour
     // StartGame() - ゲーム開始時の初期設定
     void StartGame()
     {
+        playerDeck = new List<int>() { 43, 43, 43, 44, 44, 44, 45, 45, 45, 46, 46, 46, 47, 47, 47, 48, 48, 48, 49, 49, 49, 50, 50, 50, 51, 51, 51, 52, 52, 52, 53, 53, 53, 54, 54, 54 };
+        enemyDeck = new List<int>() { 43, 43, 43, 44, 44, 44, 45, 45, 45, 46, 46, 46, 47, 47, 47, 48, 48, 48, 49, 49, 49, 50, 50, 50, 51, 51, 51, 52, 52, 52, 53, 53, 53, 54, 54, 54 };
+
         playerHP = 20;
         enemyHP = 20;
 
         // デッキシャッフル
-        Shuffle();
+        Shuffle(playerDeck);
+        Shuffle(enemyDeck);
 
         // 初期手札を配布
         SetStartHand();
@@ -50,7 +56,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Shuffle() - デッキをシャッフルする
-    void Shuffle()
+    void Shuffle(List<int> deck)
     {
         int n = deck.Count;
 
@@ -75,7 +81,7 @@ public class GameManager : MonoBehaviour
     }
 
     // DrawCard() - 手札にカードを引く処理
-    public void DrawCard(Transform hand, int drawAmount = 1)
+    public void DrawCard(Transform hand, List<int> deck, int drawAmount = 1)
     {
         if (deck.Count == 0) return; // デッキが空なら引かない
 
@@ -98,8 +104,8 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            DrawCard(playerHand);
-            DrawCard(enemyHand);
+            DrawCard(playerHand, playerDeck);
+            DrawCard(enemyHand, enemyDeck);
         }
     }
 
@@ -149,7 +155,7 @@ public class GameManager : MonoBehaviour
 
         canUseDamageCardThisTurn = true;
 
-        DrawCard(playerHand); // 手札を1枚加える
+        DrawCard(playerHand, playerDeck); // 手札を1枚加える
     }
 
     // EnemyTurn() - 敵のターンを開始する
@@ -160,7 +166,7 @@ public class GameManager : MonoBehaviour
         // ターン開始時にDamageカード使用可フラグをリセット
         canUseDamageCardThisTurn = true;
 
-        DrawCard(enemyHand); // 敵の手札を1枚加える
+        DrawCard(enemyHand, enemyDeck); // 敵の手札を1枚加える
     }
 
     // DecreaseHP() - ダメージを受けた場合のHPを減らす処理

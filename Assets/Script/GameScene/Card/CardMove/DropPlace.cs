@@ -85,12 +85,12 @@ public class DropPlace : MonoBehaviour, IDropHandler
 
         if (isPlayerField)
         {
-            GameManager.instance.DrawCard(GameManager.instance.playerHand, drawAmount);
+             GameManager.instance.DrawCard(GameManager.instance.playerHand,GameManager.instance.playerDeck, drawAmount);
             GameManager.instance.EndTurnForAllCards(GameManager.instance.playerField, GameManager.instance.playerGraveyard);
         }
         else
         {
-            GameManager.instance.DrawCard(GameManager.instance.enemyHand, drawAmount);
+            GameManager.instance.DrawCard(GameManager.instance.enemyHand, GameManager.instance.enemyDeck, drawAmount);
             GameManager.instance.EndTurnForAllCards(GameManager.instance.enemyField, GameManager.instance.enemyGraveyard);
 
         }

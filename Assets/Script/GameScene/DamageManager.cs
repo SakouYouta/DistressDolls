@@ -11,55 +11,84 @@ public class DamageManager : MonoBehaviour
     private int damageReduction = 0; // 保護カードによる軽減値
     private bool pendingDamageIsPlayer; // ダメージ対象がプレイヤーかエネミーか
 
+    private float responseTimer = 0f; // ガードカード応答タイマー
+    private float guardResponseTime = 5f; // ガードカード応答時間（5秒）
+    private bool guardApplied = false; // ガードが適用されたかどうかのフラグ
+    private bool damageProcessActive = false; // ダメージプロセスが進行中かどうか
+
+
     void Awake()
     {
         instance = this;
     }
 
-    // ダメージ処理の開始
+    //ダメージカードが使われたらガードカードを待つタイマーをスタートさせる
     public void StartDamageProcess(bool isPlayerTarget, int damage)
     {
+        // すでにダメージプロセスが進行中の場合は無視
+        if (damageProcessActive) return;
+
+        // 初期化
         pendingDamageIsPlayer = isPlayerTarget;
         pendingDamage = damage;
+        responseTimer = guardResponseTime; // 応答時間をリセット
+        guardApplied = false; // ガード未適用に設定
+        damageReduction = 0; // 軽減値もリセット
+        damageProcessActive = true; // ダメージプロセスをアクティブに設定
 
-        // ダメージの軽減を適用（プロテクトカードがある場合）
+        Debug.Log($"ダメージプロセス開始: 対象は {(isPlayerTarget ? "プレイヤー" : "敵")}、ダメージ {damage}");
+
+        // タイマーの監視を開始
+        StartCoroutine(DamageCountdown());
+    }
+
+    //相手がガードカードを使うかの処理
+    public void UseProtectCard(int protectValue)
+    {
+        // ダメージプロセスが進行中かつ応答時間内の場合のみ適用可能
+        if (damageProcessActive && responseTimer > 0)
+        {
+            damageReduction = protectValue; // ガード効果を設定
+            guardApplied = true; // ガード適用をマーク
+            Debug.Log($"ガードカード適用: {protectValue} ポイント軽減");
+        }
+        else
+        {
+            Debug.LogWarning("ガードカードの応答時間を超過しました。軽減は適用されません。");
+        }
+    }
+
+    //ガードカードが待機時間が終了したのちダメージ処理に移動
+    private IEnumerator DamageCountdown()
+    {
+        while (responseTimer > 0)
+        {
+            responseTimer -= Time.deltaTime; // タイマーを減少
+            yield return null;
+        }
+
+        // タイマー終了後にダメージ適用
         ApplyDamage();
+        damageProcessActive = false; // ダメージプロセス終了
     }
 
     // ダメージの適用
     private void ApplyDamage()
     {
-        // ダメージ軽減があれば適用
-        int finalDamage = Mathf.Max(pendingDamage - damageReduction, 0); // ダメージが負にならないように調整
+        int finalDamage = Mathf.Max(pendingDamage - damageReduction, 0); // 最終ダメージ計算
 
-        // デバッグ: 軽減値が適用されているかを確認
-        Debug.Log($"適用前のダメージ: {pendingDamage}, 軽減値: {damageReduction}, 最終ダメージ: {finalDamage}");
+        Debug.Log($"最終ダメージ計算: 元のダメージ {pendingDamage}, 軽減値 {damageReduction}, 最終ダメージ {finalDamage}");
 
-        // ダメージ処理
         if (pendingDamageIsPlayer)
         {
-            // プレイヤーのHPを減少
             GameManager.instance.DecreaseHP(true, finalDamage);
         }
         else
         {
-            // 敵のHPを減少
             GameManager.instance.DecreaseHP(false, finalDamage);
         }
 
         // HPの表示を更新
         GameManager.instance.ShowLeaderHP();
-
-        // 軽減値をリセット（次のターンで再度設定されるまで無効化）
-        damageReduction = 0;
-    }
-
-    // 保護カードの適用（プロテクト効果を設定）
-    public void UseProtectCard(int protectValue)
-    {
-        // 保護カードによる軽減
-        damageReduction = protectValue;
-        Debug.Log($"保護カードが適用され、ダメージが {protectValue} ポイント軽減されます。");
     }
 }
-
