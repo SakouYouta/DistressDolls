@@ -5,12 +5,13 @@ public class DeckProduction : MonoBehaviour
 {
     [SerializeField] private MyCardView cardView;
     [SerializeField] private SetDeck setDeck;
-    List<int> DebugCardID = new List<int> { 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53 };// 仮のリスト
     List<int> DeckRegister = new List<int>();// デッキの保存用リスト
+    List<int> PossessionCard = new List<int>();// 自分の持っているカード
 
     void Start()
     {
-        cardView.DisplayCards(DebugCardID);    
+        PossessionCard = JsonSaveManager.LoadPossessionCard();
+        cardView.DisplayCards(PossessionCard);    
     }
 
     void Update()
@@ -21,7 +22,7 @@ public class DeckProduction : MonoBehaviour
     // デッキを保存する関数
     public void SaveDeck()
     {
-        DeckRegister = setDeck.GetDeck();
+        DeckRegister = setDeck.GetDeck();// 仮登録のデッキを持ってくる
         Debug.Log("デッキリスト：" + string.Join(", ", DeckRegister));
         JsonSaveManager.SaveDeckList(DeckRegister);
     }
