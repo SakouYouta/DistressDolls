@@ -10,7 +10,7 @@ public class DeckProduction : MonoBehaviour
 
     void Start()
     {
-        PossessionCard = JsonSaveManager.LoadPossessionCard();
+        PossessionCard = DataSaveManager.LoadPossessionCard();
         cardView.DisplayCards(PossessionCard);    
     }
 
@@ -24,11 +24,11 @@ public class DeckProduction : MonoBehaviour
     {
         DeckRegister = setDeck.GetDeck();// 仮登録のデッキを持ってくる
         Debug.Log("デッキリスト：" + string.Join(", ", DeckRegister));
-        JsonSaveManager.SaveDeckList(DeckRegister);
+        DataSaveManager.SaveDeckList(DeckRegister);
     }
 
     public void ReadDeck()
     {
-        JsonSaveManager.LoadDeckList();
+        DataSaveManager.LoadDeckList();
     }
 }

@@ -15,12 +15,8 @@ public class SetDeck : MonoBehaviour, IDropHandler
             if (cardController != null)
             {
                 CardModel cardModel = cardController.model;
-                if (cardModel != null)
-                {
-                    // カードIDを登録
+                if (cardModel != null)// カードIDを登録
                     deck.Add(cardModel.cardId);
-                    //Debug.Log("デッキリスト：" + string.Join(", ", deck));
-                }
                 else
                     Debug.LogError("カードモデル情報の取得に失敗しました");
             }

@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-public static class JsonSaveManager
+public static class DataSaveManager
 {
     private static string DeckFilePath = Application.streamingAssetsPath + "/SaveData.csv";                         // デッキのファイルパス
     private static string PossessionCardFilePath = Application.streamingAssetsPath + "/PossessionCard.csv"; // 所持カードのファイルパス
