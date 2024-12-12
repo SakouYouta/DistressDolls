@@ -19,16 +19,24 @@ public class CardManager : MonoBehaviour
     {
         switch (cardModel.effectType)
         {
+            //ダメージカード処理
             case CardEffectType.Damage:
                 ApplyDamage(cardModel.effectValue, isPlayerField);
                 break;
 
+                //
             case CardEffectType.Protect:
                 ApplyProtect(cardModel.effectValue, isPlayerField);
                 break;
 
+                //
             case CardEffectType.DrawCard:
                 ApplyDrawCard(cardModel.effectValue, isPlayerField);
+                break;
+
+                //
+            case CardEffectType.Researcher:
+                ApplyResearcher(cardModel.effectValue, isPlayerField);
                 break;
 
             default:
@@ -75,6 +83,13 @@ public class CardManager : MonoBehaviour
             GameManager.instance.DrawCard(GameManager.instance.enemyHand, GameManager.instance.enemyDeck, drawAmount);
             GameManager.instance.EndTurnForAllCards(GameManager.instance.enemyField, GameManager.instance.enemyGraveyard);
         }
+    }
+    #endregion
+
+    #region ApplyResearcher() - 研究者の固有能力の処理
+    private void ApplyResearcher(int drawAmount, bool isPlayerField)
+    {
+
     }
     #endregion
 }
