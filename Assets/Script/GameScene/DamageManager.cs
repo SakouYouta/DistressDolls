@@ -27,15 +27,22 @@ public class DamageManager : MonoBehaviour
         // すでにダメージプロセスが進行中の場合は無視
         if (damageProcessActive) return;
 
+        // 次の攻撃ボーナスを適用
+        int bonusDamage = isPlayerTarget ? CardManager.instance.enemyNextAttackBonus : CardManager.instance.playerNextAttackBonus;
+        int totalDamage = damage + bonusDamage;
+
         // 初期化
         pendingDamageIsPlayer = isPlayerTarget;
-        pendingDamage = damage;
+        pendingDamage = totalDamage;
         responseTimer = guardResponseTime; // 応答時間をリセット
         guardApplied = false; // ガード未適用に設定
         damageReduction = 0; // 軽減値もリセット
         damageProcessActive = true; // ダメージプロセスをアクティブに設定
 
-        Debug.Log($"ダメージプロセス開始: 対象は {(isPlayerTarget ? "プレイヤー" : "敵")}、ダメージ {damage}");
+        Debug.Log($"ダメージプロセス開始: 対象は {(isPlayerTarget ? "プレイヤー" : "敵")}、ダメージ {totalDamage}");
+
+        // 次の攻撃ボーナスをリセット
+        ResetNextAttackBonus(isPlayerTarget);
 
         // タイマーの監視を開始
         StartCoroutine(DamageCountdown());
@@ -102,6 +109,22 @@ public class DamageManager : MonoBehaviour
 
         // HPの表示を更新
         GameManager.instance.ShowLeaderHP();
+    }
+    #endregion
+
+    #region ResetNextAttackBonus() - 次の攻撃ボーナスをリセット
+    private void ResetNextAttackBonus(bool isPlayerTarget)
+    {
+        if (isPlayerTarget)
+        {
+            CardManager.instance.enemyNextAttackBonus = 0;
+            Debug.Log("敵の次の攻撃ボーナスがリセットされました");
+        }
+        else
+        {
+            CardManager.instance.playerNextAttackBonus = 0;
+            Debug.Log("プレイヤーの次の攻撃ボーナスがリセットされました");
+        }
     }
     #endregion
 }
