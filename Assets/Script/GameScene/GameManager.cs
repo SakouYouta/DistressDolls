@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class GameManager : MonoBehaviour
 {
@@ -165,15 +166,26 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region EnemyTurn() - 敵のターンを開始する
-    void EnemyTurn()
+    private async void EnemyTurn()
     {
         Debug.Log("Enemyのターン");
 
+        // ダメージカードの使用可能フラグをリセット
         canUseDamageCardThisTurn = true;
 
-        DrawCard(enemyHand, enemyDeck); // 敵の手札を1枚加える
+        // 1. 敵がカードを引く
+        DrawCard(enemyHand, enemyDeck);
+        await Task.Delay(1000); // 1秒待つ
+
+        // 2. 敵がカードを使用する
+        EnemyAiManager.instance.PerformAiActions();
+        await Task.Delay(1000); // 1秒待つ
+
+        // 3. ターンの切り替え
+        ChangeTurn();
     }
     #endregion
+
 
     #region DecreaseHP() - ダメージを受けた場合のHPを減らす処理
     public void DecreaseHP(bool isPlayer, int damage)
