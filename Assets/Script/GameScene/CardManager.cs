@@ -5,9 +5,12 @@ using UnityEngine;
 public class CardManager : MonoBehaviour
 {
     public static CardManager instance; // Singleton パターンの適用
-    // 次の攻撃ボーナスの情報を保持
-    public int playerNextAttackBonus = 0;
-    public int enemyNextAttackBonus = 0;
+    
+    public int playerNextAttackBonus = 0;// プレイヤーの次の攻撃ボーナス
+    public int enemyNextAttackBonus = 0;//敵の次の攻撃ボーナス
+
+    public int playerNextAttackBonusReduction = 0; // プレイヤーの次の攻撃軽減
+    public int enemyNextAttackBonusReduction = 0; // 敵の次の攻撃軽減
 
     public void Awake()
     {
@@ -105,7 +108,7 @@ public class CardManager : MonoBehaviour
         Debug.Log($"研究者の効果: {effectValue} ダメージを自身に与える");
 
         // 自身にダメージを与える
-        DamageManager.instance.StartDamageProcess(isPlayerField, effectValue);
+        DamageManager.instance.StartDamageProcess(isPlayerField, effectValue, 0f);
 
         // 次の攻撃のダメージを増加させる
         Debug.Log($"次の攻撃のダメージが {effectValue} 増加します");
@@ -122,8 +125,16 @@ public class CardManager : MonoBehaviour
         DamageManager.instance.StartDamageProcess(!isPlayerField, effectValue);
 
         // 次の攻撃のダメージを軽減する
-        Debug.Log($"次の攻撃が {effectValue} ポイント軽減されます");
-        ReduceNextAttackDamage(isPlayerField, effectValue);
+        if (isPlayerField)
+        {
+            playerNextAttackBonusReduction += effectValue;
+            Debug.Log($"プレイヤーの次の攻撃が {effectValue} ポイント軽減されます (合計: {playerNextAttackBonusReduction})");
+        }
+        else
+        {
+            enemyNextAttackBonusReduction += effectValue;
+            Debug.Log($"敵の次の攻撃が {effectValue} ポイント軽減されます (合計: {enemyNextAttackBonusReduction})");
+        }
     }
     #endregion
 

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 // DamageManager.cs
 public class DamageManager : MonoBehaviour
 {
@@ -11,10 +10,9 @@ public class DamageManager : MonoBehaviour
     private int damageReduction = 0; // 保護カードによる軽減値
     private bool pendingDamageIsPlayer; // ダメージ対象がプレイヤーかエネミーか
     private float responseTimer = 0f; // ガードカード応答タイマー
-    private float guardResponseTime = 5f; // ガードカード応答時間（5秒）
+    private float guardResponseTime = 5f; // ガードカード応答時間（デフォルトは5秒）
     private bool guardApplied = false; // ガードが適用されたかどうかのフラグ
     private bool damageProcessActive = false; // ダメージプロセスが進行中かどうか
-
 
     void Awake()
     {
@@ -22,7 +20,7 @@ public class DamageManager : MonoBehaviour
     }
 
     #region StartDamageProcess() - ダメージカードが使われたらガードカードを待つタイマーをスタートさせる
-    public void StartDamageProcess(bool isPlayerTarget, int damage)
+    public void StartDamageProcess(bool isPlayerTarget, int damage, float waitTime = 5f)
     {
         // すでにダメージプロセスが進行中の場合は無視
         if (damageProcessActive) return;
@@ -31,18 +29,23 @@ public class DamageManager : MonoBehaviour
         int bonusDamage = isPlayerTarget ? CardManager.instance.enemyNextAttackBonus : CardManager.instance.playerNextAttackBonus;
         int totalDamage = damage + bonusDamage;
 
+        // 次の攻撃軽減を適用
+        int reduction = isPlayerTarget ? CardManager.instance.playerNextAttackBonusReduction : CardManager.instance.enemyNextAttackBonusReduction;
+        totalDamage = Mathf.Max(totalDamage - reduction, 0); // ダメージが0未満にならないよう調整
+
         // 初期化
         pendingDamageIsPlayer = isPlayerTarget;
         pendingDamage = totalDamage;
-        responseTimer = guardResponseTime; // 応答時間をリセット
+        responseTimer = waitTime; // 引数で渡された待機時間を設定
         guardApplied = false; // ガード未適用に設定
         damageReduction = 0; // 軽減値もリセット
         damageProcessActive = true; // ダメージプロセスをアクティブに設定
 
-        Debug.Log($"ダメージプロセス開始: 対象は {(isPlayerTarget ? "プレイヤー" : "敵")}、ダメージ {totalDamage}");
+        Debug.Log($"ダメージプロセス開始: 対象は {(isPlayerTarget ? "プレイヤー" : "敵")}、ダメージ {totalDamage}、待機時間 {responseTimer}秒");
 
-        // 次の攻撃ボーナスをリセット
+        // 次の攻撃ボーナスと軽減値をリセット
         ResetNextAttackBonus(isPlayerTarget);
+        ResetNextAttackReduction(isPlayerTarget);
 
         // タイマーの監視を開始
         StartCoroutine(DamageCountdown());
@@ -127,4 +130,21 @@ public class DamageManager : MonoBehaviour
         }
     }
     #endregion
+
+    #region ResetNextAttackReduction() - 次の攻撃軽減をリセット
+    private void ResetNextAttackReduction(bool isPlayerTarget)
+    {
+        if (isPlayerTarget)
+        {
+            CardManager.instance.playerNextAttackBonusReduction = 0;
+            Debug.Log("プレイヤーの次の攻撃軽減がリセットされました");
+        }
+        else
+        {
+            CardManager.instance.enemyNextAttackBonusReduction = 0;
+            Debug.Log("敵の次の攻撃軽減がリセットされました");
+        }
+    }
+    #endregion
 }
+
