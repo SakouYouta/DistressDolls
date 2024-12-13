@@ -92,12 +92,10 @@ public class CardManager : MonoBehaviour
         if (isPlayerField)
         {
             GameManager.instance.DrawCard(GameManager.instance.playerHand, GameManager.instance.playerDeck, drawAmount);
-            GameManager.instance.EndTurnForAllCards(GameManager.instance.playerField, GameManager.instance.playerGraveyard);
         }
         else
         {
             GameManager.instance.DrawCard(GameManager.instance.enemyHand, GameManager.instance.enemyDeck, drawAmount);
-            GameManager.instance.EndTurnForAllCards(GameManager.instance.enemyField, GameManager.instance.enemyGraveyard);
         }
     }
     #endregion
@@ -141,10 +139,57 @@ public class CardManager : MonoBehaviour
     #region ApplyWitch() - 魔女の固有能力の処理
     private void ApplyWitch(int effectValue, bool isPlayerField)
     {
-        Debug.Log($"魔女の効果: {effectValue} に基づく特殊な処理を実行");
+        Debug.Log($"魔女の効果: 相手の手札から{effectValue}枚のカードを墓地に送る");
 
-        // 現時点では処理を定義する必要があるため、ロジックを追加してください
-        // TODO: 魔女の能力ロジックを実装
+        // プレイヤーのターンの場合、敵の手札からeffectValue枚のカードを選び墓地に送る
+        if (isPlayerField)
+        {
+            // 敵の手札にカードがあるかチェック
+            if (GameManager.instance.enemyHand.childCount > 0)
+            {
+                int discardCount = Mathf.Min(effectValue, GameManager.instance.enemyHand.childCount); // 捨てる枚数はeffectValueか、手札に残っている枚数のいずれか小さい方
+
+                // effectValue枚だけカードを墓地に送る
+                for (int i = 0; i < discardCount; i++)
+                {
+                    // ランダムにカードを選ぶ
+                    int randomIndex = Random.Range(0, GameManager.instance.enemyHand.childCount);
+                    Transform cardToSend = GameManager.instance.enemyHand.GetChild(randomIndex); // 選ばれたカード
+
+                    // カードを墓地に移動 (親を変更)
+                    cardToSend.SetParent(GameManager.instance.enemyGraveyard); // 手札から墓地に移動
+                    Debug.Log($"魔女の効果: 敵の手札から「{cardToSend.name}」を墓地に送る");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("敵の手札にカードがありません");
+            }
+        }
+        else
+        {
+            // 敵のターンの場合、プレイヤーの手札からeffectValue枚のカードを選び墓地に送る
+            if (GameManager.instance.playerHand.childCount > 0)
+            {
+                int discardCount = Mathf.Min(effectValue, GameManager.instance.playerHand.childCount); // 捨てる枚数はeffectValueか、手札に残っている枚数のいずれか小さい方
+
+                // effectValue枚だけカードを墓地に送る
+                for (int i = 0; i < discardCount; i++)
+                {
+                    // ランダムにカードを選ぶ
+                    int randomIndex = Random.Range(0, GameManager.instance.playerHand.childCount);
+                    Transform cardToSend = GameManager.instance.playerHand.GetChild(randomIndex); // 選ばれたカード
+
+                    // カードを墓地に移動 (親を変更)
+                    cardToSend.SetParent(GameManager.instance.playerGraveyard); // 手札から墓地に移動
+                    Debug.Log($"魔女の効果: プレイヤーの手札から「{cardToSend.name}」を墓地に送る");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("プレイヤーの手札にカードがありません");
+            }
+        }
     }
     #endregion
 

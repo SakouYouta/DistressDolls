@@ -10,7 +10,7 @@ public class DamageManager : MonoBehaviour
     private int damageReduction = 0; // 保護カードによる軽減値
     private bool pendingDamageIsPlayer; // ダメージ対象がプレイヤーかエネミーか
     private float responseTimer = 0f; // ガードカード応答タイマー
-    private float guardResponseTime = 5f; // ガードカード応答時間（デフォルトは5秒）
+    private readonly float guardResponseTime = 5f; // ガードカード応答時間（デフォルトは5秒）
     private bool guardApplied = false; // ガードが適用されたかどうかのフラグ
     private bool damageProcessActive = false; // ダメージプロセスが進行中かどうか
 
