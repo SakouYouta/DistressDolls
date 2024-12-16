@@ -36,11 +36,7 @@ public class GameManager : MonoBehaviour
     void StartGame()
     {
         // デッキの初期化
-<<<<<<< HEAD
         playerDeck = DataSaveManager.LoadDeckList();
-=======
-        playerDeck = new List<int>() { 1, 1, 1, 2, 2, 2, 34, 34, 34, 44, 44, 44, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 18, 18, 18 };
->>>>>>> feature/Toyaishikawa/arufa/enemyai
         enemyDeck = new List<int>() { 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10, 10 };
 
         // プレイヤーと敵のHP初期値
