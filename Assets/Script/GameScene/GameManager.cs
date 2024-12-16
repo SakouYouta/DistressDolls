@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text playerHPText, enemyHPText;
     public int playerHP, enemyHP;
     public bool isPlayerTurn = true;
-    public bool canUseDamageCardThisTurn = true;
+    public bool canUseDamageCardThisTurn = false;
     public List<int> playerDeck, enemyDeck;
     public static GameManager instance;
 
@@ -35,7 +36,11 @@ public class GameManager : MonoBehaviour
     void StartGame()
     {
         // デッキの初期化
+<<<<<<< HEAD
         playerDeck = DataSaveManager.LoadDeckList();
+=======
+        playerDeck = new List<int>() { 1, 1, 1, 2, 2, 2, 34, 34, 34, 44, 44, 44, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 18, 18, 18 };
+>>>>>>> feature/Toyaishikawa/arufa/enemyai
         enemyDeck = new List<int>() { 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10, 10 };
 
         // プレイヤーと敵のHP初期値
@@ -154,24 +159,43 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region  PlayerTurn() - プレイヤーのターンを開始する
-    void PlayerTurn()
+    private void PlayerTurn()
     {
         Debug.Log("Playerのターン");
 
-        canUseDamageCardThisTurn = true;
+        canUseDamageCardThisTurn = false;
 
         DrawCard(playerHand, playerDeck); // 手札を1枚加える
+
+        if (canUseDamageCardThisTurn)
+        {
+            ChangeTurn();
+        }
     }
     #endregion
 
     #region EnemyTurn() - 敵のターンを開始する
-    void EnemyTurn()
+    private async void EnemyTurn()
     {
         Debug.Log("Enemyのターン");
 
-        canUseDamageCardThisTurn = true;
+        // ダメージカードの使用可能フラグをリセット
+        canUseDamageCardThisTurn = false;
 
-        DrawCard(enemyHand, enemyDeck); // 敵の手札を1枚加える
+        // 1. 敵がカードを引く
+        DrawCard(enemyHand, enemyDeck);
+        await Task.Delay(1000); // 1秒待つ
+
+        // 2. 敵がカードを使用する
+        while (canUseDamageCardThisTurn == false)
+        {
+            EnemyAiManager.instance.PerformAiActions();
+            await Task.Delay(1000); 
+        }
+
+        // 3. 敵がターンを終了する条件
+        await Task.Delay(5000); // 待機後ターン終了
+        ChangeTurn();
     }
     #endregion
 
