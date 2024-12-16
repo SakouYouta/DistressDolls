@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-// DamageManager.cs
+
 public class DamageManager : MonoBehaviour
 {
     public static DamageManager instance;
@@ -10,7 +10,7 @@ public class DamageManager : MonoBehaviour
     private int damageReduction = 0; // 保護カードによる軽減値
     private bool pendingDamageIsPlayer; // ダメージ対象がプレイヤーかエネミーか
     private float responseTimer = 0f; // ガードカード応答タイマー
-    private readonly float guardResponseTime = 5f; // ガードカード応答時間（デフォルトは5秒）
+    private readonly float guardResponseTime = 3f; // ガードカード応答時間（デフォルトは5秒）
     private bool guardApplied = false; // ガードが適用されたかどうかのフラグ
     private bool damageProcessActive = false; // ダメージプロセスが進行中かどうか
 
@@ -46,6 +46,12 @@ public class DamageManager : MonoBehaviour
         // 次の攻撃ボーナスと軽減値をリセット
         ResetNextAttackBonus(isPlayerTarget);
         ResetNextAttackReduction(isPlayerTarget);
+
+        // 敵がガードカードをプレイする処理を追加
+        if (!isPlayerTarget) // 攻撃対象が敵の場合
+        {
+            EnemyAiManager.instance.RespondToPlayerAttack();
+        }
 
         // タイマーの監視を開始
         StartCoroutine(DamageCountdown());

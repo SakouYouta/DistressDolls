@@ -65,10 +65,10 @@ public class CardManager : MonoBehaviour
     #region ApplyDamage() - ダメージカードの処理
     private void ApplyDamage(int damage, bool isPlayerField)
     {
-        if (GameManager.instance.canUseDamageCardThisTurn)
+        if (GameManager.instance.canUseDamageCardThisTurn == false)
         {
             DamageManager.instance.StartDamageProcess(!isPlayerField, damage);
-            GameManager.instance.canUseDamageCardThisTurn = false; // 1ターン1回のみ使用可能
+            GameManager.instance.canUseDamageCardThisTurn = true; // 1ターン1回のみ使用可能
         }
         else
         {

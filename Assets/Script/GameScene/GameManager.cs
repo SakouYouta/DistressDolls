@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text playerHPText, enemyHPText;
     public int playerHP, enemyHP;
     public bool isPlayerTurn = true;
-    public bool canUseDamageCardThisTurn = true;
+    public bool canUseDamageCardThisTurn = false;
     public List<int> playerDeck, enemyDeck;
     public static GameManager instance;
 
@@ -155,13 +155,18 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region  PlayerTurn() - プレイヤーのターンを開始する
-    void PlayerTurn()
+    private void PlayerTurn()
     {
         Debug.Log("Playerのターン");
 
-        canUseDamageCardThisTurn = true;
+        canUseDamageCardThisTurn = false;
 
         DrawCard(playerHand, playerDeck); // 手札を1枚加える
+
+        if (canUseDamageCardThisTurn)
+        {
+            ChangeTurn();
+        }
     }
     #endregion
 
@@ -171,21 +176,24 @@ public class GameManager : MonoBehaviour
         Debug.Log("Enemyのターン");
 
         // ダメージカードの使用可能フラグをリセット
-        canUseDamageCardThisTurn = true;
+        canUseDamageCardThisTurn = false;
 
         // 1. 敵がカードを引く
         DrawCard(enemyHand, enemyDeck);
         await Task.Delay(1000); // 1秒待つ
 
         // 2. 敵がカードを使用する
-        EnemyAiManager.instance.PerformAiActions();
-        await Task.Delay(1000); // 1秒待つ
+        while (canUseDamageCardThisTurn == false)
+        {
+            EnemyAiManager.instance.PerformAiActions();
+            await Task.Delay(1000); 
+        }
 
-        // 3. ターンの切り替え
+        // 3. 敵がターンを終了する条件
+        await Task.Delay(5000); // 待機後ターン終了
         ChangeTurn();
     }
     #endregion
-
 
     #region DecreaseHP() - ダメージを受けた場合のHPを減らす処理
     public void DecreaseHP(bool isPlayer, int damage)
