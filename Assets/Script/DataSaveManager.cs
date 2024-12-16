@@ -65,7 +65,7 @@ public static class DataSaveManager
                         data.Add(value);
                     }
                 }
-                Debug.Log("エクセル形式（CSV）からデータを読み込みました: " + string.Join(", ", data));
+                //Debug.Log("エクセル形式（CSV）からデータを読み込みました: " + string.Join(", ", data));
                 return data;
             }
             else
@@ -100,7 +100,7 @@ public static class DataSaveManager
                         data.Add(value);
                     }
                 }
-                Debug.Log("エクセル形式（CSV）からデータを読み込みました: " + string.Join(", ", data));
+                //Debug.Log("エクセル形式（CSV）からデータを読み込みました: " + string.Join(", ", data));
                 return data;
             }
             else
