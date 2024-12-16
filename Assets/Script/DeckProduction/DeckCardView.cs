@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
-public class MyCardView : MonoBehaviour
+public class DeckCardView : MonoBehaviour
 {
     [SerializeField] private CardController cardPrefab;
-    [SerializeField] private Transform panel; // Panel
 
-    public void DisplayCards(List<int> cardIds)
+    #region DisplayCards() カードを表示する
+    public void DisplayCards(List<int> cardIds, Transform panel)
     {
         foreach (int cardID in cardIds)
         {
@@ -17,4 +17,5 @@ public class MyCardView : MonoBehaviour
             card.Init(cardID);// カードを表示
         }
     }
+    #endregion
 }
