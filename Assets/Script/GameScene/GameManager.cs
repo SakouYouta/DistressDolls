@@ -8,11 +8,11 @@ public class GameManager : MonoBehaviour
 {
     //フィールドの宣言
     [SerializeField] CardController cardPrefab;
-    [SerializeField] public Transform playerHand, enemyHand, playerField, enemyField, playerGraveyard, enemyGraveyard;
+    public Transform playerHand, enemyHand, playerField, enemyField, playerGraveyard, enemyGraveyard;
     [SerializeField] Text playerHPText, enemyHPText;
     public int playerHP, enemyHP;
     public bool isPlayerTurn = true;
-    public bool canUseDamageCardThisTurn = false;
+    public bool TurnEnd = false;
     public List<int> playerDeck, enemyDeck;
     public static GameManager instance;
 
@@ -136,6 +136,9 @@ public class GameManager : MonoBehaviour
         // ターンを逆にする
         isPlayerTurn = !isPlayerTurn;
 
+        //ターンエンドのフラグを初期化
+        TurnEnd = false;
+
         // 次のターンの処理を実行
         TurnCalc();
     }
@@ -159,11 +162,9 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Playerのターン");
 
-        canUseDamageCardThisTurn = false;
-
         DrawCard(playerHand, playerDeck); // 手札を1枚加える
 
-        if (canUseDamageCardThisTurn)
+        if (TurnEnd)
         {
             ChangeTurn();
         }
@@ -175,18 +176,15 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Enemyのターン");
 
-        // ダメージカードの使用可能フラグをリセット
-        canUseDamageCardThisTurn = false;
-
         // 1. 敵がカードを引く
         DrawCard(enemyHand, enemyDeck);
         await Task.Delay(1000); // 1秒待つ
 
         // 2. 敵がカードを使用する
-        while (canUseDamageCardThisTurn == false)
+        while (TurnEnd == false)
         {
             EnemyAiManager.instance.PerformAiActions();
-            await Task.Delay(1000); 
+            await Task.Delay(1500); 
         }
 
         // 3. 敵がターンを終了する条件

@@ -25,7 +25,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     public void OnEndDrag(PointerEventData eventData) // カードを離したときに行う処理
     {
-        if(drag == false)
+        if (drag == false)
         {
             transform.SetParent(cardParent, false);
             GetComponent<CanvasGroup>().blocksRaycasts = true; // blocksRaycastsをオンにする
@@ -33,5 +33,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         else
             //最初にドラッグを始めた親に戻す
             transform.SetParent(originalParent, false);
+
+        drag = false;
     }
 }

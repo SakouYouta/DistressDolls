@@ -17,36 +17,43 @@ public class EnemyAiManager : MonoBehaviour
     public void PerformAiActions()
     {
         Transform cardToPlay = null;
+        bool onlyProtectCardFound = true; // Protectカードしかない場合を記録するフラグ
 
         // 1. 手札が空でないか確認
         if (GameManager.instance.enemyHand.childCount > 0)
         {
             // 優先度リストを定義（動的に変更可能）
             CardEffectType[] priorityList = {
-            CardEffectType.DrawCard,    //最優先:ドローカード
-            CardEffectType.Researcher,  //2:研究者固有カード
-            CardEffectType.Angel,       //3:天使固有カード
-            CardEffectType.Witch,       //4:魔女の固有カード
-            CardEffectType.Damage,      //ラスト: アタックカード
-            CardEffectType.Protect,
+            CardEffectType.DrawCard,    // 最優先: ドローカード
+            CardEffectType.Researcher,  // 2: 研究者固有カード
+            CardEffectType.Angel,       // 3: 天使固有カード
+            CardEffectType.Witch,       // 4: 魔女の固有カード
+            CardEffectType.Damage,      // ラスト: アタックカード
+            CardEffectType.Protect,     // Protectカード（最低優先度）
         };
 
             // 優先度リストに基づいてカードを探す
-            for (int i = 0; i < priorityList.Length; i++)
+            foreach (CardEffectType effectType in priorityList)
             {
-                cardToPlay = FindCardByType(priorityList[i]);
+                cardToPlay = FindCardByType(effectType);
                 if (cardToPlay != null)
                 {
-                    Debug.Log($"優先度 {priorityList[i]} のカードが選ばれました");
-                    break; // 見つかった時点でループを終了
+                    // Protect以外のカードが見つかった場合、フラグを変更
+                    if (effectType != CardEffectType.Protect)
+                    {
+                        onlyProtectCardFound = false;
+                    }
 
+                    Debug.Log($"優先度 {effectType} のカードが選ばれました");
+                    break; // 見つかった時点でループを終了
                 }
             }
 
-            // 4. 全ての優先カードが見つからなかった場合は先頭のカードを使用
+            // 全ての優先カードが見つからなかった場合は先頭のカードを使用
             if (cardToPlay == null)
             {
                 cardToPlay = GameManager.instance.enemyHand.GetChild(0); // デフォルトのカード
+                onlyProtectCardFound = false; // 手札の最初のカードがProtectでない可能性もあるため
             }
 
             // 最適なカードをプレイ
@@ -54,6 +61,14 @@ public class EnemyAiManager : MonoBehaviour
             {
                 CardController cardController = cardToPlay.GetComponent<CardController>();
                 CardModel cardModel = cardController.model;
+
+                // Protectカードのみの場合はターンを強制終了
+                if (onlyProtectCardFound && cardModel.effectType == CardEffectType.Protect)
+                {
+                    Debug.Log("Protectカードしかないため、ターンを終了します");
+                    GameManager.instance.TurnEnd = true; // ターンを終了
+                    return; // メソッドを終了
+                }
 
                 // 使用したカードを場に出す
                 PlayCardOnField(cardToPlay);
@@ -69,6 +84,7 @@ public class EnemyAiManager : MonoBehaviour
         }
     }
     #endregion
+
 
     #region FindCardByType() - 特定の効果タイプのカードを手札から探す
     private Transform FindCardByType(CardEffectType effectType)
