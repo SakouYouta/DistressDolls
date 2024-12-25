@@ -85,6 +85,7 @@ public class EnemyAiManager : MonoBehaviour
     }
     #endregion
 
+
     #region FindCardByType() - 特定の効果タイプのカードを手札から探す
     private Transform FindCardByType(CardEffectType effectType)
     {

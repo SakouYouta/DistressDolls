@@ -65,18 +65,7 @@ public class CardManager : MonoBehaviour
     #region ApplyDamage() - ダメージカードの処理
     private void ApplyDamage(int damage, bool isPlayerField)
     {
-        if (DamageManager.instance == null)
-        {
-            Debug.LogError("DamageManager のインスタンスが null です。");
-            return;
-        }
-
-        if (GameManager.instance == null)
-        {
-            Debug.LogError("GameManager のインスタンスが null です。");
-            return;
-        }
-        DamageManager.instance.StartDamageProcess(!isPlayerField, damage);
+       DamageManager.instance.StartDamageProcess(!isPlayerField, damage);
        GameManager.instance.TurnEnd = true;
     }
     #endregion

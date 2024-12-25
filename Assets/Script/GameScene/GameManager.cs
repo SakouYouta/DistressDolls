@@ -6,33 +6,14 @@ using System.Threading.Tasks;
 
 public class GameManager : MonoBehaviour
 {
-    // ゲーム内で使用されるカードのプレハブ。カードの生成時に利用。
+    //フィールドの宣言
     [SerializeField] CardController cardPrefab;
-
-    // プレイヤーと敵のHPを表示するUIテキスト。
-    [SerializeField] Text playerHPText, enemyHPText;
-
-    // ゲーム中の各領域を表すTransformオブジェクト。
     public Transform playerHand, enemyHand, playerField, enemyField, playerGraveyard, enemyGraveyard;
-
-    // プレイヤーと敵の現在のHP（ヒットポイント）。
+    [SerializeField] Text playerHPText, enemyHPText;
     public int playerHP, enemyHP;
-
-    // 現在のターンがプレイヤーのターンかどうかを判定するフラグ。
     public bool isPlayerTurn = true;
-
-    // 現在のターンが終了したかどうかを判定するフラグ。
     public bool TurnEnd = false;
-
-    // プレイヤーと敵のデッキを保持するリスト。
     public List<int> playerDeck, enemyDeck;
-
-    //プレイヤーのリーダーキャラクターを保持するオブジェクト。
-    public Character playerLeader;
-    // 敵のリーダーキャラクターを保持するオブジェクト。
-    public Character enemyLeader;
-
-    // ゲーム全体で1つだけ存在するGameManagerのインスタンス。
     public static GameManager instance;
 
     // Awake() - インスタンスの初期化
@@ -52,15 +33,8 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region StartGame() - ゲーム開始時の初期設定
-    public void StartGame()
+    void StartGame()
     {
-        // リーダーキャラクターの設定
-        Character playerLeader = new Character("無垢な歌姫 ドロシー・レイン", true); // プレイヤーのリーダー
-        Character enemyLeader = new Character("神秘への探究者 エレミネ", false); // 敵のリーダー
-
-        // DollSkillManagerにリーダーを渡す
-        DollSkillManager.instance.SetLeaders(playerLeader, enemyLeader);
-
         // デッキの初期化
         playerDeck = DataSaveManager.LoadDeckList();
         enemyDeck = new List<int>() { 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10, 10 };
