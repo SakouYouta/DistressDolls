@@ -356,6 +356,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &261883910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 261883912}
+  - component: {fileID: 261883911}
+  m_Layer: 0
+  m_Name: DollSkillManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &261883911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261883910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 542c6d6fff85e884d97a6cc74575ac61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &261883912
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261883910}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 861.8101, y: 498.85437, z: 3.3371782}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &265436921
 GameObject:
   m_ObjectHideFlags: 0
@@ -833,7 +877,7 @@ MonoBehaviour:
   playerHP: 0
   enemyHP: 0
   isPlayerTurn: 1
-  canUseDamageCardThisTurn: 1
+  TurnEnd: 0
   playerDeck: 2b0000002b0000002b0000002c0000002c0000002c0000002d0000002d0000002d0000002e0000002e0000002e0000002f0000002f0000002f000000300000003000000030000000310000003100000031000000320000003200000032000000330000003300000033000000340000003400000034000000350000003500000035000000360000003600000036000000
   enemyDeck: 2b0000002b0000002b0000002c0000002c0000002c0000002d0000002d0000002d0000002e0000002e0000002e0000002f0000002f0000002f000000300000003000000030000000310000003100000031000000320000003200000032000000330000003300000033000000340000003400000034000000350000003500000035000000360000003600000036000000
 --- !u!4 &580911063
@@ -2261,3 +2305,4 @@ SceneRoots:
   - {fileID: 1010848701}
   - {fileID: 550580836}
   - {fileID: 197347371}
+  - {fileID: 261883912}
