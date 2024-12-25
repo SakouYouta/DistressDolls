@@ -1,123 +1,105 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DamageManager : MonoBehaviour
 {
+    #region 変数定義
     public static DamageManager instance;
-
-    private int pendingDamage = 0; // ダメージ値
-    private int damageReduction = 0; // 保護カードによる軽減値
-    private bool pendingDamageIsPlayer; // ダメージ対象がプレイヤーかエネミーか
-    private float responseTimer = 0f; // ガードカード応答タイマー
-    private readonly float guardResponseTime = 3f; // ガードカード応答時間（デフォルトは5秒）
-    private bool guardApplied = false; // ガードが適用されたかどうかのフラグ
     private bool damageProcessActive = false; // ダメージプロセスが進行中かどうか
+    private bool pendingDamageIsPlayer; // ダメージの対象がプレイヤーか敵か
+    private int pendingDamage; // 現在のダメージ値
+    private float responseTimer; // ガードカードを待つ時間
+    private bool guardApplied; // ガードが適用されたかどうか
+    private int damageReduction; // 現在のダメージ軽減値
+    #endregion
 
-    void Awake()
+    // Awake() - インスタンスの初期化
+    public void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+        }
     }
 
     #region StartDamageProcess() - ダメージカードが使われたらガードカードを待つタイマーをスタートさせる
     public void StartDamageProcess(bool isPlayerTarget, int damage, float waitTime = 5f)
     {
-        // すでにダメージプロセスが進行中の場合は無視
-        if (damageProcessActive) return;
+        if (damageProcessActive) return; // ダメージプロセスが進行中の場合は無視
 
-        // 次の攻撃ボーナスを適用
+        // 攻撃中のリーダーキャラクターを取得
+        string attackingRole = isPlayerTarget ? "Enemy" : "Player";
+        Character attackingLeader = DollSkillManager.instance.GetLeader(attackingRole);
+
+        // 攻撃中のリーダーのスキルを適用
+        if (attackingLeader != null)
+        {
+            Debug.Log($"攻撃中のリーダー: {attackingLeader.Name}");
+            DollSkillManager.instance.ApplyLeaderSkill(attackingRole == "Player");
+        }
+        else
+        {
+            Debug.LogWarning("攻撃中のリーダーが設定されていません。");
+        }
+
+        // 次の攻撃ボーナスと軽減値を適用
         int bonusDamage = isPlayerTarget ? CardManager.instance.enemyNextAttackBonus : CardManager.instance.playerNextAttackBonus;
-        int totalDamage = damage + bonusDamage;
-
-        // 次の攻撃軽減を適用
         int reduction = isPlayerTarget ? CardManager.instance.playerNextAttackBonusReduction : CardManager.instance.enemyNextAttackBonusReduction;
-        totalDamage = Mathf.Max(totalDamage - reduction, 0); // ダメージが0未満にならないよう調整
+        int totalDamage = Mathf.Max(damage + bonusDamage - reduction, 0);
 
         // 初期化
         pendingDamageIsPlayer = isPlayerTarget;
         pendingDamage = totalDamage;
-        responseTimer = waitTime; // 引数で渡された待機時間を設定
-        guardApplied = false; // ガード未適用に設定
-        damageReduction = 0; // 軽減値もリセット
-        damageProcessActive = true; // ダメージプロセスをアクティブに設定
+        responseTimer = waitTime;
+        guardApplied = false;
+        damageReduction = 0;
+        damageProcessActive = true;
 
         Debug.Log($"ダメージプロセス開始: 対象は {(isPlayerTarget ? "プレイヤー" : "敵")}、ダメージ {totalDamage}、待機時間 {responseTimer}秒");
 
-        // 次の攻撃ボーナスと軽減値をリセット
+        // ボーナスと軽減値をリセット
         ResetNextAttackBonus(isPlayerTarget);
         ResetNextAttackReduction(isPlayerTarget);
 
-        // 敵がガードカードをプレイする処理を追加
-        if (!isPlayerTarget) // 攻撃対象が敵の場合
+        // 敵がガードカードをプレイする場合の処理
+        if (!isPlayerTarget)
         {
             EnemyAiManager.instance.RespondToPlayerAttack();
         }
 
-        // タイマーの監視を開始
-        StartCoroutine(DamageCountdown());
+        StartCoroutine(DamageCountdown()); // タイマーの監視を開始
     }
     #endregion
 
-    #region UseProtectCard() - 相手がガードカードを使うかの処理
-    public void UseProtectCard(int protectValue)
-    {
-        // ダメージプロセスが進行中かつ応答時間内の場合のみ適用可能
-        if (damageProcessActive && responseTimer > 0)
-        {
-            damageReduction = protectValue; // ガード効果を設定
-            guardApplied = true; // ガード適用をマーク
-            Debug.Log($"ガードカード適用: {protectValue} ポイント軽減");
-        }
-        else
-        {
-            Debug.LogWarning("ガードカードの応答時間を超過しました。軽減は適用されません。");
-        }
-    }
-    #endregion
-
-    #region DamageCountdown() - ガードカードが待機時間が終了したのちダメージ処理に移動
+    #region DamageCountdown() - ガード待機時間の監視
     private IEnumerator DamageCountdown()
     {
         while (responseTimer > 0)
         {
-            responseTimer -= Time.deltaTime; // タイマーを減少
+            responseTimer -= Time.deltaTime;
             yield return null;
         }
 
-        // タイマー終了後にダメージ適用
-        ApplyDamage();
+        ApplyDamage(); // タイマー終了後にダメージを適用
         damageProcessActive = false; // ダメージプロセス終了
     }
     #endregion
 
-    #region ApplyDamage() - ダメージの適用
+    #region ApplyDamage() - ダメージを適用
     private void ApplyDamage()
     {
-        int finalDamage = Mathf.Max(pendingDamage - damageReduction, 0); // 最終ダメージ計算
-
-        // ガード適用状況をログ出力
-        if (guardApplied)
-        {
-            Debug.Log("ガードが成功し、ダメージが軽減されました。");
-        }
-        else
-        {
-            Debug.Log("ガードが適用されず、ダメージがそのまま適用されます。");
-        }
-
-        Debug.Log($"最終ダメージ計算: 元のダメージ {pendingDamage}, 軽減値 {damageReduction}, 最終ダメージ {finalDamage}");
+        int finalDamage = Mathf.Max(pendingDamage - damageReduction, 0);
 
         if (pendingDamageIsPlayer)
         {
-            GameManager.instance.DecreaseHP(true, finalDamage);
+            GameManager.instance.playerHP -= finalDamage;
+            Debug.Log($"プレイヤーに {finalDamage} ダメージが適用されました。残りHP: {GameManager.instance.playerHP}");
         }
         else
         {
-            GameManager.instance.DecreaseHP(false, finalDamage);
+            GameManager.instance.enemyHP -= finalDamage;
+            Debug.Log($"敵に {finalDamage} ダメージが適用されました。残りHP: {GameManager.instance.enemyHP}");
         }
-
-        // HPの表示を更新
-        GameManager.instance.ShowLeaderHP();
     }
     #endregion
 
@@ -127,30 +109,34 @@ public class DamageManager : MonoBehaviour
         if (isPlayerTarget)
         {
             CardManager.instance.enemyNextAttackBonus = 0;
-            Debug.Log("敵の次の攻撃ボーナスがリセットされました");
         }
         else
         {
             CardManager.instance.playerNextAttackBonus = 0;
-            Debug.Log("プレイヤーの次の攻撃ボーナスがリセットされました");
         }
     }
     #endregion
 
-    #region ResetNextAttackReduction() - 次の攻撃軽減をリセット
+    #region ResetNextAttackReduction() - 次の攻撃軽減値をリセット
     private void ResetNextAttackReduction(bool isPlayerTarget)
     {
         if (isPlayerTarget)
         {
             CardManager.instance.playerNextAttackBonusReduction = 0;
-            Debug.Log("プレイヤーの次の攻撃軽減がリセットされました");
         }
         else
         {
             CardManager.instance.enemyNextAttackBonusReduction = 0;
-            Debug.Log("敵の次の攻撃軽減がリセットされました");
         }
     }
     #endregion
-}
 
+    #region UseProtectCard() - ガードカードを使用
+    public void UseProtectCard(int reductionValue)
+    {
+        guardApplied = true;
+        damageReduction += reductionValue;
+        Debug.Log($"ガードカードが使用され、ダメージ軽減値が {reductionValue} 増加しました。");
+    }
+    #endregion
+}
