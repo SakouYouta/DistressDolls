@@ -35,12 +35,21 @@ public class GameManager : MonoBehaviour
     #region StartGame() - ゲーム開始時の初期設定
     void StartGame()
     {
+
+        // リーダーキャラクターを設定（DollSkillManagerにアクセスしてリーダーを設定）
+        // ここで設定するキャラクターは例として「エレミネ」と「ドロシー・レイン」にしていますが、実際にはゲーム内のデータに基づいて設定することができます
+        Character playerLeader = new Character("神秘への探索者 エレミネ", true);  // プレイヤーリーダー
+        Character enemyLeader = new Character("無垢な歌姫 ドロシー・レイン", false);  // 敵リーダー
+
+        // DollSkillManager のインスタンスを取得して SetLeaders を呼び出す
+        DollSkillManager.instance.SetLeaders(playerLeader, enemyLeader); // ここで SetLeaders を呼び出しているか確認
+
         // デッキの初期化
         playerDeck = DataSaveManager.LoadDeckList();
         enemyDeck = new List<int>() { 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10, 10 };
 
         // プレイヤーと敵のHP初期値
-        playerHP = 20;
+        playerHP = 10;
         enemyHP = 20;
 
         // デッキシャッフル

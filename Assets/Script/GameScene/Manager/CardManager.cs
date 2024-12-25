@@ -65,8 +65,25 @@ public class CardManager : MonoBehaviour
     #region ApplyDamage() - ダメージカードの処理
     private void ApplyDamage(int damage, bool isPlayerField)
     {
-       DamageManager.instance.StartDamageProcess(!isPlayerField, damage);
-       GameManager.instance.TurnEnd = true;
+        
+
+        // エレミネのスキル発動条件
+        if (isPlayerField && DollSkillManager.instance.playerLeaderCharacter.Name == "神秘への探索者 エレミネ")
+        {
+            DollSkillManager.instance.ApplySeekerOfMysteryEffect(DollSkillManager.instance.playerLeaderCharacter);
+            Debug.Log("エレミネのスキルがプレイヤーに適用されました");
+        }
+        else if (!isPlayerField && DollSkillManager.instance.enemyLeaderCharacter.Name == "神秘への探索者 エレミネ")
+        {
+            DollSkillManager.instance.ApplySeekerOfMysteryEffect(DollSkillManager.instance.enemyLeaderCharacter);
+            Debug.Log("エレミネのスキルが敵に適用されました");
+        }
+
+        // ダメージ処理を実行
+        DamageManager.instance.StartDamageProcess(!isPlayerField, damage);
+
+        // ターン終了処理
+        GameManager.instance.TurnEnd = true;
     }
     #endregion
 
