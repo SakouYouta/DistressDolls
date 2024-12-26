@@ -68,18 +68,21 @@ public class DollSkillManager : MonoBehaviour
     }
     #endregion
 
-    #region 　ApplyYoungWitchEffect() - アイネの固有能力
+    #region ApplyYoungWitchEffect() - アイネの固有能力
     public void ApplyYoungWitchEffect(Character targetLeader)
     {
-        Debug.Log("幼魔女 アイネ・ヴァンデンベルグ: 追加で1ダメージを与えました！");
-        DamageManager.instance.StartDamageProcess(!targetLeader.IsPlayer, 1, 1); // 対象に追加ダメージを与える
+        Debug.Log($"幼魔女 アイネ・ヴァンデンベルグ: {targetLeader.Name} にガード不可能な3ダメージを与えます。");
+
+        // ガード無視のダメージを即時適用
+        DamageManager.instance.ApplyUnblockableDamage(!targetLeader.IsPlayer, 3);
     }
     #endregion
+
 }
 
-    #region キャラクタークラス
-    // キャラクタークラス
-    public class Character
+#region キャラクタークラス
+// キャラクタークラス
+public class Character
     {
         public string Name { get; private set; }
         public bool IsPlayer { get; private set; } // trueならプレイヤー、falseなら敵

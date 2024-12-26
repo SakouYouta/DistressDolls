@@ -47,6 +47,14 @@ public class DamageManager : MonoBehaviour
         ResetNextAttackBonus(isPlayerTarget);
         ResetNextAttackReduction(isPlayerTarget);
 
+        // タイマーが0の場合は即座にダメージを適用
+        if (waitTime <= 0)
+        {
+            ApplyDamage(); // 即時ダメージ適用
+            damageProcessActive = false; // ダメージプロセス終了
+            return;
+        }
+
         // 敵がガードカードをプレイする処理を追加
         if (!isPlayerTarget) // 攻撃対象が敵の場合
         {
@@ -103,6 +111,19 @@ public class DamageManager : MonoBehaviour
         else
         {
             Debug.Log("ガードが適用されず、ダメージがそのまま適用されます。");
+
+            // アイネの固有能力をチェック（プレイヤーリーダーの場合）
+            if (!pendingDamageIsPlayer && DollSkillManager.instance.playerLeaderCharacter.Name == "幼魔女 アイネ")
+            {
+                Debug.Log("アイネ（プレイヤー）の能力を発動します。");
+                DollSkillManager.instance.ApplyYoungWitchEffect(DollSkillManager.instance.enemyLeaderCharacter);
+            }
+            // アイネの固有能力をチェック（敵リーダーの場合）
+            else if (pendingDamageIsPlayer && DollSkillManager.instance.enemyLeaderCharacter.Name == "幼魔女 アイネ")
+            {
+                Debug.Log("アイネ（敵）の能力を発動します。");
+                DollSkillManager.instance.ApplyYoungWitchEffect(DollSkillManager.instance.playerLeaderCharacter);
+            }
         }
 
         Debug.Log($"最終ダメージ計算: 元のダメージ {pendingDamage}, 軽減値 {damageReduction}, 最終ダメージ {finalDamage}");
@@ -114,6 +135,26 @@ public class DamageManager : MonoBehaviour
         else
         {
             GameManager.instance.DecreaseHP(false, finalDamage);
+        }
+
+        // HPの表示を更新
+        GameManager.instance.ShowLeaderHP();
+    }
+    #endregion
+
+    #region ApplyUnblockableDamage() - ガード不可能な追加ダメージを適用
+    public void ApplyUnblockableDamage(bool isPlayerTarget, int damage)
+    {
+        Debug.Log($"ガード不可能な追加ダメージ: 対象は {(!isPlayerTarget ? "プレイヤー" : "敵")}、ダメージ {damage}");
+
+        // ダメージを直接適用
+        if (!isPlayerTarget)
+        {
+            GameManager.instance.DecreaseHP(true, damage);
+        }
+        else
+        {
+            GameManager.instance.DecreaseHP(false, damage);
         }
 
         // HPの表示を更新

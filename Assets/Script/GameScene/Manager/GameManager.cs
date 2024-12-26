@@ -37,9 +37,13 @@ public class GameManager : MonoBehaviour
     {
 
         // リーダーキャラクターを設定（DollSkillManagerにアクセスしてリーダーを設定）
-        // ここで設定するキャラクターは例として「エレミネ」と「ドロシー・レイン」にしていますが、実際にはゲーム内のデータに基づいて設定することができます
-        Character playerLeader = new Character("無垢な歌姫 ドロシー", true);  // プレイヤーリーダー
-        Character enemyLeader = new Character("神秘への探索者 エレミネ", false);  // 敵リーダー
+
+        //神秘への探索者 エレミネ
+        //無垢な歌姫 ドロシー
+        //幼魔女 アイネ
+
+        Character playerLeader = new Character("神秘への探索者 エレミネ", true);  // プレイヤーリーダー
+        Character enemyLeader = new Character("幼魔女 アイネ", false);  // 敵リーダー
 
         // DollSkillManager のインスタンスを取得して SetLeaders を呼び出す
         DollSkillManager.instance.SetLeaders(playerLeader, enemyLeader); // ここで SetLeaders を呼び出しているか確認
