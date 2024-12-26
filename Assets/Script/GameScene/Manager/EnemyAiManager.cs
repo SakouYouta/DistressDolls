@@ -85,7 +85,6 @@ public class EnemyAiManager : MonoBehaviour
     }
     #endregion
 
-
     #region FindCardByType() - 特定の効果タイプのカードを手札から探す
     private Transform FindCardByType(CardEffectType effectType)
     {
@@ -129,6 +128,13 @@ public class EnemyAiManager : MonoBehaviour
             // ガードカードの効果を適用
             DamageManager.instance.UseProtectCard(cardModel.effectValue);
             Debug.Log($"敵がガードカード「{guardCard.name}」を使用: 軽減値 {cardModel.effectValue}");
+
+            // 敵リーダーが「無垢な歌姫 ドロシー」の場合、固有スキルを発動
+            if (DollSkillManager.instance.enemyLeaderCharacter.Name == "無垢な歌姫 ドロシー")
+            {
+                DollSkillManager.instance.ApplyPureSongstressEffect(DollSkillManager.instance.enemyLeaderCharacter);
+                Debug.Log("敵リーダー「ドロシー」の固有スキルが発動しました！");
+            }
 
             // 使用したカードを場に出す
             PlayCardOnField(guardCard);

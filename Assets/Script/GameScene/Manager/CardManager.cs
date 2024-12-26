@@ -65,8 +65,6 @@ public class CardManager : MonoBehaviour
     #region ApplyDamage() - ダメージカードの処理
     private void ApplyDamage(int damage, bool isPlayerField)
     {
-        
-
         // エレミネのスキル発動条件
         if (isPlayerField && DollSkillManager.instance.playerLeaderCharacter.Name == "神秘への探索者 エレミネ")
         {
@@ -90,6 +88,18 @@ public class CardManager : MonoBehaviour
     #region ApplyProtect() - ガードカードの処理
     private void ApplyProtect(int protectValue, bool isPlayerField)
     {
+        // ドロシーのスキル発動条件
+        if (isPlayerField && DollSkillManager.instance.playerLeaderCharacter.Name == "無垢な歌姫 ドロシー")
+        {
+            DollSkillManager.instance.ApplyPureSongstressEffect(DollSkillManager.instance.playerLeaderCharacter);
+            Debug.Log("ドロシーのスキルがプレイヤーに適用されました");
+        }
+        else if (!isPlayerField && DollSkillManager.instance.enemyLeaderCharacter.Name == "無垢な歌姫 ドロシー")
+        {
+            DollSkillManager.instance.ApplyPureSongstressEffect(DollSkillManager.instance.enemyLeaderCharacter);
+            Debug.Log("ドロシーのスキルが敵に適用されました");
+        }
+
         Debug.Log($"ガードカードの効果: {protectValue} ポイントを軽減");
         DamageManager.instance.UseProtectCard(protectValue);
     }

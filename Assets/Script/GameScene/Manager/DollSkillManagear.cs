@@ -49,14 +49,21 @@ public class DollSkillManager : MonoBehaviour
     #region 　ApplyPureSongstressEffect() - ドロシーの固有能力
     public void ApplyPureSongstressEffect(Character targetLeader)
     {
-        Debug.Log("無垢な歌姫 ドロシー・レイン: カードを1枚引きました！");
-        if (targetLeader.IsPlayer)
+        if (Random.value < 0.5f) // 確率は５０％
         {
-            GameManager.instance.DrawCard(GameManager.instance.playerHand, GameManager.instance.playerDeck); // プレイヤーのデッキからドロー
+            Debug.Log("無垢な歌姫 ドロシー: カードを1枚引きました！");
+            if (targetLeader.IsPlayer)
+            {
+                GameManager.instance.DrawCard(GameManager.instance.playerHand, GameManager.instance.playerDeck); // プレイヤーのデッキからドロー
+            }
+            else
+            {
+                GameManager.instance.DrawCard(GameManager.instance.enemyHand, GameManager.instance.enemyDeck); // 敵のデッキからドロー
+            }
         }
         else
         {
-            GameManager.instance.DrawCard(GameManager.instance.enemyHand, GameManager.instance.enemyDeck); // 敵のデッキからドロー
+            Debug.Log("無垢な歌姫 ドロシー: スキルが発動しませんでした。");
         }
     }
     #endregion
