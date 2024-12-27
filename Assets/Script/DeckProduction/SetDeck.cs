@@ -18,7 +18,6 @@ public class SetDeck : MonoBehaviour, IDropHandler
     #region OnDrop() デッキにカードを加えた際に呼ばれる
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("呼ばれた");
         CardMovement cardMove = eventData.pointerDrag.GetComponent<CardMovement>();
         if (cardMove != null && cardMove.cardParent == PossessionPanel)
         {
@@ -32,7 +31,9 @@ public class SetDeck : MonoBehaviour, IDropHandler
                     {// デッキのカードが30枚までになるように
                         CardMovement.drag = false;
                         deck.Add(cardModel.cardId);
+                        Debug.Log("かーどID" + cardModel.cardId);
                         Debug.Log(deck.Count);
+                        Debug.Log("デッキ追加" + string.Join(", ", deck));
                     }
                     else
                     {
@@ -56,6 +57,7 @@ public class SetDeck : MonoBehaviour, IDropHandler
                 {
                     deck.Remove(cardModel.cardId);
                     Debug.Log(deck.Count);
+                    Debug.Log("デッキ削除");
                 }
                 else
                     Debug.LogError("カードモデル情報の取得に失敗しました");

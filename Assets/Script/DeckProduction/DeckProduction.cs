@@ -30,7 +30,7 @@ public class DeckProduction : MonoBehaviour
     public void SaveDeck()
     {
         DeckRegister = setDeck.GetDeck();// 仮登録のデッキを持ってくる
-        Debug.Log("デッキリスト：" + string.Join(", ", DeckRegister));
+        Debug.Log("デッキ保存リスト：" + string.Join(", ", DeckRegister));
         DataSaveManager.SaveDeckList(DeckRegister);
     }
     #endregion
