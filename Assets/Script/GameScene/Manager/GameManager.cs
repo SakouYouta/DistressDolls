@@ -38,9 +38,9 @@ public class GameManager : MonoBehaviour
 
         // リーダーキャラクターを設定（DollSkillManagerにアクセスしてリーダーを設定）
 
-        //神秘への探索者 エレミネ
-        //無垢な歌姫 ドロシー
-        //幼魔女 アイネ
+        //神秘への探索者 エレミネ  HPが６以下になったら攻撃力が5増加
+        //無垢な歌姫 ドロシー      ガードした時５０％の確率でカード引く
+        //幼魔女 アイネ            攻撃した時ガードされなかったら3ダメージ
 
         Character playerLeader = new Character("神秘への探索者 エレミネ", true);  // プレイヤーリーダー
         Character enemyLeader = new Character("幼魔女 アイネ", false);  // 敵リーダー
