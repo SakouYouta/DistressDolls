@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Card6
   m_EditorClassIdentifier: 
   cardId: 6
-  name: "\u9632\u58C1"
+  name: "\u9811\u4E08"
   abilty: "\u30C0\u30E1\u30FC\u30B8\u30921\u6E1B\u3089\u3059"
   icon: {fileID: 0}
   effectType: 1

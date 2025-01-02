@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ada679b763bfe2041bae56d6061929da, type: 3}
-  m_Name: Card3
+  m_Name: card19
   m_EditorClassIdentifier: 
-  cardId: 3
-  name: "\u5F37\u6253"
-  abilty: "3\u30C0\u30E1\u30FC\u30B8\u4E0E\u3048\u308B"
+  cardId: 19
+  name: "\u53F1\u84EE\u306E\u5287\u85AC"
+  abilty: "\u81EA\u8EAB\u306B3\u30C0\u30E1\u30FC\u30B8\u3001\u6B21\u306E\u653B\u6483\u304C3\u30C0\u30E1\u30FC\u30B8\u30A2\u30C3\u30D7"
   icon: {fileID: 0}
-  effectType: 0
+  effectType: 4
   effectValue: 3

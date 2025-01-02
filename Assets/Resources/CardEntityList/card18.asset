@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: card18
   m_EditorClassIdentifier: 
   cardId: 18
-  name: "\u52C7\u611B\u306E\u5287\u85AC"
-  abilty: "\u81EA\u8EAB\u306B\uFF11\u30C0\u30E1\u30FC\u30B8\u3001\u6B21\u306E\u653B\u6483\u304C1\u30C0\u30E1\u30FC\u30B8\u30A2\u30C3\u30D7"
+  name: "\u7E01\u846C\u306E\u5287\u85AC"
+  abilty: "\u81EA\u8EAB\u306B2\u30C0\u30E1\u30FC\u30B8\u3001\u6B21\u306E\u653B\u6483\u304C2\u30C0\u30E1\u30FC\u30B8\u30A2\u30C3\u30D7"
   icon: {fileID: 0}
   effectType: 4
-  effectValue: 1
+  effectValue: 2
