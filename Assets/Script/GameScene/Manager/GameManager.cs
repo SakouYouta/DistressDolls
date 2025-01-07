@@ -28,12 +28,12 @@ public class GameManager : MonoBehaviour
     #region Start() - ゲーム開始時の初期設定を行う
     void Start()
     {
-        StartGame();
+        //StartGame();
     }
     #endregion
 
     #region StartGame() - ゲーム開始時の初期設定
-    void StartGame()
+    public void StartGame()
     {
 
         // リーダーキャラクターを設定（DollSkillManagerにアクセスしてリーダーを設定）

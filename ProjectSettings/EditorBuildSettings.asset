@@ -4,6 +4,18 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/OnlineGameScene.unity
+    guid: 8b16e1d3425902f4db28f50cd7dad0c0
+  - enabled: 1
+    path: Assets/Scenes/GameScene.unity
+    guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/gachaSystem.unity
+    guid: af5943c683d9f6e45a34273ca3bb9142
+  - enabled: 1
+    path: Assets/Scenes/DeckProduction.unity
+    guid: 0d4b248834af04944ba31f9ecd372f8b
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
