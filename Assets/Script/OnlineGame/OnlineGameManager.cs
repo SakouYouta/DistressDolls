@@ -2,22 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Photon.Pun;
-using Photon.Realtime;
+using System.Threading.Tasks;
 
-public class OnlineGameManager : MonoBehaviourPunCallbacks
+public class OnlineGameManager : MonoBehaviour
 {
-    // フィールドの宣言
+    //フィールドの宣言
     [SerializeField] CardController cardPrefab;
     public Transform playerHand, enemyHand, playerField, enemyField, playerGraveyard, enemyGraveyard;
     [SerializeField] Text playerHPText, enemyHPText;
-    public int playerHP = 10, enemyHP = 20;
-
-    public bool isMyTurn = false; // 自分のターンかどうか
-    private bool isGameOver = false;
-
-    public List<int> playerDeck;
-
+    public int playerHP, enemyHP;
+    public bool isPlayerTurn = true;
+    public bool TurnEnd = false;
+    public List<int> playerDeck, enemyDeck;
     public static OnlineGameManager instance;
 
     // Awake() - インスタンスの初期化
@@ -29,37 +25,50 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    #region StartGame() - ゲーム開始時の初期設定
-    public void StartGame()
+    #region Start() - ゲーム開始時の初期設定を行う
+    void Start()
     {
-        Debug.Log("ゲーム開始");
-
-        // ホストが先攻
-        if (PhotonNetwork.IsMasterClient)
-        {
-            isMyTurn = true;
-            photonView.RPC("SyncTurn", RpcTarget.Others, true); // 相手にターン情報を通知
-        }
-        else
-        {
-            isMyTurn = false;
-        }
-
-        // HPの初期値設定
-        playerHP = 10;
-        enemyHP = 20;
-
-        // デッキの初期化
-        playerDeck = DataSaveManager.LoadDeckList();
-        Shuffle(playerDeck);
-
-        // 初期手札を配布
-        SetStartHand();
-        ShowLeaderHP();
+        //StartGame();
     }
     #endregion
 
-    #region Shuffle() - デッキをシャッフル
+    #region StartGame() - ゲーム開始時の初期設定
+    public void StartGame()
+    {
+
+        // リーダーキャラクターを設定（DollSkillManagerにアクセスしてリーダーを設定）
+
+        //神秘への探索者 エレミネ  HPが６以下になったら攻撃力が5増加
+        //無垢な歌姫 ドロシー      ガードした時５０％の確率でカード引く
+        //幼魔女 アイネ            攻撃した時ガードされなかったら3ダメージ
+
+        Character playerLeader = new Character("神秘への探索者 エレミネ", true);  // プレイヤーリーダー
+        Character enemyLeader = new Character("幼魔女 アイネ", false);  // 敵リーダー
+
+        // DollSkillManager のインスタンスを取得して SetLeaders を呼び出す
+        DollSkillManager.instance.SetLeaders(playerLeader, enemyLeader); // ここで SetLeaders を呼び出しているか確認
+
+        // デッキの初期化
+        playerDeck = DataSaveManager.LoadDeckList();
+        enemyDeck = new List<int>() { 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10, 10 };
+
+        // プレイヤーと敵のHP初期値
+        playerHP = 10;
+        enemyHP = 20;
+
+        // デッキシャッフル
+        Shuffle(playerDeck);
+        Shuffle(enemyDeck);
+
+        // 初期手札を配布
+        SetStartHand();
+
+        // ターン計算を開始
+        TurnCalc();
+    }
+    #endregion
+
+    #region Shuffle() - デッキをシャッフルする
     void Shuffle(List<int> deck)
     {
         int n = deck.Count;
@@ -75,17 +84,14 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
     }
     #endregion
 
-    #region SetStartHand() - 初期手札を配布
-    void SetStartHand()
+    #region  CreateCard() - カードを生成して指定された場所に配置する
+    public void CreateCard(int cardID, Transform place)
     {
-        for (int i = 0; i < 3; i++)
-        {
-            DrawCard(playerHand, playerDeck);
-            if (PhotonNetwork.IsMasterClient)
-            {
-                photonView.RPC("DrawCardRPC", RpcTarget.Others, i);
-            }
-        }
+        CardController card = Instantiate(cardPrefab, place); // カードをインスタンス化
+        card.Init(cardID);
+
+        bool isPlayer = (place == playerHand); // プレイヤーかどうかを判定
+        card.model.isPlayerCard = isPlayer;
     }
     #endregion
 
@@ -103,54 +109,55 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
 
                 int cardID = deck[0];
                 deck.RemoveAt(0);
-                CreateCard(cardID, hand);
+                CreateCard(cardID, hand); // 新しいカードを生成して手札に追加
             }
         }
     }
+    #endregion
 
-    [PunRPC]
-    private void DrawCardRPC(int index)
+    #region SetStartHand() - 初期手札を3枚配布する
+    void SetStartHand()
     {
-        DrawCard(enemyHand, playerDeck); // 敵もカードを引く（サーバー同期）
+        for (int i = 0; i < 3; i++)
+        {
+            DrawCard(playerHand, playerDeck);
+            DrawCard(enemyHand, enemyDeck);
+        }
     }
     #endregion
 
-    #region CreateCard() - カードを生成して指定された場所に配置
-    public void CreateCard(int cardID, Transform place)
+    #region  TurnCalc() - プレイヤーまたは敵のターンを計算し、それぞれのターンを実行する
+    void TurnCalc()
     {
-        CardController card = Instantiate(cardPrefab, place); // カードをインスタンス化
-        card.Init(cardID);
-
-        bool isPlayer = (place == playerHand); // プレイヤーかどうかを判定
-        card.model.isPlayerCard = isPlayer;
+        if (isPlayerTurn)
+        {
+            PlayerTurn(); // プレイヤーのターンを開始
+        }
+        else
+        {
+            EnemyTurn(); // 敵のターンを開始
+        }
     }
     #endregion
 
-    #region PlayerTurn() - プレイヤーのターンを開始
-    public void PlayerTurn()
+    #region ChangeTurn() - ターンを終了し、次のターンに切り替える
+    public void ChangeTurn()
     {
-        if (!isMyTurn) return; // 自分のターンでない場合は無視
+        EndTurnForAllCards(playerField, playerGraveyard);  // プレイヤーのフィールドからカードを墓地に移動
+        EndTurnForAllCards(enemyField, enemyGraveyard);  // エネミーのフィールドからカードを墓地に移動
 
-        Debug.Log("プレイヤーのターン開始");
-        DrawCard(playerHand, playerDeck); // カードを1枚引く
+        // ターンを逆にする
+        isPlayerTurn = !isPlayerTurn;
+
+        //ターンエンドのフラグを初期化
+        TurnEnd = false;
+
+        // 次のターンの処理を実行
+        TurnCalc();
     }
     #endregion
 
-    #region EndTurn() - ターンを終了
-    public void EndTurn()
-    {
-        if (!isMyTurn || isGameOver) return;
-
-        // 自分のフィールド上のカードを墓地に移動
-        EndTurnForAllCards(playerField, playerGraveyard);
-
-        // ターンを相手に渡す
-        isMyTurn = false;
-        photonView.RPC("SyncTurn", RpcTarget.Others, true);
-    }
-    #endregion
-
-    #region EndTurnForAllCards() - フィールド上のカードを全て墓地に移動
+    #region EndTurnForAllCards() - フィールド上のカードを全て墓地に移動させる
     public void EndTurnForAllCards(Transform field, Transform graveyard)
     {
         CardController[] cardsOnField = field.GetComponentsInChildren<CardController>();
@@ -158,29 +165,48 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
         foreach (CardController card in cardsOnField)
         {
             CreateCard(card.model.cardId, graveyard); // カードを墓地に移動
-            Destroy(card.gameObject); // 元のカードを削除
+            Destroy(card.gameObject);  // 元のカードを削除
         }
     }
     #endregion
 
-    #region SyncTurn() - ターン情報を同期
-    [PunRPC]
-    private void SyncTurn(bool turn)
+    #region  PlayerTurn() - プレイヤーのターンを開始する
+    private void PlayerTurn()
     {
-        isMyTurn = turn; // ターンフラグを更新
-        if (isMyTurn)
+        Debug.Log("Playerのターン");
+
+        DrawCard(playerHand, playerDeck); // 手札を1枚加える
+
+        if (TurnEnd)
         {
-            Debug.Log("自分のターン開始");
-            PlayerTurn(); // プレイヤーのターンを開始
-        }
-        else
-        {
-            Debug.Log("相手のターン待機中...");
+            ChangeTurn();
         }
     }
     #endregion
 
-    #region DecreaseHP() - HPを減少させる
+    #region EnemyTurn() - 敵のターンを開始する
+    private async void EnemyTurn()
+    {
+        Debug.Log("Enemyのターン");
+
+        // 1. 敵がカードを引く
+        DrawCard(enemyHand, enemyDeck);
+        await Task.Delay(1000); // 1秒待つ
+
+        // 2. 敵がカードを使用する
+        while (TurnEnd == false)
+        {
+            EnemyAiManager.instance.PerformAiActions();
+            await Task.Delay(1500);
+        }
+
+        // 3. 敵がターンを終了する条件
+        await Task.Delay(5000); // 待機後ターン終了
+        ChangeTurn();
+    }
+    #endregion
+
+    #region DecreaseHP() - ダメージを受けた場合のHPを減らす処理
     public void DecreaseHP(bool isPlayer, int damage)
     {
         if (isPlayer)
@@ -191,14 +217,7 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
         {
             enemyHP -= damage;
         }
-
         ShowLeaderHP();
-
-        // HPがゼロ以下の場合、ゲーム終了
-        if (playerHP <= 0 || enemyHP <= 0)
-        {
-            photonView.RPC("EndGame", RpcTarget.All, playerHP > 0);
-        }
     }
     #endregion
 
@@ -213,19 +232,16 @@ public class OnlineGameManager : MonoBehaviourPunCallbacks
     }
     #endregion
 
-    #region EndGame() - ゲーム終了処理
-    [PunRPC]
+    #region  EndGame() - ゲーム終了処理
     private void EndGame(bool isPlayerWinner)
     {
-        isGameOver = true;
-
         if (isPlayerWinner)
         {
             Debug.Log("ゲーム終了: プレイヤーの勝利！");
         }
         else
         {
-            Debug.Log("ゲーム終了: 相手の勝利！");
+            Debug.Log("ゲーム終了: エネミーの勝利！");
         }
 
         // 必要ならリスタートやシーン遷移処理を追加
