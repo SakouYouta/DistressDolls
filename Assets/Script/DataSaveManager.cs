@@ -19,7 +19,7 @@ public static class DataSaveManager
             string csvContent = string.Join(",", data);
             // ファイルに書き込む
             File.WriteAllText(filePath, csvContent);
-            Debug.Log("データがエクセル形式（CSV）で保存されました: " + filePath);
+            Debug.Log("デッキ保存" + string.Join(", ", data));
         }
         catch (IOException ex)
         {

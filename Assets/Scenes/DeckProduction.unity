@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 150054443}
   - component: {fileID: 150054442}
   - component: {fileID: 150054445}
+  - component: {fileID: 150054446}
   m_Layer: 5
   m_Name: CardSelect
   m_TagString: Untagged
@@ -227,11 +228,27 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150054440}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 470700d5dec8fa84bb271738b1a0dfa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deck: 
+  deckPanel: {fileID: 651655616}
+  PossessionPanel: {fileID: 150054441}
+--- !u!114 &150054446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150054440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ac84f43cbe83ec458125c15ee368124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  setDeck: {fileID: 651655618}
   deckPanel: {fileID: 651655616}
   PossessionPanel: {fileID: 150054441}
 --- !u!1 &356325567
@@ -725,6 +742,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 470700d5dec8fa84bb271738b1a0dfa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deck: 
   deckPanel: {fileID: 651655616}
   PossessionPanel: {fileID: 150054441}
 --- !u!114 &651655619
