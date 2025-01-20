@@ -34,6 +34,7 @@ namespace Photon.Pun.UtilityScripts
             cullArea = (CullArea)target;
 
             // Destroying the newly created cull area if there is already one existing
+<<<<<<< HEAD
             int cullAreaCount = 0;
             #if UNITY_6000_0_OR_NEWER
             cullAreaCount = FindObjectsByType<CullArea>(FindObjectsSortMode.None).Length;
@@ -42,6 +43,9 @@ namespace Photon.Pun.UtilityScripts
             #endif
 
             if (cullAreaCount > 1)
+=======
+            if (FindObjectsOfType<CullArea>().Length > 1)
+>>>>>>> feature/Toyaishikawa/beta/online
             {
                 Debug.LogWarning("Destroying newly created cull area because there is already one existing in the scene.");
 

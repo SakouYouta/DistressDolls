@@ -7,7 +7,11 @@
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
+<<<<<<< HEAD
       "Photon3Unity3D/4.1.8.13": {
+=======
+      "Photon3Unity3D/4.1.8.9": {
+>>>>>>> feature/Toyaishikawa/beta/online
         "dependencies": {
           "NETStandard.Library": "2.0.3"
         },
@@ -24,7 +28,11 @@
     }
   },
   "libraries": {
+<<<<<<< HEAD
     "Photon3Unity3D/4.1.8.13": {
+=======
+    "Photon3Unity3D/4.1.8.9": {
+>>>>>>> feature/Toyaishikawa/beta/online
       "type": "project",
       "serviceable": false,
       "sha512": ""

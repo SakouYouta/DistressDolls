@@ -9,6 +9,7 @@ SocketCreate: function(url, protocols)
         socket: new WebSocket(str, [prot]),
         buffer: new Uint8Array(0),
         error: null,
+<<<<<<< HEAD
         messages: [],
         send: typeof(SharedArrayBuffer) == "function" ? // SharedArrayBuffer is available
     		function (socketInstance, ptr, length) {
@@ -22,6 +23,9 @@ SocketCreate: function(url, protocols)
                 const socket = webSocketInstances[socketInstance];
                 socket.socket.send(new Uint8Array(HEAPU8.buffer, ptr, length));
             }
+=======
+        messages: []
+>>>>>>> feature/Toyaishikawa/beta/online
     }
     socket.socket.binaryType = 'arraybuffer';
     socket.socket.onmessage = function (e) {
@@ -92,10 +96,17 @@ SocketError: function (socketInstance, ptr, bufsize)
     return 1;
 },
 
+<<<<<<< HEAD
 SocketSend: function (socketInstance, ptr, bufsize)
 {
     var socket = webSocketInstances[socketInstance];
     socket.send(socketInstance, ptr, bufsize);
+=======
+SocketSend: function (socketInstance, ptr, length)
+{
+    var socket = webSocketInstances[socketInstance];
+    socket.socket.send (HEAPU8.buffer.slice(ptr, ptr+length));
+>>>>>>> feature/Toyaishikawa/beta/online
 },
 
 SocketRecvLength: function(socketInstance)

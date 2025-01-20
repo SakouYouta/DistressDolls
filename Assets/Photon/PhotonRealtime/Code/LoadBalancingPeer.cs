@@ -122,10 +122,17 @@ namespace Photon.Realtime
                 this.SocketImplementationConfig[ConnectionProtocol.WebSocketSecure] = websocketType;
             }
 
+<<<<<<< HEAD
             //#if NET_4_6 && (UNITY_EDITOR || !ENABLE_IL2CPP) && !NETFX_CORE
             //this.SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(SocketUdpAsync);
             //this.SocketImplementationConfig[ConnectionProtocol.Tcp] = typeof(SocketTcpAsync);
             //#endif
+=======
+            #if NET_4_6 && (UNITY_EDITOR || !ENABLE_IL2CPP) && !NETFX_CORE
+            this.SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(SocketUdpAsync);
+            this.SocketImplementationConfig[ConnectionProtocol.Tcp] = typeof(SocketTcpAsync);
+            #endif
+>>>>>>> feature/Toyaishikawa/beta/online
         }
 
 
@@ -298,7 +305,10 @@ namespace Photon.Realtime
             }
 
             Dictionary<byte, object> op = new Dictionary<byte, object>();
+<<<<<<< HEAD
             SendOptions sendOptions = new SendOptions() { Reliability = true };
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
 
             if (!string.IsNullOrEmpty(opParams.RoomName))
             {
@@ -313,7 +323,10 @@ namespace Photon.Realtime
             if (opParams.ExpectedUsers != null && opParams.ExpectedUsers.Length > 0)
             {
                 op[ParameterCode.Add] = opParams.ExpectedUsers;
+<<<<<<< HEAD
                 sendOptions.Encrypt = true;
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
             }
             if (opParams.Ticket != null)
             {
@@ -332,7 +345,11 @@ namespace Photon.Realtime
             }
 
             //this.Listener.DebugReturn(DebugLevel.INFO, "OpCreateRoom: " + SupportClass.DictionaryToString(op));
+<<<<<<< HEAD
             return this.SendOperation(OperationCode.CreateGame, op, sendOptions);
+=======
+            return this.SendOperation(OperationCode.CreateGame, op, SendOptions.SendReliable);
+>>>>>>> feature/Toyaishikawa/beta/online
         }
 
         /// <summary>
@@ -354,7 +371,10 @@ namespace Photon.Realtime
                 this.Listener.DebugReturn(DebugLevel.INFO, "OpJoinRoom()");
             }
             Dictionary<byte, object> op = new Dictionary<byte, object>();
+<<<<<<< HEAD
             SendOptions sendOptions = new SendOptions() { Reliability = true };
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
 
             if (!string.IsNullOrEmpty(opParams.RoomName))
             {
@@ -378,7 +398,10 @@ namespace Photon.Realtime
             if (opParams.ExpectedUsers != null && opParams.ExpectedUsers.Length > 0)
             {
                 op[ParameterCode.Add] = opParams.ExpectedUsers;
+<<<<<<< HEAD
                 sendOptions.Encrypt = true;
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
             }
             if (opParams.Ticket != null)
             {
@@ -397,7 +420,11 @@ namespace Photon.Realtime
             }
 
             //this.Listener.DebugReturn(DebugLevel.INFO, "OpJoinRoom: " + SupportClass.DictionaryToString(op));
+<<<<<<< HEAD
             return this.SendOperation(OperationCode.JoinGame, op, sendOptions);
+=======
+            return this.SendOperation(OperationCode.JoinGame, op, SendOptions.SendReliable);
+>>>>>>> feature/Toyaishikawa/beta/online
         }
 
 
@@ -432,7 +459,10 @@ namespace Photon.Realtime
             }
 
             Dictionary<byte, object> opParameters = new Dictionary<byte, object>();
+<<<<<<< HEAD
             SendOptions sendOptions = new SendOptions() { Reliability = true };
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
             if (expectedRoomProperties.Count > 0)
             {
                 opParameters[ParameterCode.GameProperties] = expectedRoomProperties;
@@ -457,7 +487,10 @@ namespace Photon.Realtime
             if (opJoinRandomRoomParams.ExpectedUsers != null && opJoinRandomRoomParams.ExpectedUsers.Length > 0)
             {
                 opParameters[ParameterCode.Add] = opJoinRandomRoomParams.ExpectedUsers;
+<<<<<<< HEAD
                 sendOptions.Encrypt = true;
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
             }
             if (opJoinRandomRoomParams.Ticket != null)
             {
@@ -468,7 +501,11 @@ namespace Photon.Realtime
 
 
             //this.Listener.DebugReturn(DebugLevel.INFO, "OpJoinRandomRoom: " + SupportClass.DictionaryToString(opParameters));
+<<<<<<< HEAD
             return this.SendOperation(OperationCode.JoinRandomGame, opParameters, sendOptions);
+=======
+            return this.SendOperation(OperationCode.JoinRandomGame, opParameters, SendOptions.SendReliable);
+>>>>>>> feature/Toyaishikawa/beta/online
         }
 
         /// <summary>
@@ -500,7 +537,10 @@ namespace Photon.Realtime
             }
 
             Dictionary<byte, object> opParameters = new Dictionary<byte, object>();
+<<<<<<< HEAD
             SendOptions sendOptions = new SendOptions() { Reliability = true };
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
             if (expectedRoomProperties.Count > 0)
             {
                 opParameters[ParameterCode.GameProperties] = expectedRoomProperties;    // used as filter. below, RoomOptionsToOpParameters has usePropertiesKey = true
@@ -525,7 +565,10 @@ namespace Photon.Realtime
             if (opJoinRandomRoomParams.ExpectedUsers != null && opJoinRandomRoomParams.ExpectedUsers.Length > 0)
             {
                 opParameters[ParameterCode.Add] = opJoinRandomRoomParams.ExpectedUsers;
+<<<<<<< HEAD
                 sendOptions.Encrypt = true;
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
             }
             if (opJoinRandomRoomParams.Ticket != null)
             {
@@ -551,7 +594,11 @@ namespace Photon.Realtime
             }
 
             //this.Listener.DebugReturn(DebugLevel.INFO, "OpJoinRandomOrCreateRoom: " + SupportClass.DictionaryToString(opParameters, false));
+<<<<<<< HEAD
             return this.SendOperation(OperationCode.JoinRandomGame, opParameters, sendOptions);
+=======
+            return this.SendOperation(OperationCode.JoinRandomGame, opParameters, SendOptions.SendReliable);
+>>>>>>> feature/Toyaishikawa/beta/online
         }
 
 
@@ -666,8 +713,12 @@ namespace Photon.Realtime
                 opParameters[ParameterCode.FindFriendsOptions] = options.ToIntFlags();
             }
 
+<<<<<<< HEAD
             SendOptions sendOptions = new SendOptions() { Reliability = true, Encrypt = true };
             return this.SendOperation(OperationCode.FindFriends, opParameters, sendOptions);
+=======
+            return this.SendOperation(OperationCode.FindFriends, opParameters, SendOptions.SendReliable);
+>>>>>>> feature/Toyaishikawa/beta/online
         }
 
         public bool OpSetCustomPropertiesOfActor(int actorNr, Hashtable actorProperties)
@@ -1686,9 +1737,12 @@ namespace Photon.Realtime
 
         /// <summary>(188) Parameter key to let the server know it may queue the client in low-ccu matchmaking situations.</summary>
         public const byte AllowRepeats = 188;
+<<<<<<< HEAD
 
         /// <summary>(187) This optional parameter from the server configures the client to send analytics or not.</summary>
         public const byte ReportQos = 187;
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
     }
 
 
@@ -1990,7 +2044,11 @@ namespace Photon.Realtime
         ///
         /// 1) On server, room property ABC is set to value FOO, which triggers notifications to all the clients telling them that the property changed.
         /// 2) While that notification is in flight, a client sets the ABC property to value BAR.
+<<<<<<< HEAD
         /// 3) Client receives notification from the server and changes its local copy of ABC to FOO.
+=======
+        /// 3) Client receives notification from the server and changes it�s local copy of ABC to FOO.
+>>>>>>> feature/Toyaishikawa/beta/online
         /// 4) Server receives the set operation and changes the official value of ABC to BAR, but never notifies the client that sent the set operation that the value is now BAR.
         ///
         /// Without this option, the client that set the value to BAR never hears from the server that the official copy has been updated to BAR, and thus gets stuck with a value of FOO.

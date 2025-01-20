@@ -25,12 +25,16 @@ namespace Photon.Chat.Demo
 
         public void OnPointerClick(PointerEventData eventData)
         {
+<<<<<<< HEAD
             #if UNITY_6000_0_OR_NEWER
             ChatGui handler = FindFirstObjectByType<ChatGui>();
             #else
             ChatGui handler = FindObjectOfType<ChatGui>();
             #endif
 
+=======
+            ChatGui handler = FindObjectOfType<ChatGui>();
+>>>>>>> feature/Toyaishikawa/beta/online
             handler.ShowChannel(this.Channel);
         }
     }

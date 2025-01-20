@@ -22,7 +22,10 @@ namespace Photon.Realtime
     using System.Text;
     using System.Collections;
     using System.Collections.Generic;
+<<<<<<< HEAD
     using System.Globalization;
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
 
     using Stopwatch = System.Diagnostics.Stopwatch;
 
@@ -275,7 +278,10 @@ namespace Photon.Realtime
                 sb.AppendFormat("State: {0} ", this.client.State);
                 sb.AppendFormat("PeerID: {0} ", this.client.LoadBalancingPeer.PeerID);
                 sb.AppendFormat("NameServer: {0} Current Server: {1} IP: {2} Region: {3} ", this.client.NameServerHost, this.client.CurrentServerAddress, this.client.LoadBalancingPeer.ServerIpAddress, this.client.CloudRegion);
+<<<<<<< HEAD
                 sb.AppendFormat("{0} UTC", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture));
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
 
                 Debug.LogWarning(sb.ToString());
             }

@@ -293,6 +293,7 @@ namespace Photon.Realtime
         /// </summary>
         public LoadBalancingPeer LoadBalancingPeer { get; private set; }
 
+<<<<<<< HEAD
         #if PHOTON_LOCATION
         public LocationInfo LocationInfo
         {
@@ -300,6 +301,8 @@ namespace Photon.Realtime
         }
         #endif
 
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
         /// <summary>
         /// Gets or sets the binary protocol version used by this client
         /// </summary>
@@ -409,12 +412,20 @@ namespace Photon.Realtime
         /// If the fallback is impossible or if that connection also fails, the app logic must handle the case.
         /// It might even make sense to just try the same connection settings once more (or ask the user to do something about
         /// the network connectivity, firewalls, etc).
+<<<<<<< HEAD
         ///
+=======
+        /// 
+>>>>>>> feature/Toyaishikawa/beta/online
         /// The fallback will use the default Name Server port as defined by ProtocolToNameServerPort.
         /// </remarks>
         public bool EnableProtocolFallback { get; set; }
 
+<<<<<<< HEAD
         /// <summary>The currently used server address (if any). The type of server is defined by Server property.</summary>
+=======
+        /// <summary>The currently used server address (if any). The type of server is define by Server property.</summary>
+>>>>>>> feature/Toyaishikawa/beta/online
         public string CurrentServerAddress { get { return this.LoadBalancingPeer.ServerAddress; } }
 
         /// <summary>Your Master Server address. In PhotonCloud, call ConnectToRegionMaster() to find your Master Server.</summary>
@@ -427,6 +438,7 @@ namespace Photon.Realtime
         /// <summary>The game server's address for a particular room. In use temporarily, as assigned by master.</summary>
         public string GameServerAddress { get; protected internal set; }
 
+<<<<<<< HEAD
         /// <summary>Provides a custom function to re-write server addresses in case the client must use a third party relay.</summary>
         /// <remarks>
         /// Discord Activities can only communicate with the domain discord.com.
@@ -434,6 +446,8 @@ namespace Photon.Realtime
         /// </remarks>
         public Func<string, ServerConnection, string> AddressRewriter;
 
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
         /// <summary>The server this client is currently connected or connecting to.</summary>
         /// <remarks>
         /// Each server (NameServer, MasterServer, GameServer) allow some operations and reject others.
@@ -456,10 +470,13 @@ namespace Photon.Realtime
         /// </remarks>
         public string ProxyServerAddress;
 
+<<<<<<< HEAD
         /// <summary>Count of connections made to any server.</summary>
         /// <remarks>Statistical value. Increased by OnStatusChanged(StatusCode.Connect).</remarks>
         public int ConnectCount { get; private set; }
 
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
         /// <summary>Backing field for property.</summary>
         private ClientState state = ClientState.PeerCreated;
 
@@ -597,6 +614,7 @@ namespace Photon.Realtime
         /// </remarks>
         public DisconnectCause DisconnectedCause { get; protected set; }
 
+<<<<<<< HEAD
         /// <summary>Defaults to null. Set when the client receives a disconnect info message with a debug string. Reset to null in connect methods.</summary>
         public string DisconnectMessage;
 
@@ -607,6 +625,8 @@ namespace Photon.Realtime
         #pragma warning disable CS0414
         private bool telemetrySent = false;
         #pragma warning restore CS0414
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
 
         /// <summary>
         /// After a to a connection loss or timeout, this summarizes the most relevant system conditions which might have contributed to the loss.
@@ -862,7 +882,11 @@ namespace Photon.Realtime
         public int NameServerPortInAppSettings;
 
         /// <summary>
+<<<<<<< HEAD
         /// Gets the NameServer Address (with prefix and port), based on the set protocol (this.LoadBalancingPeer.TransportProtocol).
+=======
+        /// Gets the NameServer Address (with prefix and port), based on the set protocol (this.LoadBalancingPeer.UsedProtocol).
+>>>>>>> feature/Toyaishikawa/beta/online
         /// </summary>
         /// <returns>NameServer Address (with prefix and port).</returns>
         private string GetNameServerAddress()
@@ -881,17 +905,29 @@ namespace Photon.Realtime
                 protocolPort = this.ServerPortOverrides.NameServerPort;
             }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> feature/Toyaishikawa/beta/online
             return this.ToProtocolAddress(this.NameServerHost, protocolPort, this.LoadBalancingPeer.TransportProtocol);
         }
 
 
+<<<<<<< HEAD
         /// <summary>Build URI from address, use Scheme, Host and Path but set the port as defined by port-field or default port. Calls AddressRewriter if set.</summary>
+=======
+        /// <summary>Build URI from address, use Scheme, Host and Path but set the port as defined by port-field or default port.</summary>
+>>>>>>> feature/Toyaishikawa/beta/online
         /// <exception cref="ArgumentException"></exception>
         private string ToProtocolAddress(string address, int port, ConnectionProtocol protocol)
         {
             string protocolScheme = String.Empty;
 
+<<<<<<< HEAD
             switch (protocol)
+=======
+            switch (this.LoadBalancingPeer.TransportProtocol)
+>>>>>>> feature/Toyaishikawa/beta/online
             {
                 case ConnectionProtocol.Udp:
                 case ConnectionProtocol.Tcp:
@@ -910,12 +946,16 @@ namespace Photon.Realtime
 
             Uri uri = new Uri(protocolScheme + address);
             string result = $"{uri.Scheme}://{uri.Host}:{port}{uri.AbsolutePath}";
+<<<<<<< HEAD
 
             if (this.AddressRewriter != null)
             {
                 result = this.AddressRewriter(result, ServerConnection.NameServer);
             }
 
+=======
+            //Debug.Log("ToProtocolAddress: "+result);
+>>>>>>> feature/Toyaishikawa/beta/online
             return result;
         }
 
@@ -1003,7 +1043,10 @@ namespace Photon.Realtime
 
             this.bestRegionSummaryFromStorage = appSettings.BestRegionSummaryFromStorage;
             this.DisconnectedCause = DisconnectCause.None;
+<<<<<<< HEAD
             this.DisconnectMessage = null;
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
             this.SystemConnectionSummary = null;
 
 
@@ -1090,7 +1133,10 @@ namespace Photon.Realtime
             this.CheckConnectSetupWebGl();
 
             this.DisconnectedCause = DisconnectCause.None;
+<<<<<<< HEAD
             this.DisconnectMessage = null;
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
             this.SystemConnectionSummary = null;
             if (this.LoadBalancingPeer.Connect(this.MasterServerAddress, this.ProxyServerAddress, this.AppId, this.TokenForInit))
             {
@@ -1134,7 +1180,10 @@ namespace Photon.Realtime
             }
 
             this.DisconnectedCause = DisconnectCause.None;
+<<<<<<< HEAD
             this.DisconnectMessage = null;
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
             this.SystemConnectionSummary = null;
             if (this.LoadBalancingPeer.Connect(this.NameServerAddress, this.ProxyServerAddress, "NameServer", this.TokenForInit))
             {
@@ -1220,7 +1269,10 @@ namespace Photon.Realtime
 
             this.connectToBestRegion = false;
             this.DisconnectedCause = DisconnectCause.None;
+<<<<<<< HEAD
             this.DisconnectMessage = null;
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
             this.SystemConnectionSummary = null;
             if (!this.LoadBalancingPeer.Connect(this.NameServerAddress, this.ProxyServerAddress, "NameServer", null))
             {
@@ -1389,7 +1441,11 @@ namespace Photon.Realtime
             this.Disconnect(DisconnectCause.DisconnectByClientLogic);
         }
 
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> feature/Toyaishikawa/beta/online
         /// <summary>Disconnects the client / peer from a server or stays disconnected. Internal method that sets the DisconnectedCause as well.</summary>
         internal void Disconnect(DisconnectCause cause)
         {
@@ -2431,12 +2487,23 @@ namespace Photon.Realtime
                 return;
             }
 
+<<<<<<< HEAD
 
             if (applyUserId && string.IsNullOrEmpty(this.LocalPlayer.UserId))
             {
                 this.LocalPlayer.UserId = this.AuthValues == null || string.IsNullOrEmpty(this.AuthValues.UserId) ? new System.Guid().ToString() : this.AuthValues.UserId;
             }
 
+=======
+            if (applyUserId)
+            {
+                this.LocalPlayer.UserId = this.AuthValues == null || string.IsNullOrEmpty(this.AuthValues.UserId) ? new System.Guid().ToString() : this.AuthValues.UserId;
+            }
+            else
+            {
+                this.LocalPlayer.UserId = null;
+            }
+>>>>>>> feature/Toyaishikawa/beta/online
 
             if (this.CurrentRoom == null)
             {
@@ -2694,6 +2761,7 @@ namespace Photon.Realtime
             return this.IsConnected;
         }
 
+<<<<<<< HEAD
         #if PHOTON_TELEMETRY
         /// <summary>If enabled, sends telemetry about the connection to a Photon service.</summary>
         /// <returns>True if a current report was sent. False if telemetry is disabled or a report was sent already.</returns>
@@ -2712,6 +2780,8 @@ namespace Photon.Realtime
         }
         #endif
 
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
         #endregion
 
         #region Implementation of IPhotonPeerListener
@@ -2807,11 +2877,14 @@ namespace Photon.Realtime
                 case OperationCode.Authenticate:
                 case OperationCode.AuthenticateOnce:
                     {
+<<<<<<< HEAD
                         if (operationResponse.Parameters.ContainsKey(ParameterCode.ReportQos))
                         {
                             this.TelemetryEnabled = (bool)operationResponse[ParameterCode.ReportQos];
                         }
 
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
                         if (operationResponse.ReturnCode != 0)
                         {
                             this.DebugReturn(DebugLevel.ERROR, operationResponse.ToStringFull() + " Server: " + this.Server + " Address: " + this.LoadBalancingPeer.ServerAddress);
@@ -2840,7 +2913,10 @@ namespace Photon.Realtime
                                     break;
                             }
 
+<<<<<<< HEAD
                             this.DisconnectMessage = $"Op: {operationResponse.OperationCode} ReturnCode: {operationResponse.ReturnCode} '{operationResponse.DebugMessage}'";
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
                             this.Disconnect(this.DisconnectedCause);
                             break;  // if auth didn't succeed, we disconnect (above) and exit this operation's handling
                         }
@@ -2871,6 +2947,7 @@ namespace Photon.Realtime
 
                         if (this.Server == ServerConnection.NameServer)
                         {
+<<<<<<< HEAD
                             if (this.AuthMode == AuthModeOption.AuthOnceWss && this.ExpectedProtocol != null)
                             {
                                 this.DebugReturn(DebugLevel.INFO, string.Format("AuthOnceWss mode. Auth response switches TransportProtocol to ExpectedProtocol: {0}.", this.ExpectedProtocol));
@@ -2878,6 +2955,8 @@ namespace Photon.Realtime
                                 this.ExpectedProtocol = null;
                             }
 
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
                             string receivedCluster = operationResponse[ParameterCode.Cluster] as string;
                             if (!string.IsNullOrEmpty(receivedCluster))
                             {
@@ -2888,6 +2967,7 @@ namespace Photon.Realtime
                             this.MasterServerAddress = operationResponse[ParameterCode.Address] as string;
                             if (this.ServerPortOverrides.MasterServerPort != 0)
                             {
+<<<<<<< HEAD
                                 this.MasterServerAddress = ReplacePortWithAlternative(this.MasterServerAddress, this.ServerPortOverrides.MasterServerPort);
                             }
                             if (this.AddressRewriter != null)
@@ -2895,6 +2975,19 @@ namespace Photon.Realtime
                                 this.MasterServerAddress = this.AddressRewriter(this.MasterServerAddress, ServerConnection.MasterServer);
                             }
 
+=======
+                                //Debug.LogWarning("Incoming MasterServer Address: "+this.MasterServerAddress);
+                                this.MasterServerAddress = ReplacePortWithAlternative(this.MasterServerAddress, this.ServerPortOverrides.MasterServerPort);
+                                //Debug.LogWarning("New MasterServer Address: "+this.MasterServerAddress);
+                            }
+
+                            if (this.AuthMode == AuthModeOption.AuthOnceWss && this.ExpectedProtocol != null)
+                            {
+                                this.DebugReturn(DebugLevel.INFO, string.Format("AuthOnceWss mode. Auth response switches TransportProtocol to ExpectedProtocol: {0}.", this.ExpectedProtocol));
+                                this.LoadBalancingPeer.TransportProtocol = (ConnectionProtocol)this.ExpectedProtocol;
+                                this.ExpectedProtocol = null;
+                            }
+>>>>>>> feature/Toyaishikawa/beta/online
                             this.DisconnectToReconnect();
                         }
                         else if (this.Server == ServerConnection.MasterServer)
@@ -2984,7 +3077,11 @@ namespace Photon.Realtime
                         return; // in this particular case, we suppress the duplicate GetRegion response. we don't want a callback for this, cause there is a warning already.
                     }
 
+<<<<<<< HEAD
                     this.RegionHandler.SetRegions(operationResponse, this);
+=======
+                    this.RegionHandler.SetRegions(operationResponse);
+>>>>>>> feature/Toyaishikawa/beta/online
                     this.ConnectionCallbackTargets.OnRegionListReceived(this.RegionHandler);
 
                     if (this.connectToBestRegion)
@@ -3022,11 +3119,17 @@ namespace Photon.Realtime
                             this.GameServerAddress = (string)operationResponse[ParameterCode.Address];
                             if (this.ServerPortOverrides.GameServerPort != 0)
                             {
+<<<<<<< HEAD
                                 this.GameServerAddress = ReplacePortWithAlternative(this.GameServerAddress, this.ServerPortOverrides.GameServerPort);
                             }
                             if (this.AddressRewriter != null)
                             {
                                 this.GameServerAddress = this.AddressRewriter(this.GameServerAddress, ServerConnection.GameServer);
+=======
+                                //Debug.LogWarning("Incoming GameServer Address: " + this.GameServerAddress);
+                                this.GameServerAddress = ReplacePortWithAlternative(this.GameServerAddress, this.ServerPortOverrides.GameServerPort);
+                                //Debug.LogWarning("New GameServer Address: " + this.GameServerAddress);
+>>>>>>> feature/Toyaishikawa/beta/online
                             }
 
                             string roomName = operationResponse[ParameterCode.RoomName] as string;
@@ -3124,9 +3227,12 @@ namespace Photon.Realtime
             switch (statusCode)
             {
                 case StatusCode.Connect:
+<<<<<<< HEAD
                     this.ConnectCount++;
                     this.telemetrySent = false;
 
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
                     if (this.State == ClientState.ConnectingToNameServer)
                     {
                         if (this.LoadBalancingPeer.DebugOut >= DebugLevel.ALL)
@@ -3253,10 +3359,13 @@ namespace Photon.Realtime
                                 this.AuthValues.Token = null; // when leaving the server, invalidate the secret (but not the auth values)
                             }
 
+<<<<<<< HEAD
                             #if PHOTON_TELEMETRY
                             this.SendTelemetry();
                             #endif
 
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
                             this.State = ClientState.Disconnected;
                             this.ConnectionCallbackTargets.OnDisconnected(this.DisconnectedCause);
                             break;
@@ -3581,7 +3690,10 @@ namespace Photon.Realtime
         private void OnDisconnectMessageReceived(DisconnectMessage obj)
         {
             this.DebugReturn(DebugLevel.ERROR, string.Format("Got DisconnectMessage. Code: {0} Msg: \"{1}\". Debug Info: {2}", obj.Code, obj.DebugMessage, obj.Parameters.ToStringFull()));
+<<<<<<< HEAD
             this.DisconnectMessage = $"DisconnectMessage {obj.Code}: {obj.DebugMessage}";
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
             this.Disconnect(DisconnectCause.DisconnectByDisconnectMessage);
         }
 
@@ -3599,11 +3711,14 @@ namespace Photon.Realtime
 
         protected internal static string ReplacePortWithAlternative(string address, ushort replacementPort)
         {
+<<<<<<< HEAD
             if (string.IsNullOrEmpty(address) || replacementPort == 0)
             {
                 return address;
             }
 
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
             bool webSocket = address.StartsWith("ws");
             if (webSocket)
             {
@@ -3613,7 +3728,11 @@ namespace Photon.Realtime
             }
             else
             {
+<<<<<<< HEAD
                 UriBuilder urib = new UriBuilder($"scheme://{address}");
+=======
+                UriBuilder urib = new UriBuilder(string.Format("scheme://{0}", address));
+>>>>>>> feature/Toyaishikawa/beta/online
                 return string.Format("{0}:{1}", urib.Host, replacementPort);
             }
         }

@@ -37,11 +37,15 @@ namespace Photon.Chat.Demo
                 descriptionText = "<Color=Red>WARNING:</Color>\nPlease setup a Chat AppId in the PhotonServerSettings file.";
             }
             #else
+<<<<<<< HEAD
             #if UNITY_6000_0_OR_NEWER
             ChatGui cGui = FindFirstObjectByType<ChatGui>(); // this could be a serialized reference instead of finding this each time
             #else
             ChatGui cGui = FindObjectOfType<ChatGui>(); // this could be a serialized reference instead of finding this each time
             #endif
+=======
+            ChatGui cGui = FindObjectOfType<ChatGui>(); // TODO: this could be a serialized reference instead of finding this each time
+>>>>>>> feature/Toyaishikawa/beta/online
 
             showWarning = cGui == null || string.IsNullOrEmpty(cGui.chatAppSettings.AppIdChat);
             if (showWarning)

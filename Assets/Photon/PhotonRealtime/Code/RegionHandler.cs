@@ -9,6 +9,10 @@
 // <author>developer@photonengine.com</author>
 // ----------------------------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> feature/Toyaishikawa/beta/online
 #if UNITY_4_7 || UNITY_5 || UNITY_5_3_OR_NEWER
 #define SUPPORTED_UNITY
 #endif
@@ -17,7 +21,10 @@
 #define PING_VIA_COROUTINE
 #endif
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
 namespace Photon.Realtime
 {
     using System;
@@ -153,7 +160,11 @@ namespace Photon.Realtime
         }
 
         /// <summary>Initializes the regions of this RegionHandler with values provided from the Name Server (as OperationResponse for OpGetRegions).</summary>
+<<<<<<< HEAD
         public void SetRegions(OperationResponse opGetRegions, LoadBalancingClient loadBalancingClient = null)
+=======
+        public void SetRegions(OperationResponse opGetRegions)
+>>>>>>> feature/Toyaishikawa/beta/online
         {
             if (opGetRegions.OperationCode != OperationCode.GetRegions)
             {
@@ -169,10 +180,15 @@ namespace Photon.Realtime
             string[] servers = opGetRegions[ParameterCode.Address] as string[];
             if (regions == null || servers == null || regions.Length != servers.Length)
             {
+<<<<<<< HEAD
                 if (loadBalancingClient != null)
                 {
                     loadBalancingClient.DebugReturn(DebugLevel.ERROR, "RegionHandler.SetRegions() failed. Received regions and servers must be non null and of equal length. Could not read regions.");
                 }
+=======
+                //TODO: log error
+                //Debug.LogError("The region arrays from Name Server are not ok. Must be non-null and same length. " + (regions == null) + " " + (servers == null) + "\n" + opGetRegions.ToStringFull());
+>>>>>>> feature/Toyaishikawa/beta/online
                 return;
             }
 
@@ -187,11 +203,14 @@ namespace Photon.Realtime
                     server = LoadBalancingClient.ReplacePortWithAlternative(servers[i], PortToPingOverride);
                 }
 
+<<<<<<< HEAD
                 if (loadBalancingClient != null && loadBalancingClient.AddressRewriter != null)
                 {
                     server = loadBalancingClient.AddressRewriter(server, ServerConnection.MasterServer);
                 }
 
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
                 Region tmp = new Region(regions[i], server);
                 if (string.IsNullOrEmpty(tmp.Code))
                 {
@@ -238,10 +257,13 @@ namespace Photon.Realtime
         private MonoBehaviourEmpty emptyMonoBehavior;
         #endif
 
+<<<<<<< HEAD
         #if PHOTON_LOCATION
         internal Location Location = new Location();
         #endif
 
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
         /// <summary>Creates a new RegionHandler.</summary>
         /// <param name="masterServerPortOverride">If non-zero, this port will be used to ping Master Servers on.</param>
         public RegionHandler(ushort masterServerPortOverride = 0)
@@ -286,6 +308,7 @@ namespace Photon.Realtime
             this.onCompleteCall = onCompleteCallback;
             #endif
 
+<<<<<<< HEAD
             #if PHOTON_LOCATION
             #if SUPPORTED_UNITY
             this.Location.FetchLocation(this.emptyMonoBehavior, null);
@@ -295,6 +318,8 @@ namespace Photon.Realtime
             #endif
 
 
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
             if (string.IsNullOrEmpty(previousSummary))
             {
                 return this.PingEnabledRegions();
@@ -738,7 +763,11 @@ namespace Photon.Realtime
             //Debug.Log("Done: "+ this.region.Code);
             this.Done = true;
             this.ping.Dispose();
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> feature/Toyaishikawa/beta/online
             if (this.rttResults.Count > 1 && replyCount > 0)
             {
                 int bestRtt = this.rttResults.Min();

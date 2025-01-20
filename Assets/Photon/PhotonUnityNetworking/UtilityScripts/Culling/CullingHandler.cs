@@ -65,11 +65,15 @@ namespace Photon.Pun.UtilityScripts
 
             if (this.cullArea == null)
             {
+<<<<<<< HEAD
                 #if UNITY_6000_0_OR_NEWER
                 this.cullArea = FindFirstObjectByType<CullArea>();
                 #else
                 this.cullArea = FindObjectOfType<CullArea>();
                 #endif
+=======
+                this.cullArea = FindObjectOfType<CullArea>();
+>>>>>>> feature/Toyaishikawa/beta/online
             }
 
             this.previousActiveCells = new List<byte>(0);

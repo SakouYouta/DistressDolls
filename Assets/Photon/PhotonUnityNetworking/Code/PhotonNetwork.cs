@@ -64,7 +64,11 @@ namespace Photon.Pun
     public static partial class PhotonNetwork
     {
         /// <summary>Version number of PUN. Used in the AppVersion, which separates your playerbase in matchmaking.</summary>
+<<<<<<< HEAD
         public const string PunVersion = "2.49";
+=======
+        public const string PunVersion = "2.47";
+>>>>>>> feature/Toyaishikawa/beta/online
 
         /// <summary>Version number of your game. Setting this updates the AppVersion, which separates your playerbase in matchmaking.</summary>
         /// <remarks>
@@ -2976,6 +2980,7 @@ namespace Photon.Pun
         }
 
 
+<<<<<<< HEAD
         ///// <summary>Finds the GameObjects with Components of a specific type (using FindObjectsOfType).</summary>
         ///// <param name="type">Type must be a Component</param>
         ///// <returns>HashSet with GameObjects that have a specific type of Component.</returns>
@@ -2993,6 +2998,26 @@ namespace Photon.Pun
 
         //    return objectsWithComponent;
         //}
+=======
+        /// <summary>Finds the GameObjects with Components of a specific type (using FindObjectsOfType).</summary>
+        /// <param name="type">Type must be a Component</param>
+        /// <returns>HashSet with GameObjects that have a specific type of Component.</returns>
+        public static HashSet<GameObject> FindGameObjectsWithComponent(Type type)
+        {
+            HashSet<GameObject> objectsWithComponent = new HashSet<GameObject>();
+
+            Component[] targetComponents = (Component[]) GameObject.FindObjectsOfType(type);
+            for (int index = 0; index < targetComponents.Length; index++)
+            {
+                if (targetComponents[index] != null)
+                {
+                    objectsWithComponent.Add(targetComponents[index].gameObject);
+                }
+            }
+
+            return objectsWithComponent;
+        }
+>>>>>>> feature/Toyaishikawa/beta/online
 
 
         /// <summary>Enable/disable receiving events from a given Interest Group.</summary>
@@ -3281,6 +3306,7 @@ namespace Photon.Pun
         }
 
 
+<<<<<<< HEAD
         ///// <summary>
         ///// Internally used by Editor scripts, called on Hierarchy change (includes scene save) to remove surplus hidden PhotonHandlers.
         ///// </summary>
@@ -3304,6 +3330,31 @@ namespace Photon.Pun
         //        }
         //    }
         //}
+=======
+        /// <summary>
+        /// Internally used by Editor scripts, called on Hierarchy change (includes scene save) to remove surplus hidden PhotonHandlers.
+        /// </summary>
+        /// <remarks>This is done in this class, because the Editor assembly can't access PhotonHandler.</remarks>
+        public static void InternalCleanPhotonMonoFromSceneIfStuck()
+        {
+            PhotonHandler[] photonHandlers = GameObject.FindObjectsOfType(typeof(PhotonHandler)) as PhotonHandler[];
+            if (photonHandlers != null && photonHandlers.Length > 0)
+            {
+                Debug.Log("Cleaning up hidden PhotonHandler instances in scene. Please save the scene to fix the problem.");
+                foreach (PhotonHandler photonHandler in photonHandlers)
+                {
+                    // Debug.Log("Removing Handler: " + photonHandler + " photonHandler.gameObject: " + photonHandler.gameObject);
+                    if (photonHandler.gameObject != null && photonHandler.gameObject.name == "PhotonMono")
+                    {
+                        photonHandler.gameObject.hideFlags = 0;
+                        GameObject.DestroyImmediate(photonHandler.gameObject);
+                    }
+
+                    Component.DestroyImmediate(photonHandler);
+                }
+            }
+        }
+>>>>>>> feature/Toyaishikawa/beta/online
 
         #endif
 

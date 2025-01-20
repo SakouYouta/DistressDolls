@@ -27,11 +27,15 @@ namespace Photon.Pun.UtilityScripts
             return;
             #endif
 
+<<<<<<< HEAD
             #if UNITY_6000_0_OR_NEWER
             EventSystem sceneEventSystem = FindFirstObjectByType<EventSystem>();
             #else
             EventSystem sceneEventSystem = FindObjectOfType<EventSystem>();
             #endif
+=======
+            EventSystem sceneEventSystem = FindObjectOfType<EventSystem>();
+>>>>>>> feature/Toyaishikawa/beta/online
             if (sceneEventSystem == null)
             {
                 GameObject eventSystem = new GameObject("EventSystem");

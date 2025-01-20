@@ -31,9 +31,12 @@ namespace Photon.Realtime
     using System.Text;
     using UnityEngine.Networking;
 
+<<<<<<< HEAD
     #if UNITY_2021_3_OR_NEWER
     using UnityEditor.Build;
     #endif
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
 
     [InitializeOnLoad]
     public static class PhotonEditorUtils
@@ -117,10 +120,14 @@ namespace Photon.Realtime
                     continue;
                 }
 
+<<<<<<< HEAD
                 var defineSymbols = GetScriptingDefines(group)
                                    .Split(';')
                                    .Select(d => d.Trim())
                                    .ToList();
+=======
+                var defineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(group).Split(';').Select(d => d.Trim()).ToList();
+>>>>>>> feature/Toyaishikawa/beta/online
 
                 if (!defineSymbols.Contains(defineSymbol))
                 {
@@ -128,7 +135,11 @@ namespace Photon.Realtime
 
                     try
                     {
+<<<<<<< HEAD
                         SetScriptingDefines(group, string.Join(";", defineSymbols.ToArray()));
+=======
+                        PlayerSettings.SetScriptingDefineSymbolsForGroup(group, string.Join(";", defineSymbols.ToArray()));
+>>>>>>> feature/Toyaishikawa/beta/online
                     }
                     catch (Exception e)
                     {
@@ -139,6 +150,7 @@ namespace Photon.Realtime
         }
 
 
+<<<<<<< HEAD
         private static string GetScriptingDefines(BuildTargetGroup group)
         {
             #if UNITY_2021_3_OR_NEWER
@@ -161,6 +173,8 @@ namespace Photon.Realtime
             #endif
         }
 
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
         /// <summary>
         /// Removes PUN2's Script Define Symbols from project
         /// </summary>
@@ -169,15 +183,26 @@ namespace Photon.Realtime
             foreach (BuildTarget target in Enum.GetValues(typeof(BuildTarget)))
             {
                 BuildTargetGroup group = BuildPipeline.GetBuildTargetGroup(target);
+<<<<<<< HEAD
+=======
+
+>>>>>>> feature/Toyaishikawa/beta/online
                 if (group == BuildTargetGroup.Unknown)
                 {
                     continue;
                 }
 
+<<<<<<< HEAD
                 var defineSymbols = GetScriptingDefines(group)
                                    .Split(';')
                                    .Select(d => d.Trim())
                                    .ToList();
+=======
+                var defineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(group)
+                    .Split(';')
+                    .Select(d => d.Trim())
+                    .ToList();
+>>>>>>> feature/Toyaishikawa/beta/online
 
                 List<string> newDefineSymbols = new List<string>();
                 foreach (var symbol in defineSymbols)
@@ -192,7 +217,11 @@ namespace Photon.Realtime
 
                 try
                 {
+<<<<<<< HEAD
                     SetScriptingDefines(group, string.Join(";", newDefineSymbols.ToArray()));
+=======
+                    PlayerSettings.SetScriptingDefineSymbolsForGroup(group, string.Join(";", newDefineSymbols.ToArray()));
+>>>>>>> feature/Toyaishikawa/beta/online
                 }
                 catch (Exception e)
                 {

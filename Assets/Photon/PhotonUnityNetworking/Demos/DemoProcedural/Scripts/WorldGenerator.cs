@@ -65,11 +65,15 @@ namespace Photon.Pun.Demo.Procedural
             {
                 if (instance == null)
                 {
+<<<<<<< HEAD
                     #if UNITY_6000_0_OR_NEWER
                     instance = FindFirstObjectByType<WorldGenerator>();
                     #else
                     instance = FindObjectOfType<WorldGenerator>();
                     #endif
+=======
+                    instance = FindObjectOfType<WorldGenerator>();
+>>>>>>> feature/Toyaishikawa/beta/online
                 }
 
                 return instance;

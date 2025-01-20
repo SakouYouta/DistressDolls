@@ -76,12 +76,16 @@ namespace Photon.Pun.UtilityScripts
             {
                 if (instance == null)
                 {
+<<<<<<< HEAD
                     
                     #if UNITY_6000_0_OR_NEWER
                     instance = FindFirstObjectByType<PhotonTeamsManager>();
                     #else
                     instance = FindObjectOfType<PhotonTeamsManager>();
                     #endif
+=======
+                    instance = FindObjectOfType<PhotonTeamsManager>();
+>>>>>>> feature/Toyaishikawa/beta/online
                     if (instance == null)
                     {
                         GameObject obj = new GameObject();

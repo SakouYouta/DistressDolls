@@ -62,11 +62,15 @@ public class ChatEditor : EditorWindow
     {
         if (this.cGui == null)
         {
+<<<<<<< HEAD
             #if UNITY_6000_0_OR_NEWER
             cGui = FindFirstObjectByType<ChatGui>();
             #else
             cGui = FindObjectOfType<ChatGui>();
             #endif
+=======
+            cGui = FindObjectOfType<ChatGui>();
+>>>>>>> feature/Toyaishikawa/beta/online
         }
 
         GUI.skin.label.wordWrap = true;

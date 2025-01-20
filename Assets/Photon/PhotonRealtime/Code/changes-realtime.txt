@@ -3,6 +3,7 @@ Photon Realtime C# Client - Changelog
 www.photonengine.com  -  Join our Discord Server: https://dashboard.photonengine.com/account/profile
 
 
+<<<<<<< HEAD
 Version 4.1.8.13 (09. January 2025 - rev7815)
     Changed: RealtimeFallback() will no longer call client.Disconnect if the client is disconnecting already.
     Changed: ChangeLocalID() to not change the LocalPlayer.UserId, unless it is null or empty. This improves a change in v4.1.8.9, which could set the LocalPlayer.UserId to null.
@@ -26,6 +27,8 @@ Version 4.1.8.10 (14. October 2024 - rev7732)
     Internal: GetNameServerAddress now uses ToProtocolAddress.
     Changed: The Authenticate response on the Name Server will first apply the expected protocol for the Master Server connection. Then read the address and maybe rewrite it.
     Removed: Unity special cases of using SocketUdpAsync / SocketTcpAsync for .Net 4.x for Mono specifically. Recent Unity versions (2019 tested) no longer run into issues with receiving data in blocking mode.
+=======
+>>>>>>> feature/Toyaishikawa/beta/online
 
 Version 4.1.8.9 (02. September 2024 - rev7660)
     Changed: EnableProtocolFallback will only ever work for UDP, TCP or WS connections. If WSS should be used on the Name Server, this is likely for the encryption. A switch from WSS to others will lower the security level unexpectedly.
