@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -6,16 +7,19 @@ using Debug = UnityEngine.Debug;
 
 public class SetDeck : MonoBehaviour, IDropHandler
 {
-    private List<int> deck = new List<int>();
+    public List<int> deck = new List<int>();
     [SerializeField] private Transform deckPanel;
     [SerializeField] private Transform PossessionPanel;
+
+    //外部から変更を加えられないように
+    public ReadOnlyCollection<int> Deck => deck.AsReadOnly();
 
     void Start()
     {// デッキデータ読み込み
         deck = DataSaveManager.LoadDeckList();
     }
 
-    #region OnDrop() デッキにカードを加えた際に呼ばれる
+    #region OnDrop() カードがドロップされた際に呼ばれる
     public void OnDrop(PointerEventData eventData)
     {
         CardMovement cardMove = eventData.pointerDrag.GetComponent<CardMovement>();
@@ -30,15 +34,15 @@ public class SetDeck : MonoBehaviour, IDropHandler
                     if (deck.Count < 30)
                     {// デッキのカードが30枚までになるように
                         CardMovement.drag = false;
-                        deck.Add(cardModel.cardId);
-                        Debug.Log("かーどID" + cardModel.cardId);
-                        Debug.Log(deck.Count);
+                        deck.Add(cardModel.cardId); // カードをデッキに追加
                         Debug.Log("デッキ追加" + string.Join(", ", deck));
+                        Debug.Log("追加したかーどID" + cardModel.cardId);
+                        Debug.Log("追加後のデッキの数" + deck.Count);
                     }
                     else
                     {
                         CardMovement.drag = true;
-                        Debug.LogError("カードが30枚以上です");
+                        Debug.Log("カードが30枚以上です");
                     }
                 }
                 else
@@ -47,35 +51,10 @@ public class SetDeck : MonoBehaviour, IDropHandler
             else Debug.LogError("カードコントローラー情報の取得に失敗しました");
             cardMove.cardParent = deckPanel;
         }
-        else if(cardMove != null && cardMove.cardParent == deckPanel)
-        {
-            CardController cardController = cardMove.GetComponent<CardController>();
-            if (cardController != null)
-            {
-                CardModel cardModel = cardController.model;
-                if (cardModel != null)// カードIDを削除
-                {
-                    deck.Remove(cardModel.cardId);
-                    Debug.Log(deck.Count);
-                    Debug.Log("デッキ削除");
-                }
-                else
-                    Debug.LogError("カードモデル情報の取得に失敗しました");
-            }
-            else Debug.LogError("カードコントローラー情報の取得に失敗しました");
-            cardMove.cardParent = PossessionPanel;
-        }
         else if (cardMove == null)
             Debug.Log("カードムーブ情報の取得に失敗しました");
         else if (cardMove.cardParent == PossessionPanel)
             Debug.Log("カードの親情報の取得に失敗しました");
-    }
-    #endregion
-
-    #region GetDeck() デッキを渡す
-    public List<int> GetDeck()
-    {
-        return new List<int>(deck);
     }
     #endregion
 }

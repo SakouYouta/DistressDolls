@@ -29,8 +29,11 @@ public class DeckProduction : MonoBehaviour
     #region SaveDeck()　デッキを保存
     public void SaveDeck()
     {
-        DeckRegister = setDeck.GetDeck();// 仮登録のデッキを持ってくる
-        Debug.Log("デッキ保存リスト：" + string.Join(", ", DeckRegister));
+        DeckRegister.Clear();
+        foreach (int deck in setDeck.Deck)
+        {
+            DeckRegister.Add(deck);
+        }
         DataSaveManager.SaveDeckList(DeckRegister);
     }
     #endregion
@@ -38,7 +41,9 @@ public class DeckProduction : MonoBehaviour
     #region ReadDeck() デッキを読み込む
     public void ReadDeck()
     {
-        DataSaveManager.LoadDeckList();
+        List<int> readdeck = new List<int>();
+        readdeck = DataSaveManager.LoadDeckList();
+        Debug.Log("読み込んだデッキ：" + string.Join(", ", readdeck));
     }
     #endregion
 
