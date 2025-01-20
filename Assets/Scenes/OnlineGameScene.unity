@@ -322,6 +322,7 @@ GameObject:
   m_Component:
   - component: {fileID: 196680686}
   - component: {fileID: 196680687}
+  - component: {fileID: 196680688}
   m_Layer: 0
   m_Name: OnlineMatchingManager
   m_TagString: Untagged
@@ -356,6 +357,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdecc43f84ebb5545b57e0188b2d451f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &196680688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 196680685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &197347369
 GameObject:
   m_ObjectHideFlags: 0
@@ -924,7 +947,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.005065918, y: 0}
+  m_AnchoredPosition: {x: -0.005126953, y: 0}
   m_SizeDelta: {x: 0.010132, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &497392364
@@ -1941,7 +1964,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.005065918, y: 0}
+  m_AnchoredPosition: {x: -0.005126953, y: 0}
   m_SizeDelta: {x: 0.010132, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1252830481
@@ -2147,6 +2170,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1528111181}
   - component: {fileID: 1528111182}
+  - component: {fileID: 1528111183}
   m_Layer: 0
   m_Name: OnlineGameManager
   m_TagString: Untagged
@@ -2182,20 +2206,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 1003898851616374241, guid: 3f24f10433b087643958ceccb9ec60b4, type: 3}
-  playerHand: {fileID: 1166110186}
-  enemyHand: {fileID: 1119146779}
-  playerField: {fileID: 83987190}
-  enemyField: {fileID: 602898718}
-  playerGraveyard: {fileID: 338055458}
-  enemyGraveyard: {fileID: 1547191419}
-  playerHPText: {fileID: 1892062872}
-  enemyHPText: {fileID: 1271187787}
-  playerHP: 0
-  enemyHP: 0
-  isPlayerTurn: 1
-  TurnEnd: 0
-  playerDeck: 
-  enemyDeck: 
+  player1Hand: {fileID: 1166110186}
+  player2Hand: {fileID: 1119146779}
+  player1Field: {fileID: 83987190}
+  player2Field: {fileID: 602898718}
+  player1Graveyard: {fileID: 338055458}
+  player2Graveyard: {fileID: 1547191419}
+  player1HPText: {fileID: 1892062872}
+  player2HPText: {fileID: 1271187787}
+  player1HP: 10
+  player2HP: 10
+  isPlayer1Turn: 1
+  turnEnd: 0
+  player1Deck: 
+  player2Deck: 
+--- !u!114 &1528111183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1528111180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 2
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1547191418
 GameObject:
   m_ObjectHideFlags: 0
