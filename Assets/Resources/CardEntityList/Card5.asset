@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Card5
   m_EditorClassIdentifier: 
   cardId: 5
-  name: "\u8EFD\u88C5"
+  name: "\u9632\u5FA1"
   abilty: "\u30C0\u30E1\u30FC\u30B8\u30921\u6E1B\u3089\u3059"
-  icon: {fileID: 0}
+  icon: {fileID: 6338736928516000783, guid: 3c36da02ec322204384920d8961aff00, type: 3}
   effectType: 1
   effectValue: 1

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ada679b763bfe2041bae56d6061929da, type: 3}
+  m_Name: Card37
+  m_EditorClassIdentifier: 
+  cardId: 37
+  name: "\u4F7F\u3044\u9B54\u3000\u30B9\u30FC\u30CD"
+  abilty: "1\u30C0\u30E1\u30FC\u30B8\u4E0E\u3048\u308B"
+  icon: {fileID: 5941724309818466762, guid: 54ae308b8db15244d89a6cec3dc812cc, type: 3}
+  effectType: 0
+  effectValue: 1

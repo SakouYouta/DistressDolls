@@ -15,6 +15,6 @@ MonoBehaviour:
   cardId: 9
   name: "\u5F15\u529B"
   abilty: "\u30AB\u30FC\u30C9\u30921\u679A\u5F15\u304F"
-  icon: {fileID: 0}
+  icon: {fileID: -3356143854199884288, guid: 42d5961ed73b2f644bc078750a941885, type: 3}
   effectType: 2
   effectValue: 1
