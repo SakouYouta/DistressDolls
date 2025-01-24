@@ -9,6 +9,7 @@ public class GachaSystemManager : MonoBehaviour
     [SerializeField] Button pack1Button;       // Pack 1 ボタン
     [SerializeField] Button pack2Button;       // Pack 2 ボタン
     [SerializeField] Button pack3Button;       // Pack 3 ボタン
+    public Button confirmButton;     // 確認ボタン（追加）
 
     // シングルトン化
     public static GachaSystemManager instance;
@@ -39,6 +40,8 @@ public class GachaSystemManager : MonoBehaviour
         pack1Button.onClick.AddListener(() => SelectPack(1));
         pack2Button.onClick.AddListener(() => SelectPack(2));
         pack3Button.onClick.AddListener(() => SelectPack(3));
+        confirmButton.gameObject.SetActive(false);
+
     }
 
     // パックを選択するメソッド
@@ -68,7 +71,7 @@ public class GachaSystemManager : MonoBehaviour
         pack3Button.gameObject.SetActive(false);
 
         // OpenPackスクリプトに通知して開封ボタンを有効化
-        OpenPack openPack = FindObjectOfType<OpenPack>();
+        OpenPack openPack = FindAnyObjectByType<OpenPack>();
         if (openPack != null)
         {
             openPack.EnableOpenButton();

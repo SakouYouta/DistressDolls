@@ -62,6 +62,8 @@ public class OpenPack : MonoBehaviour
 
         // 開封フラグを立てて、再度開封できないようにする
         isPackOpened = true;
+        
+        GachaSystemManager.instance.confirmButton.gameObject.SetActive(true);
     }
 
     // 選択されたリストからランダムにカードIDを決定するメソッド
