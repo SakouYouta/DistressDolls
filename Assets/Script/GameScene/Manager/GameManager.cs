@@ -1,8 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
+using UnityEngine.SceneManagement; // シーン遷移のために必要
+
 
 public class GameManager : MonoBehaviour
 {
@@ -224,16 +225,24 @@ public class GameManager : MonoBehaviour
     #region ShowLeaderHP() - プレイヤーと敵のHPをUIに表示する
     public void ShowLeaderHP()
     {
-        if (playerHP <= 0) playerHP = 0;
-        if (enemyHP <= 0) enemyHP = 0;
+        if (playerHP <= 0)
+        {
+            playerHP = 0;
+            EndGame(false); // プレイヤーが敗北した場合
+        }
+        else if (enemyHP <= 0)
+        {
+            enemyHP = 0;
+            EndGame(true); // プレイヤーが勝利した場合
+        }
 
         playerHPText.text = playerHP.ToString();
         enemyHPText.text = enemyHP.ToString();
     }
     #endregion
 
-    #region  EndGame() - ゲーム終了処理
-    private void EndGame(bool isPlayerWinner)
+    #region EndGame() - ゲーム終了処理
+    private async void EndGame(bool isPlayerWinner)
     {
         if (isPlayerWinner)
         {
@@ -244,7 +253,17 @@ public class GameManager : MonoBehaviour
             Debug.Log("ゲーム終了: エネミーの勝利！");
         }
 
-        // 必要ならリスタートやシーン遷移処理を追加
+        await Task.Delay(1000); // 1秒待機
+
+        // シーン遷移 (勝利と敗北で異なるシーンへ遷移)
+        if (isPlayerWinner)
+        {
+            SceneManager.LoadScene("WinResultScene"); // 勝利シーンに遷移
+        }
+        else
+        {
+            SceneManager.LoadScene("LoseResultScene"); // 敗北シーンに遷移
+        }
     }
     #endregion
 }

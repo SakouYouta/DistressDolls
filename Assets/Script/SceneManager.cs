@@ -9,6 +9,8 @@ public class SceneManagerScript : MonoBehaviour
     private const string BATTLE_SCENE = "GameScene";
     private const string GACHA_SCENE = "gachaSystem";
     private const string DECK_SCENE = "DeckProduction";
+    private const string WINRESULT_SCENE = "WinResultScene";
+    private const string LOSERESULT_SCENE = "LoseResultScene";
 
     /// <summary>
     /// 指定されたシーンをロードします。
@@ -65,5 +67,21 @@ public class SceneManagerScript : MonoBehaviour
     public void LoadDeckScene()
     {
         LoadScene(DECK_SCENE);
+    }
+
+    /// <summary>
+    /// 勝利リザルトシーンに移動します。
+    /// </summary>
+    public void LoadWinResultScene()
+    {
+        LoadScene(WINRESULT_SCENE);
+    }
+
+    /// <summary>
+    /// 敗北リザルトシーンに移動します。
+    /// </summary>
+    public void LoadLoseResultScene()
+    {
+        LoadScene(LOSERESULT_SCENE);
     }
 }
