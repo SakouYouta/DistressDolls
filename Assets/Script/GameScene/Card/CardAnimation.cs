@@ -8,21 +8,34 @@ public class CardAnimation : MonoBehaviour
     #region RotateCard-カードを回転
     public IEnumerator RotateCard(Transform card)
     {
-        float elapsedTime = 0.0f; // 経過時間を記録する変数
-        float startRotation = card.eulerAngles.z;
-        float endRotation = startRotation + 360f; // 一周（360度）後の回転角度
+        float halfDuration = flipDuration / 2f; // 縮むと広がるそれぞれの時間
+        Vector3 originalScale = cardTransform.localScale; // 元のスケールを保存
 
-        while (elapsedTime < rotationDuration)
+        // カードの横幅を徐々に短くしてゼロにする
+        float elapsedTime = 0f;
+        while (elapsedTime < halfDuration)
         {
-            // 現在の回転角度を線形補間で計算
-            float currentRotation = Mathf.Lerp(startRotation, endRotation, elapsedTime / rotationDuration);
-            card.eulerAngles = new Vector3(0, 0, currentRotation);
+            float scaleX = Mathf.Lerp(originalScale.x, 0f, elapsedTime / halfDuration);
+            cardTransform.localScale = new Vector3(scaleX, originalScale.y, originalScale.z);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        // 回転が終了した後、最終的に初期の向きにリセット（0度の状態に戻す）
-        card.eulerAngles = new Vector3(0, 0, startRotation);
+        // 完全にゼロにする
+        cardTransform.localScale = new Vector3(0f, originalScale.y, originalScale.z);
+
+        // 横幅を徐々に元の長さに戻す
+        elapsedTime = 0f;
+        while (elapsedTime < halfDuration)
+        {
+            float scaleX = Mathf.Lerp(0f, originalScale.x, elapsedTime / halfDuration);
+            cardTransform.localScale = new Vector3(scaleX, originalScale.y, originalScale.z);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 元のスケールに戻す
+        cardTransform.localScale = originalScale;
     }
     #endregion
 }
