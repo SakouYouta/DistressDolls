@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Debug = UnityEngine.Debug;
@@ -11,17 +13,20 @@ public class ExcludeDeck : MonoBehaviour, IDropHandler
     [SerializeField] private SetDeck setDeck;
     [SerializeField] private Transform deckPanel;
     [SerializeField] private Transform PossessionPanel;
+    [SerializeField] private CardAnimation cardAnimation;
+    private CardModel cardModel;
 
     #region OnDrop() カードがドロップされた際に呼ばれる
     public void OnDrop(PointerEventData eventData)
     {
+        Transform card = eventData.pointerDrag.transform;
         CardMovement cardMove = eventData.pointerDrag.GetComponent<CardMovement>();
         if (cardMove != null && cardMove.cardParent == deckPanel)
         {
             CardController cardController = cardMove.GetComponent<CardController>();
             if (cardController != null)
             {
-                CardModel cardModel = cardController.model;
+                cardModel = cardController.model;
                 if (cardModel != null)// カードIDを削除
                 {
                     deck = setDeck.deck;
@@ -35,7 +40,8 @@ public class ExcludeDeck : MonoBehaviour, IDropHandler
                     Debug.Log("カードモデル情報の取得に失敗しました");
             }
             else Debug.Log("カードコントローラー情報の取得に失敗しました");
-            cardMove.cardParent = PossessionPanel;
+            //cardMove.cardParent = PossessionPanel;
+            StartCoroutine(Animation(cardMove, cardModel));
         }
         else if (cardMove == null)
             Debug.Log("カードムーブ情報の取得に失敗しました");
@@ -43,4 +49,10 @@ public class ExcludeDeck : MonoBehaviour, IDropHandler
             Debug.Log("カードの親情報の取得に失敗しました");
     }
     #endregion
+
+    private IEnumerator Animation(CardMovement cardMove, CardModel cardModel)
+    {
+        yield return StartCoroutine(cardAnimation.RotateCard(cardModel.cardId, cardMove.cardParent, PossessionPanel));
+        cardMove.cardParent = PossessionPanel;
+    }
 }
