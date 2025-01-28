@@ -85,14 +85,26 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    #region  CreateCard() - カードを生成して指定された場所に配置する
+    #region CreateCard() - カードを生成して指定された場所に配置する
+    // カードを生成して指定された場所に配置する
     public void CreateCard(int cardID, Transform place)
     {
         CardController card = Instantiate(cardPrefab, place); // カードをインスタンス化
         card.Init(cardID);
 
-        bool isPlayer = (place == playerHand); // プレイヤーかどうかを判定
+        // プレイヤーかどうかを判定
+        bool isPlayer = (place == playerHand);
         card.model.isPlayerCard = isPlayer;
+
+        // 敵手札の場合はカード裏面を表示
+        if (!isPlayer && place == enemyHand)
+        {
+            card.view.InvisibleHand(true); // カードの裏面を表示
+        }
+        else
+        {
+            card.view.InvisibleHand(false); // カードの裏面を表示
+        }
     }
     #endregion
 
@@ -198,6 +210,13 @@ public class GameManager : MonoBehaviour
         while (TurnEnd == false)
         {
             EnemyAiManager.instance.PerformAiActions();
+
+            // カードをフィールドに移動した場合、表面表示に変更
+            foreach (CardController card in enemyField.GetComponentsInChildren<CardController>())
+            {
+                card.view.InvisibleHand(false); // 表面を表示
+            }
+            
             await Task.Delay(1500); 
         }
 

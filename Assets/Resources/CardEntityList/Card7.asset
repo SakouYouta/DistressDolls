@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardId: 7
   name: "\u9632\u58C1"
-  abilty: "\u30C0\u30E1\u30FC\u30B8\u30922\u6E1B\u3089\u3059"
+  abilty: "\u30C0\u30E1\u30FC\u30B8\u30923\u6E1B\u3089\u3059"
   icon: {fileID: 4978949850837199153, guid: 8647d938d91bcd14c8c1080a249bfbbd, type: 3}
   effectType: 1
-  effectValue: 2
+  effectValue: 3
