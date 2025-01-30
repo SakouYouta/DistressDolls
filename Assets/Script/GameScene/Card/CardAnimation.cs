@@ -12,7 +12,7 @@ public class CardAnimation : MonoBehaviour
     [SerializeField] private CardController cardPrefab;
 
     #region RotateCardAnimation-カードを回転
-    public IEnumerator RotateCardAnimation(int cardId, Transform parent, Transform field, Transform animationField)
+    public IEnumerator RotateCardAnimation(int cardId, Transform field, GameObject animationField)
     {
         float halfTime = time / 2f; // 縮むと広がるそれぞれの時間
         CardController card = Instantiate(cardPrefab, new Vector2(1000.0f, 350.0f), Quaternion.identity).GetComponent<CardController>();
@@ -20,9 +20,8 @@ public class CardAnimation : MonoBehaviour
         Vector2 originalScale = card.transform.localScale; // 元のスケールを保存
         Vector2 cardVector = new Vector2(2.0f, 2.0f);
 
-        // 最前面に設定
-        animationField.SetAsLastSibling();
-        card.transform.SetParent(animationField);
+        animationField.SetActive(true);
+        card.transform.SetParent(animationField.transform);
 
         // カードの横幅を徐々に短くしてゼロにする
         float timer = 0f;
@@ -53,13 +52,12 @@ public class CardAnimation : MonoBehaviour
         // 元のスケールに戻し、親を変更
         card.transform.localScale = originalScale;
         card.transform.SetParent(field);
-        // 最背面に設定
-        animationField.SetAsFirstSibling();
+        animationField.SetActive(false);
     }
     #endregion
 
     #region FastRotateCardAnimation-カードを回転（高速）
-    public IEnumerator FastRotateCardAnimation(int cardId, Transform parent, Transform field, Transform animationField)
+    public IEnumerator FastRotateCardAnimation(int cardId, Transform field, GameObject animationField)
     {
         float halfTime = fastTime / 2f; // 縮むと広がるそれぞれの時間
         CardController card = Instantiate(cardPrefab, new Vector2(1000.0f, 350.0f), Quaternion.identity).GetComponent<CardController>();
@@ -67,9 +65,8 @@ public class CardAnimation : MonoBehaviour
         Vector2 originalScale = card.transform.localScale; // 元のスケールを保存
         Vector2 cardVector = new Vector2(2.0f, 2.0f);
 
-        // 最前面に設定
-        animationField.SetAsLastSibling();
-        card.transform.SetParent(animationField);
+        animationField.SetActive(true);
+        card.transform.SetParent(animationField.transform);
 
         for (int i = 0; i < 3; i++)
         {
@@ -104,8 +101,25 @@ public class CardAnimation : MonoBehaviour
         // 元のスケールに戻し、親を変更
         card.transform.localScale = originalScale;
         card.transform.SetParent(field);
-        // 最背面に設定
-        animationField.SetAsFirstSibling();
+        animationField.SetActive(false);
+    }
+    #endregion
+
+    #region DrawCardAnimation-カードを引く際のアニメーション
+    public IEnumerator DrawCardAnimation(int cardId, Transform field, GameObject animationField)
+    {
+        float halfTime = time / 2f; // 縮むと広がるそれぞれの時間
+        CardController card = Instantiate(cardPrefab, new Vector2(1000.0f, 350.0f), Quaternion.identity).GetComponent<CardController>();
+        card.Init(cardId); // カードを初期化
+
+        // 最前面に設定
+        animationField.SetActive(true);
+        card.transform.SetParent(animationField.transform);
+
+        yield return null;
+
+        card.transform.SetParent(field);
+        animationField.SetActive(false);
     }
     #endregion
 }

@@ -14,7 +14,7 @@ public class ExcludeDeck : MonoBehaviour, IDropHandler
     [SerializeField] private Transform deckPanel;
     [SerializeField] private Transform PossessionPanel;
     [SerializeField] private CardAnimation cardAnimation;
-    [SerializeField] public Transform AnimationField;
+    [SerializeField] public GameObject AnimationField;
     private CardModel cardModel;
 
     #region OnDrop() カードがドロップされた際に呼ばれる
@@ -53,7 +53,7 @@ public class ExcludeDeck : MonoBehaviour, IDropHandler
 
     private IEnumerator Animation(CardMovement cardMove, CardModel cardModel)
     {
-        yield return StartCoroutine(cardAnimation.RotateCardAnimation(cardModel.cardId, cardMove.cardParent, PossessionPanel, AnimationField));
-        cardMove.cardParent = PossessionPanel;
+        yield return StartCoroutine(cardAnimation.RotateCardAnimation(cardModel.cardId, PossessionPanel, AnimationField));
+        //cardMove.cardParent = PossessionPanel;
     }
 }

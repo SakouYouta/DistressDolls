@@ -236,7 +236,7 @@ MonoBehaviour:
   deckPanel: {fileID: 651655616}
   PossessionPanel: {fileID: 150054441}
   cardAnimation: {fileID: 356325571}
-  AnimationField: {fileID: 1936006009}
+  AnimationField: {fileID: 1936006008}
 --- !u!1 &356325567
 GameObject:
   m_ObjectHideFlags: 0
