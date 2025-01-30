@@ -71,6 +71,8 @@ public class EnemyAiManager : MonoBehaviour
                 }
 
                 // 使用したカードを場に出す
+                // 敵手札の場合はカード裏面を表示
+                cardController.view.InvisibleHand(false); // カードの裏面を表示
                 PlayCardOnField(cardToPlay);
                 Debug.Log($"敵がカード「{cardModel.name}」を使用しました（効果タイプ: {cardModel.effectType}）");
 
@@ -137,6 +139,7 @@ public class EnemyAiManager : MonoBehaviour
             }
 
             // 使用したカードを場に出す
+            cardController.view.InvisibleHand(false);
             PlayCardOnField(guardCard);
         }
         else

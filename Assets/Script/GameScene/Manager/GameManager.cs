@@ -15,6 +15,11 @@ public class GameManager : MonoBehaviour
     public bool isPlayerTurn = true;
     public bool TurnEnd = false;
     public List<int> playerDeck, enemyDeck;
+    [SerializeField] private Image playerLeaderImage;
+    [SerializeField] private Image enemyLeaderImage;
+    [SerializeField] private Sprite elemineSprite;
+    [SerializeField] private Sprite dorothySprite;
+    [SerializeField] private Sprite aineSprite;
     public static GameManager instance;
 
     // Awake() - インスタンスの初期化
@@ -49,12 +54,16 @@ public class GameManager : MonoBehaviour
         // DollSkillManager のインスタンスを取得して SetLeaders を呼び出す
         DollSkillManager.instance.SetLeaders(playerLeader, enemyLeader); // ここで SetLeaders を呼び出しているか確認
 
+        // リーダー画像を設定
+        SetLeaderImage(playerLeader.Name, playerLeaderImage);
+        SetLeaderImage(enemyLeader.Name, enemyLeaderImage);
+
         // デッキの初期化
         playerDeck = DataSaveManager.LoadDeckList();
         enemyDeck = new List<int>() { 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10, 10 };
 
         // プレイヤーと敵のHP初期値
-        playerHP = 10;
+        playerHP = 20;
         enemyHP = 20;
 
         // デッキシャッフル
@@ -68,6 +77,25 @@ public class GameManager : MonoBehaviour
         TurnCalc();
     }
     #endregion
+
+    private void SetLeaderImage(string leaderName, Image leaderImage)
+    {
+        switch (leaderName)
+        {
+            case "神秘への探索者 エレミネ":
+                leaderImage.sprite = elemineSprite;
+                break;
+            case "無垢な歌姫 ドロシー":
+                leaderImage.sprite = dorothySprite;
+                break;
+            case "幼魔女 アイネ":
+                leaderImage.sprite = aineSprite;
+                break;
+            default:
+                Debug.LogError("リーダー画像が設定されていません: " + leaderName);
+                break;
+        }
+    }
 
     #region Shuffle() - デッキをシャッフルする
     void Shuffle(List<int> deck)
