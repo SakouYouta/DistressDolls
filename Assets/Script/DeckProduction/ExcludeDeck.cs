@@ -52,7 +52,7 @@ public class ExcludeDeck : MonoBehaviour, IDropHandler
 
     private IEnumerator Animation(CardMovement cardMove, CardModel cardModel)
     {
-        yield return StartCoroutine(cardAnimation.RotateCard(cardModel.cardId, cardMove.cardParent, PossessionPanel));
+        yield return StartCoroutine(cardAnimation.RotateCardAnimation(cardModel.cardId, cardMove.cardParent, PossessionPanel));
         cardMove.cardParent = PossessionPanel;
     }
 }
