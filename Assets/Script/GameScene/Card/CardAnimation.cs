@@ -1,41 +1,125 @@
 using System.Collections;
+using System.Collections.Specialized;
+using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Security.Permissions;
 using UnityEngine;
 
 public class CardAnimation : MonoBehaviour
 {
-    private float time = 0.75f; // 回転にかかる時間（秒）
+    private float time = 0.5f; // 回転にかかる時間（秒）
+    private float fastTime = 0.15f; // 回転にかかる時間（秒）
+    [SerializeField] private CardController cardPrefab;
 
-    #region RotateCard-カードを回転
-    public IEnumerator RotateCard(Transform card)
+    #region RotateCardAnimation-カードを回転
+    public IEnumerator RotateCardAnimation(int cardId, Transform field, GameObject animationField)
     {
         float halfTime = time / 2f; // 縮むと広がるそれぞれの時間
-        Vector3 originalScale = card.localScale; // 元のスケールを保存
+        CardController card = Instantiate(cardPrefab, new Vector2(1000.0f, 350.0f), Quaternion.identity).GetComponent<CardController>();
+        card.Init(cardId); // カードを初期化
+        Vector2 originalScale = card.transform.localScale; // 元のスケールを保存
+        Vector2 cardVector = new Vector2(2.0f, 2.0f);
+
+        animationField.SetActive(true);
+        card.transform.SetParent(animationField.transform);
 
         // カードの横幅を徐々に短くしてゼロにする
-        float elapsedTime = 0f;
-        while (elapsedTime < halfTime)
+        float timer = 0f;
+        while (timer < halfTime)
         {
-            float scaleX = Mathf.Lerp(originalScale.x, 0f, elapsedTime / halfTime);
-            card.localScale = new Vector3(scaleX, originalScale.y, originalScale.z);
-            elapsedTime += Time.deltaTime;
+            float scaleX = Mathf.Lerp(cardVector.x, 0f, timer / halfTime);
+            card.transform.localScale = new Vector2(scaleX, cardVector.y);
+            timer += Time.deltaTime;
             yield return null;
         }
 
         // 完全にゼロにする
-        card.localScale = new Vector3(0f, originalScale.y, originalScale.z);
+        card.transform.localScale = new Vector2(0f, cardVector.y);
 
         // 横幅を徐々に元の長さに戻す
-        elapsedTime = 0f;
-        while (elapsedTime < halfTime)
+        timer = 0f;
+        while (timer < halfTime)
         {
-            float scaleX = Mathf.Lerp(0f, originalScale.x, elapsedTime / halfTime);
-            card.localScale = new Vector3(scaleX, originalScale.y, originalScale.z);
-            elapsedTime += Time.deltaTime;
+            float scaleX = Mathf.Lerp(0f, cardVector.x, timer / halfTime);
+            card.transform.localScale = new Vector2(scaleX, cardVector.y);
+            timer += Time.deltaTime;
             yield return null;
         }
 
-        // 元のスケールに戻す
-        card.localScale = originalScale;
+        // 0.5秒待つ
+        yield return new WaitForSeconds(0.5f);
+
+        // 元のスケールに戻し、親を変更
+        card.transform.localScale = originalScale;
+        card.transform.SetParent(field);
+        animationField.SetActive(false);
+    }
+    #endregion
+
+    #region FastRotateCardAnimation-カードを回転（高速）
+    public IEnumerator FastRotateCardAnimation(int cardId, Transform field, GameObject animationField)
+    {
+        float halfTime = fastTime / 2f; // 縮むと広がるそれぞれの時間
+        CardController card = Instantiate(cardPrefab, new Vector2(1000.0f, 350.0f), Quaternion.identity).GetComponent<CardController>();
+        card.Init(cardId); // カードを初期化
+        Vector2 originalScale = card.transform.localScale; // 元のスケールを保存
+        Vector2 cardVector = new Vector2(2.0f, 2.0f);
+
+        animationField.SetActive(true);
+        card.transform.SetParent(animationField.transform);
+
+        for (int i = 0; i < 3; i++)
+        {
+            halfTime = time / 2f;
+            // カードの横幅を徐々に短くしてゼロにする
+            float timer = 0f;
+            while (timer < halfTime)
+            {
+                float scaleX = Mathf.Lerp(cardVector.x, 0f, timer / halfTime);
+                card.transform.localScale = new Vector2(scaleX, cardVector.y);
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            // 完全にゼロにする
+            card.transform.localScale = new Vector2(0f, cardVector.y);
+
+            // 横幅を徐々に元の長さに戻す
+            timer = 0f;
+            while (timer < halfTime)
+            {
+                float scaleX = Mathf.Lerp(0f, cardVector.x, timer / halfTime);
+                card.transform.localScale = new Vector2(scaleX, cardVector.y);
+                timer += Time.deltaTime;
+                yield return null;
+            }
+        }
+
+        // 0.5秒待つ
+        yield return new WaitForSeconds(0.5f);
+
+        // 元のスケールに戻し、親を変更
+        card.transform.localScale = originalScale;
+        card.transform.SetParent(field);
+        animationField.SetActive(false);
+    }
+    #endregion
+
+    #region DrawCardAnimation-カードを引く際のアニメーション
+    public IEnumerator DrawCardAnimation(int cardId, Transform field, GameObject animationField)
+    {
+        float halfTime = time / 2f; // 縮むと広がるそれぞれの時間
+        CardController card = Instantiate(cardPrefab, new Vector2(1000.0f, 350.0f), Quaternion.identity).GetComponent<CardController>();
+        card.Init(cardId); // カードを初期化
+
+        // 最前面に設定
+        animationField.SetActive(true);
+        card.transform.SetParent(animationField.transform);
+
+        yield return null;
+
+        card.transform.SetParent(field);
+        animationField.SetActive(false);
     }
     #endregion
 }
