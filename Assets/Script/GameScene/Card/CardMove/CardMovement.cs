@@ -8,7 +8,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 {
     public Transform cardParent;
     private Transform originalParent;  // 最初の親を保持する変数
-    public static bool drag = false;
+    public bool drag = false;
 
     public void OnBeginDrag(PointerEventData eventData) // ドラッグを始めるときに行う処理
     {

@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      MiniDorothy_0: 1863707240124587337
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      MiniEremine 1_0: -2332462404408488434
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

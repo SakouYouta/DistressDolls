@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class CardAnimation : MonoBehaviour
 {
-    private float time = 0.5f; // ‰ñ“]‚É‚©‚©‚éŠÔi•bj
+    private float time = 0.15f; // ‰ñ“]‚É‚©‚©‚éŠÔi•bj
     private float fastTime = 0.15f; // ‰ñ“]‚É‚©‚©‚éŠÔi•bj
     [SerializeField] private CardController cardPrefab;
 

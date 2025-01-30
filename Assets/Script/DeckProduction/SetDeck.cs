@@ -33,7 +33,7 @@ public class SetDeck : MonoBehaviour, IDropHandler
                 {// カードIDを登録
                     if (deck.Count < 30)
                     {// デッキのカードが30枚までになるように
-                        CardMovement.drag = false;
+                        cardMove.drag = false;
                         deck.Add(cardModel.cardId); // カードをデッキに追加
                         Debug.Log("デッキ追加" + string.Join(", ", deck));
                         Debug.Log("追加したかーどID" + cardModel.cardId);
@@ -41,7 +41,7 @@ public class SetDeck : MonoBehaviour, IDropHandler
                     }
                     else
                     {
-                        CardMovement.drag = true;
+                        cardMove.drag = true;
                         Debug.Log("カードが30枚以上です");
                     }
                 }

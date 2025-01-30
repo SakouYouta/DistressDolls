@@ -6,31 +6,39 @@ using UnityEngine.EventSystems;
 public class DropPlace : MonoBehaviour, IDropHandler
 {
     [SerializeField] private bool isPlayerField; // このフィールドがプレイヤー用かエネミー用か
+    [SerializeField] private CardAnimation cardAnimation;
+    [SerializeField] private GameObject AnimationField;
 
     public void OnDrop(PointerEventData eventData)
     {
-        CardMovement cardMovement = eventData.pointerDrag.GetComponent<CardMovement>();
-        if (cardMovement != null)
+        CardMovement cardMove = eventData.pointerDrag.GetComponent<CardMovement>();
+        if (cardMove != null)
         {
-            CardModel cardModel = cardMovement.GetComponent<CardController>().model;
+            CardModel cardModel = cardMove.GetComponent<CardController>().model;
 
             // 所有者チェック: プレイヤーフィールドにはプレイヤーのカードのみ、エネミーフィールドにはエネミーのカードのみ配置できる
             if (isPlayerField && cardModel.isPlayerCard || !isPlayerField && !cardModel.isPlayerCard)
             {
-                if (cardMovement.cardParent == GameManager.instance.playerField)
+                if (cardMove.cardParent == GameManager.instance.playerField)
                 {
-                    CardMovement.drag = true;   //再配置できないように
+                    cardMove.drag = true;   //再配置できないように
                 }
                 else
                 {
                     // 正しいフィールドにカードを配置する
-                    cardMovement.cardParent = this.transform; // ドラッグ元からドロップ先に親を変更
-
+                    StartCoroutine(Animation(cardMove, cardModel));
                     // カード効果を適用 (CardManagerに委譲)
                     CardManager.instance.ApplyCardEffect(cardModel, isPlayerField);
                 }
-
             }
         }
     }
+
+    #region Animation()-アニメーション用のコルーチン
+    private IEnumerator Animation(CardMovement cardMove, CardModel cardModel)
+    {
+        yield return StartCoroutine(cardAnimation.RotateCardAnimation(cardModel.cardId, this.transform, AnimationField));
+        Destroy(cardMove.gameObject);
+    }
+    #endregion
 }

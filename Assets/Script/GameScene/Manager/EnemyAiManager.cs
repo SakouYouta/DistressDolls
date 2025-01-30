@@ -1,8 +1,12 @@
 using UnityEngine;
 using System.Threading.Tasks;
+using System.Collections;
 
 public class EnemyAiManager : MonoBehaviour
 {
+    [SerializeField] private CardAnimation cardAnimation;
+    [SerializeField] private GameObject AnimationField;
+
     public static EnemyAiManager instance;
 
     private void Awake()
@@ -106,10 +110,16 @@ public class EnemyAiManager : MonoBehaviour
     #endregion
 
     #region PlayCardOnField() - 使用したカードを場に出す処理
-    private void PlayCardOnField(Transform cardToPlay)
+    private async void PlayCardOnField(Transform cardToPlay)
     {
+        CardController cardController = cardToPlay.GetComponent<CardController>();
+        CardModel cardModel = cardController.model;
+
+        await Task.Delay(1000); // 1秒待つ
+
         // カードを手札から場に移動
-        cardToPlay.SetParent(GameManager.instance.enemyField); // enemyFieldは場のTransform
+        cardToPlay.SetParent(GameManager.instance.enemyField);
+        //StartCoroutine(Animation(cardToPlay, cardModel));
 
         // 場にカードが出たことを確認
         Debug.Log($"敵のカード「{cardToPlay.name}」が場に出されました");
@@ -164,6 +174,19 @@ public class EnemyAiManager : MonoBehaviour
             }
         }
         return null; // ガードカードがない場合
+    }
+    #endregion
+
+    #region Animation()-アニメーション用のコルーチン
+    private IEnumerator Animation(Transform cardToPlay, CardModel cardModel)
+    {
+        if (cardToPlay != null)
+            yield return StartCoroutine(cardAnimation.RotateCardAnimation(cardModel.cardId, GameManager.instance.enemyField, AnimationField));
+        else
+            yield break;
+
+        if (cardToPlay != null)
+            Destroy(cardToPlay.gameObject);
     }
     #endregion
 }

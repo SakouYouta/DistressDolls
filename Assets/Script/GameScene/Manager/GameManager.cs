@@ -10,14 +10,14 @@ public class GameManager : MonoBehaviour
     //フィールドの宣言
     [SerializeField] CardController cardPrefab;                                 //カードのプレハブ
     [SerializeField] Text playerHPText, enemyHPText;                            //お互いのHP状況をテキストで表示
-    [SerializeField] private Image playerLeaderImage, enemyLeaderImage;         //お互いのリーダーの画像
+    [SerializeField] Image playerLeaderImage, enemyLeaderImage;         //お互いのリーダーの画像
     [SerializeField] private Sprite elemineSprite, dorothySprite, aineSprite;   //リーダーごとの画像
     [SerializeField] private Button changeTurnButton;                           //
     [SerializeField] Text turnText;                                          //現在が何ターン目なのかを表示
 
     public Transform playerHand, enemyHand, playerField, enemyField, playerGraveyard, enemyGraveyard;   //
     public List<int> playerDeck, enemyDeck;                                                             //
-    
+
     public Character playerLeader, enemyLeader;                                 //お互いリーダーが誰かの設定
     public int playerHP, enemyHP;                                               //お互いのHPの数値
     public bool isPlayerTurn = true;                                            //今がプレイヤーのターンか
@@ -157,7 +157,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region DrawCard() - 手札にカードを引く処理
-    public void DrawCard(Transform hand, List<int> deck, int drawAmount = 1)
+    public async void DrawCard(Transform hand, List<int> deck, int drawAmount = 1)
     {
         if (deck.Count == 0) return; // デッキが空なら引かない
 
@@ -177,7 +177,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region SetStartHand() - 初期手札を3枚配布する
-    void SetStartHand()
+    public void SetStartHand()
     {
         for (int i = 0; i < 3; i++)
         {
@@ -251,7 +251,7 @@ public class GameManager : MonoBehaviour
 
         DrawCard(playerHand, playerDeck); // 手札を1枚加える
 
-        if (TurnEnd　== true)
+        if (TurnEnd == true)
         {
             ChangeTurn();
         }
@@ -268,7 +268,7 @@ public class GameManager : MonoBehaviour
 
         // 1. 敵がカードを引く
         DrawCard(enemyHand, enemyDeck);
-        await Task.Delay(1000); // 1秒待つ
+        await Task.Delay(1000);
 
         // 2. 敵がカードを使用する
         while (TurnEnd == false)
@@ -280,8 +280,8 @@ public class GameManager : MonoBehaviour
             {
                 card.view.InvisibleHand(false); // 表面を表示
             }
-            
-            await Task.Delay(1500); 
+
+            await Task.Delay(1500);
         }
 
         // 3. 敵がターンを終了する条件
