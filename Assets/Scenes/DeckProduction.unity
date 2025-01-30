@@ -131,7 +131,6 @@ GameObject:
   - component: {fileID: 150054444}
   - component: {fileID: 150054443}
   - component: {fileID: 150054442}
-  - component: {fileID: 150054445}
   - component: {fileID: 150054446}
   m_Layer: 5
   m_Name: CardSelect
@@ -221,21 +220,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150054440}
   m_CullTransparentMesh: 1
---- !u!114 &150054445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 150054440}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 470700d5dec8fa84bb271738b1a0dfa2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  deck: 
-  deckPanel: {fileID: 651655616}
-  PossessionPanel: {fileID: 150054441}
 --- !u!114 &150054446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,6 +236,7 @@ MonoBehaviour:
   deckPanel: {fileID: 651655616}
   PossessionPanel: {fileID: 150054441}
   cardAnimation: {fileID: 356325571}
+  AnimationField: {fileID: 1936006009}
 --- !u!1 &356325567
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,7 +313,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 1003898851616374241, guid: 3f24f10433b087643958ceccb9ec60b4, type: 3}
-  AnimationField: {fileID: 1936006008}
 --- !u!1 &412856334
 GameObject:
   m_ObjectHideFlags: 0
@@ -1211,6 +1195,7 @@ RectTransform:
   m_Children:
   - {fileID: 441557285}
   - {fileID: 150054441}
+  - {fileID: 1936006009}
   - {fileID: 1984331153}
   - {fileID: 651655616}
   - {fileID: 807778254}
@@ -1219,7 +1204,6 @@ RectTransform:
   - {fileID: 1071294467}
   - {fileID: 963404276}
   - {fileID: 534790058}
-  - {fileID: 1936006009}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1872,6 +1856,7 @@ MonoBehaviour:
   deckPanel: {fileID: 651655616}
   PossessionPanel: {fileID: 1936006009}
   cardAnimation: {fileID: 356325571}
+  AnimationField: {fileID: 0}
 --- !u!114 &1936006011
 MonoBehaviour:
   m_ObjectHideFlags: 0
