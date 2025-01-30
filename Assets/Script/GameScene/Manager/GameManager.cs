@@ -8,18 +8,23 @@ using UnityEngine.SceneManagement; // シーン遷移のために必要
 public class GameManager : MonoBehaviour
 {
     //フィールドの宣言
-    [SerializeField] CardController cardPrefab;
-    public Transform playerHand, enemyHand, playerField, enemyField, playerGraveyard, enemyGraveyard;
-    [SerializeField] Text playerHPText, enemyHPText;
-    public int playerHP, enemyHP;
-    public bool isPlayerTurn = true;
-    public bool TurnEnd = false;
-    public List<int> playerDeck, enemyDeck;
-    [SerializeField] private Image playerLeaderImage;
-    [SerializeField] private Image enemyLeaderImage;
-    [SerializeField] private Sprite elemineSprite;
-    [SerializeField] private Sprite dorothySprite;
-    [SerializeField] private Sprite aineSprite;
+    [SerializeField] CardController cardPrefab;                                 //カードのプレハブ
+    [SerializeField] Text playerHPText, enemyHPText;                            //お互いのHP状況をテキストで表示
+    [SerializeField] private Image playerLeaderImage, enemyLeaderImage;         //お互いのリーダーの画像
+    [SerializeField] private Sprite elemineSprite, dorothySprite, aineSprite;   //リーダーごとの画像
+    [SerializeField] private Button changeTurnButton;                           //
+    [SerializeField] Text turnText;                                          //現在が何ターン目なのかを表示
+
+    public Transform playerHand, enemyHand, playerField, enemyField, playerGraveyard, enemyGraveyard;   //
+    public List<int> playerDeck, enemyDeck;                                                             //
+    
+    public Character playerLeader, enemyLeader;                                 //お互いリーダーが誰かの設定
+    public int playerHP, enemyHP;                                               //お互いのHPの数値
+    public bool isPlayerTurn = true;                                            //今がプレイヤーのターンか
+    public bool TurnEnd = false;                                                //ターン終了フラグ
+    public int NowTurn = 0;                                                     //今がどちらのターンか　１Player　、２．Enemy
+    private int turnCount = 1;                                                  // 何ターン目か
+
     public static GameManager instance;
 
     // Awake() - インスタンスの初期化
@@ -48,8 +53,8 @@ public class GameManager : MonoBehaviour
         //無垢な歌姫 ドロシー      ガードした時５０％の確率でカード引く
         //幼魔女 アイネ            攻撃した時ガードされなかったら3ダメージ
 
-        Character playerLeader = new Character("神秘への探索者 エレミネ", true);  // プレイヤーリーダー
-        Character enemyLeader = new Character("幼魔女 アイネ", false);  // 敵リーダー
+        playerLeader = new Character("神秘への探索者 エレミネ", true);  // プレイヤーリーダー
+        enemyLeader = new Character("幼魔女 アイネ", false);  // 敵リーダー
 
         // DollSkillManager のインスタンスを取得して SetLeaders を呼び出す
         DollSkillManager.instance.SetLeaders(playerLeader, enemyLeader); // ここで SetLeaders を呼び出しているか確認
@@ -73,11 +78,18 @@ public class GameManager : MonoBehaviour
         // 初期手札を配布
         SetStartHand();
 
+        // ボタンの初期状態を設定
+        UpdateChangeTurnButton();
+
+        //今が何ターン目か
+        UpdateTurnText();
+
         // ターン計算を開始
         TurnCalc();
     }
     #endregion
 
+    #region SetLeaderImage() - リーダーによってリーダー画像の切り替え
     private void SetLeaderImage(string leaderName, Image leaderImage)
     {
         switch (leaderName)
@@ -96,6 +108,14 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
+    #endregion
+
+    #region UpdateTurnText() - ターン数の更新
+    private void UpdateTurnText()
+    {
+        turnText.text = $"ターン {turnCount} ";
+    }
+    #endregion
 
     #region Shuffle() - デッキをシャッフルする
     void Shuffle(List<int> deck)
@@ -184,17 +204,28 @@ public class GameManager : MonoBehaviour
     #region ChangeTurn() - ターンを終了し、次のターンに切り替える
     public void ChangeTurn()
     {
-        EndTurnForAllCards(playerField, playerGraveyard);  // プレイヤーのフィールドからカードを墓地に移動
-        EndTurnForAllCards(enemyField, enemyGraveyard);  // エネミーのフィールドからカードを墓地に移動
+        // どちらのターンでもターン終了処理を実行
+        EndTurnForAllCards(playerField, playerGraveyard);
+        EndTurnForAllCards(enemyField, enemyGraveyard);
 
-        // ターンを逆にする
+        // ターンを切り替える
         isPlayerTurn = !isPlayerTurn;
 
-        //ターンエンドのフラグを初期化
+        //自動終了をリセット
         TurnEnd = false;
+
+        //ターン数更新
+        UpdateTurnText();
 
         // 次のターンの処理を実行
         TurnCalc();
+    }
+    #endregion
+
+    #region UpdateChangeTurnButton() - ターン終了ボタンの有効/無効を切り替える
+    private void UpdateChangeTurnButton()
+    {
+        changeTurnButton.interactable = (NowTurn == 1); // プレイヤーのターンのみボタン有効
     }
     #endregion
 
@@ -214,11 +245,13 @@ public class GameManager : MonoBehaviour
     #region  PlayerTurn() - プレイヤーのターンを開始する
     private void PlayerTurn()
     {
-        Debug.Log("Playerのターン");
+        NowTurn = 1;
+        Debug.Log($"Playerのターン開始: NowTurn = {NowTurn}");
+        UpdateChangeTurnButton();
 
         DrawCard(playerHand, playerDeck); // 手札を1枚加える
 
-        if (TurnEnd)
+        if (TurnEnd　== true)
         {
             ChangeTurn();
         }
@@ -228,7 +261,10 @@ public class GameManager : MonoBehaviour
     #region EnemyTurn() - 敵のターンを開始する
     private async void EnemyTurn()
     {
-        Debug.Log("Enemyのターン");
+        NowTurn = 2;
+        turnCount++; // ターンカウントを増やす
+        Debug.Log($"Enemyのターン開始: NowTurn = {NowTurn}");
+        UpdateChangeTurnButton();
 
         // 1. 敵がカードを引く
         DrawCard(enemyHand, enemyDeck);
