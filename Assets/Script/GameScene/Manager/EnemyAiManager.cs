@@ -187,7 +187,7 @@ public class EnemyAiManager : MonoBehaviour
         else
             yield break;
 
-        yield return new WaitForSeconds(1f); // 1•b‘Ò‚Â
+        yield return new WaitForSeconds(0.5f); // 1•b‘Ò‚Â
 
 
         UnityEngine.Debug.Log(cardToPlay);
