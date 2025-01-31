@@ -76,7 +76,6 @@ public class EnemyAiManager : MonoBehaviour
 
                 // 使用したカードを場に出す
                 // 敵手札の場合はカード裏面を表示
-                cardController.view.InvisibleHand(false); // カードの裏面を表示
                 PlayCardOnField(cardToPlay);
                 Debug.Log($"敵がカード「{cardModel.name}」を使用しました（効果タイプ: {cardModel.effectType}）");
 
@@ -118,8 +117,12 @@ public class EnemyAiManager : MonoBehaviour
         await Task.Delay(1000); // 1秒待つ
 
         // カードを手札から場に移動
-        cardToPlay.SetParent(GameManager.instance.enemyField);
-        //StartCoroutine(Animation(cardToPlay, cardModel));
+        //cardToPlay.SetParent(GameManager.instance.enemyField);
+        StartCoroutine(Animation(cardToPlay, cardModel));
+
+        await Task.Delay(1000); // 1秒待つ
+
+        cardController.view.InvisibleHand(false);
 
         // 場にカードが出たことを確認
         Debug.Log($"敵のカード「{cardToPlay.name}」が場に出されました");
@@ -149,7 +152,6 @@ public class EnemyAiManager : MonoBehaviour
             }
 
             // 使用したカードを場に出す
-            cardController.view.InvisibleHand(false);
             PlayCardOnField(guardCard);
         }
         else
@@ -185,6 +187,10 @@ public class EnemyAiManager : MonoBehaviour
         else
             yield break;
 
+        yield return new WaitForSeconds(1f); // 1秒待つ
+
+
+        UnityEngine.Debug.Log(cardToPlay);
         if (cardToPlay != null)
             Destroy(cardToPlay.gameObject);
     }

@@ -151,7 +151,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            card.view.InvisibleHand(false); // カードの裏面を表示
+            card.view.InvisibleHand(false); // カードの裏面を非表示
         }
     }
     #endregion
