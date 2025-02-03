@@ -24,15 +24,16 @@ public class GachaSystemManager : MonoBehaviour
     private void Awake()
     {
         if (instance == null)
-        {
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
+        
     }
+
+    private void OnEnable()
+    {
+        Debug.Log("OnEnable() - シーン再読み込み時にガチャの状態をリセット");
+        ResetGacha();
+    }
+
 
     private void Start()
     {
@@ -41,12 +42,29 @@ public class GachaSystemManager : MonoBehaviour
         pack2Button.onClick.AddListener(() => SelectPack(2));
         pack3Button.onClick.AddListener(() => SelectPack(3));
         confirmButton.gameObject.SetActive(false);
-
+        ResetGacha(); // シーン開始時にガチャ状態をリセット
     }
 
-    // パックを選択するメソッド
+    #region ResetGacha() - ガチャの状態をリセットするメソッド
+    public void ResetGacha()
+    {
+        Debug.Log("ガチャの状態をリセットします");
+
+        selectedPackList = null;
+        pack1Button.gameObject.SetActive(true);
+        pack2Button.gameObject.SetActive(true);
+        pack3Button.gameObject.SetActive(true);
+        confirmButton.gameObject.SetActive(false);
+
+        Debug.Log("パック選択ボタンを再表示し、選択状態をリセットしました");
+    }
+    #endregion
+
+    #region SelectPack() - パックを選択するメソッド
     public void SelectPack(int packNumber)
     {
+        Debug.Log($"パック{packNumber}の選択処理を開始します");
+
         switch (packNumber)
         {
             case 1:
@@ -59,57 +77,60 @@ public class GachaSystemManager : MonoBehaviour
                 selectedPackList = packCardList3;
                 break;
             default:
-                Debug.LogError("Invalid pack number");
+                Debug.LogError("無効なパック番号が指定されました");
                 return;
         }
 
-        Debug.Log($"Pack {packNumber} selected.");
+        Debug.Log($"パック{packNumber}が選択されました。選択されたカード数: {selectedPackList?.Count}枚");
 
-        // 選択ボタンを非表示にし、開封ボタンを表示
+        
+
+        // 選択ボタンを非表示にする
         pack1Button.gameObject.SetActive(false);
         pack2Button.gameObject.SetActive(false);
         pack3Button.gameObject.SetActive(false);
+
+        Debug.Log("選択前のパックボタン表示状態: " +
+                  $"Pack1: {pack1Button.gameObject.activeSelf}, " +
+                  $"Pack2: {pack2Button.gameObject.activeSelf}, " +
+                  $"Pack3: {pack3Button.gameObject.activeSelf}");
+
+        Debug.Log("パックボタンを非表示にしました");
 
         // OpenPackスクリプトに通知して開封ボタンを有効化
         OpenPack openPack = FindAnyObjectByType<OpenPack>();
         if (openPack != null)
         {
+            Debug.Log("OpenPackスクリプトが見つかりました。開封ボタンを有効化します");
             openPack.EnableOpenButton();
         }
         else
         {
-            Debug.LogError("OpenPack script not found!");
+            Debug.LogError("OpenPackスクリプトが見つかりませんでした");
         }
     }
+    #endregion
 
-    // 現在の選択パックリストを取得する
+    #region GetSelectedPackList() - 現在の選択パックリストを取得する
     public List<int> GetSelectedPackList()
     {
         return selectedPackList;
     }
+    #endregion
 
-    // カードを生成するメソッド（OpenPackで利用される）
+    #region OpenCardCreate() - カードを生成するメソッド（OpenPackで利用される）
     public void OpenCardCreate(int cardId, Transform trans)
     {
         if (selectedPackList == null)
         {
-            Debug.LogError("No pack selected. Cannot create cards.");
+            Debug.LogError("パックが選択されていません。カードを生成できません");
             return;
         }
+
+        Debug.Log($"カードID {cardId} のカードを生成します");
 
         CardController card = Instantiate(cardPrefab, trans);
         card.Init(cardId);
     }
-
-    // カードIDをランダムに決めるメソッド（OpenPackが利用）
-    public int GetRandomCardId()
-    {
-        if (selectedPackList == null)
-        {
-            Debug.LogError("No pack selected. Cannot decide card ID.");
-            return -1;
-        }
-
-        return selectedPackList[Random.Range(0, selectedPackList.Count)];
-    }
+    #endregion
 }
