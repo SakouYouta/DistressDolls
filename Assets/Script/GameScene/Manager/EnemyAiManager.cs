@@ -8,7 +8,6 @@ public class EnemyAiManager : MonoBehaviour
     [SerializeField] private GameObject AnimationField;
 
     public static EnemyAiManager instance;
-    private bool flg = false;
 
     private void Awake()
     {
@@ -117,8 +116,6 @@ public class EnemyAiManager : MonoBehaviour
 
         await Task.Delay(1000); // 1秒待つ
 
-        while (flg) ;
-
         // カードを手札から場に移動
         //cardToPlay.SetParent(GameManager.instance.enemyField);
         StartCoroutine(Animation(cardToPlay, cardModel));
@@ -185,11 +182,9 @@ public class EnemyAiManager : MonoBehaviour
     #region Animation()-アニメーション用のコルーチン
     private IEnumerator Animation(Transform cardToPlay, CardModel cardModel)
     {
-        flg = false;
         yield return StartCoroutine(cardAnimation.RotateCardAnimation(cardModel.cardId, GameManager.instance.enemyField, AnimationField));
         yield return new WaitForSeconds(1f);
         Destroy(cardToPlay.gameObject);
-        flg = true;
     }
     #endregion
 }
