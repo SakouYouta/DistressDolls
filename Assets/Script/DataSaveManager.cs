@@ -6,114 +6,193 @@ using Debug = UnityEngine.Debug;
 
 public static class DataSaveManager
 {
-    private static string DeckFilePath = Application.streamingAssetsPath + "/SaveData.csv";                         // デッキのファイルパス
-    private static string PossessionCardFilePath = Application.streamingAssetsPath + "/PossessionCard.csv"; // 所持カードのファイルパス
+    private static string DataFilePath = Application.streamingAssetsPath + "/SaveData.csv";                         // デッキのファイルパス
+    private static int DeckIndex = 0;
+    private static int PossessinoIndex = 1;
 
+    #region カードデータ関連
     #region SaveDeckList()  デッキリストデータを保存
-    public static void SaveDeckList(List<int> data, string filePath = null)
+    public static void SaveDeckList(List<int> data)
     {
-        filePath = filePath ?? DeckFilePath;
         try
         {
-            // データをカンマ区切りの1行の文字列に変換
-            string csvContent = string.Join(",", data);
-            // ファイルに書き込む
-            File.WriteAllText(filePath, csvContent);
-            Debug.Log("デッキ保存" + string.Join(", ", data));
+            List<string> lines = new List<string>();
+
+
+            // 既存ファイルを読み込む（なければ新規作成）
+            if (File.Exists(DataFilePath))
+            {
+                lines.AddRange(File.ReadAllLines(DataFilePath));
+            }
+
+            // 必要な行数まで拡張
+            while (lines.Count <= DeckIndex)
+            {
+                lines.Add(""); // 空行を追加
+            }
+
+            lines[DeckIndex] = string.Join(",", data);
+            File.WriteAllLines(DataFilePath, lines);
+
+            Debug.Log($"データを {DataFilePath} の {DeckIndex} 行目に保存しました: {string.Join(", ", data)}");
         }
         catch (IOException ex)
         {
-            Debug.LogError("エクセル保存エラー: " + ex.Message);
+            Debug.LogError($"CSV保存エラー ({DataFilePath}): " + ex.Message);
         }
     }
     #endregion
 
     #region SavePossessionCard()  所持カードデータを保存
-    public static void SavePossessionCard(List<int> data, string filePath = null)
+    public static void SavePossessionCard(List<int> data)
     {
-        filePath = filePath ?? PossessionCardFilePath;
         try
         {
-            // データをカンマ区切りの1行の文字列に変換
-            string csvContent = string.Join(",", data);
-            // ファイルに書き込む
-            File.WriteAllText(filePath, csvContent);
-            Debug.Log("データがエクセル形式（CSV）で保存されました: " + filePath);
+            List<string> lines = new List<string>();
+            // 既存ファイルを読み込む（なければ新規作成）
+            if (File.Exists(DataFilePath))
+            {
+                lines.AddRange(File.ReadAllLines(DataFilePath));
+            }
+
+            // 必要な行数まで拡張
+            while (lines.Count <= PossessinoIndex)
+            {
+                lines.Add(""); // 空行を追加
+            }
+
+            lines[PossessinoIndex] = string.Join(",", data);
+            File.WriteAllLines(DataFilePath, lines);
+
+            Debug.Log($"データを {DataFilePath} の {PossessinoIndex} 行目に保存しました: {string.Join(", ", data)}");
         }
         catch (IOException ex)
         {
-            Debug.LogError("エクセル保存エラー: " + ex.Message);
+            Debug.LogError($"CSV保存エラー ({DataFilePath}): " + ex.Message);
         }
     }
     #endregion
 
     #region LoadDeckList()  デッキデータの読み込み
-    public static List<int> LoadDeckList(string filePath = null)
+    public static List<int> LoadDeckList()
     {
-        filePath = filePath ?? DeckFilePath;
         try
         {
-            if (File.Exists(filePath))
+            if (!File.Exists(DataFilePath))
             {
-                string csvContent = File.ReadAllText(filePath);
-                string[] stringArray = csvContent.Split(',');
-                List<int> data = new List<int>();
-                foreach (var str in stringArray)
-                {
-                    if (int.TryParse(str, out int value))
-                    {
-                        data.Add(value);
-                    }
-                }
-                //Debug.Log("エクセル形式（CSV）からデータを読み込みました: " + string.Join(", ", data));
-                return data;
-            }
-            else
-            {
-                Debug.LogWarning("指定されたファイルが見つかりません: " + filePath);
+                Debug.LogWarning($"指定されたファイルが見つかりません: {DataFilePath}");
                 return new List<int>();
             }
+
+            string[] lines = File.ReadAllLines(DataFilePath);
+
+            // 指定行が範囲外なら空リストを返す
+            if (DeckIndex >= lines.Length)
+            {
+                Debug.LogWarning($"指定行 ({DeckIndex}) はファイルの範囲外です: {DataFilePath}");
+                return new List<int>();
+            }
+
+            // 行のデータをパース
+            string[] stringArray = lines[DeckIndex].Split(',');
+            List<int> data = new List<int>();
+            foreach (var str in stringArray)
+            {
+                if (int.TryParse(str, out int value))
+                {
+                    data.Add(value);
+                }
+            }
+
+            return data;
         }
         catch (IOException ex)
         {
-            Debug.LogError("エクセル読み込みエラー: " + ex.Message);
+            Debug.LogError($"CSV読み込みエラー ({DataFilePath}): " + ex.Message);
             return new List<int>();
         }
     }
     #endregion
 
     #region LoadPossessionCard()  所持カードの読み込み
-    public static List<int> LoadPossessionCard(string filePath = null)
+    public static List<int> LoadPossessionCard()
     {
-        filePath = filePath ?? PossessionCardFilePath;
         try
         {
-            if (File.Exists(filePath))
+            if (!File.Exists(DataFilePath))
             {
-                string csvContent = File.ReadAllText(filePath);
-                string[] stringArray = csvContent.Split(',');
-                List<int> data = new List<int>();
-                foreach (var str in stringArray)
-                {
-                    if (int.TryParse(str, out int value))
-                    {
-                        data.Add(value);
-                    }
-                }
-                //Debug.Log("エクセル形式（CSV）からデータを読み込みました: " + string.Join(", ", data));
-                return data;
-            }
-            else
-            {
-                Debug.LogWarning("指定されたファイルが見つかりません: " + filePath);
+                Debug.LogWarning($"指定されたファイルが見つかりません: {DataFilePath}");
                 return new List<int>();
             }
+
+            string[] lines = File.ReadAllLines(DataFilePath);
+
+            // 指定行が範囲外なら空リストを返す
+            if (PossessinoIndex >= lines.Length)
+            {
+                Debug.LogWarning($"指定行 ({PossessinoIndex}) はファイルの範囲外です: {DataFilePath}");
+                return new List<int>();
+            }
+
+            // 行のデータをパース
+            string[] stringArray = lines[PossessinoIndex].Split(',');
+            List<int> data = new List<int>();
+            foreach (var str in stringArray)
+            {
+                if (int.TryParse(str, out int value))
+                {
+                    data.Add(value);
+                }
+            }
+
+            return data;
         }
         catch (IOException ex)
         {
-            Debug.LogError("エクセル読み込みエラー: " + ex.Message);
+            Debug.LogError($"CSV読み込みエラー ({DataFilePath}): " + ex.Message);
             return new List<int>();
         }
     }
+    #endregion
+    #endregion
+
+    #region ソウルデータ関連
+    #region SaveSoul()-ソウルを保存する
+    public static void SaveSoul(int soul)
+    {
+        PlayerPrefs.SetInt("Soul", soul);
+        PlayerPrefs.Save();
+    }
+    #endregion
+
+    #region GetSoul()-ソウルを取得
+    public static int GetSoul()
+    {
+        return PlayerPrefs.GetInt("soul", 0);
+    }
+    #endregion
+
+    #region AddSoul()-ソウルを増やす
+    public static void AddSoul(int soul)
+    {
+        int AllSoul = GetSoul();
+        AllSoul += soul;
+        SaveSoul(AllSoul);
+    }
+    #endregion
+
+    #region SubtractionSoul()-ソウルを減らす
+    public static bool SubtractionSoul(int soul)
+    {
+        int AllSoul = GetSoul();
+        if (AllSoul >= soul)
+        {
+            AllSoul -= soul;
+            SaveSoul(AllSoul);
+            return true;
+        }
+        return false;
+    }
+    #endregion
     #endregion
 }
