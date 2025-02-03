@@ -28,13 +28,6 @@ public class GachaSystemManager : MonoBehaviour
         
     }
 
-    private void OnEnable()
-    {
-        Debug.Log("OnEnable() - シーン再読み込み時にガチャの状態をリセット");
-        ResetGacha();
-    }
-
-
     private void Start()
     {
         // 各パック選択ボタンにリスナーを追加
@@ -46,7 +39,7 @@ public class GachaSystemManager : MonoBehaviour
     }
 
     #region ResetGacha() - ガチャの状態をリセットするメソッド
-    public void ResetGacha()
+    private void ResetGacha()
     {
         Debug.Log("ガチャの状態をリセットします");
 
@@ -55,8 +48,6 @@ public class GachaSystemManager : MonoBehaviour
         pack2Button.gameObject.SetActive(true);
         pack3Button.gameObject.SetActive(true);
         confirmButton.gameObject.SetActive(false);
-
-        Debug.Log("パック選択ボタンを再表示し、選択状態をリセットしました");
     }
     #endregion
 
@@ -80,11 +71,7 @@ public class GachaSystemManager : MonoBehaviour
                 Debug.LogError("無効なパック番号が指定されました");
                 return;
         }
-
-        Debug.Log($"パック{packNumber}が選択されました。選択されたカード数: {selectedPackList?.Count}枚");
-
         
-
         // 選択ボタンを非表示にする
         pack1Button.gameObject.SetActive(false);
         pack2Button.gameObject.SetActive(false);
@@ -94,8 +81,6 @@ public class GachaSystemManager : MonoBehaviour
                   $"Pack1: {pack1Button.gameObject.activeSelf}, " +
                   $"Pack2: {pack2Button.gameObject.activeSelf}, " +
                   $"Pack3: {pack3Button.gameObject.activeSelf}");
-
-        Debug.Log("パックボタンを非表示にしました");
 
         // OpenPackスクリプトに通知して開封ボタンを有効化
         OpenPack openPack = FindAnyObjectByType<OpenPack>();
@@ -126,8 +111,6 @@ public class GachaSystemManager : MonoBehaviour
             Debug.LogError("パックが選択されていません。カードを生成できません");
             return;
         }
-
-        Debug.Log($"カードID {cardId} のカードを生成します");
 
         CardController card = Instantiate(cardPrefab, trans);
         card.Init(cardId);
