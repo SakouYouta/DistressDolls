@@ -123,9 +123,6 @@ public class EnemyAiManager : MonoBehaviour
         await Task.Delay(1000); // 1秒待つ
 
         cardController.view.InvisibleHand(false);
-
-        // 場にカードが出たことを確認
-        Debug.Log($"敵のカード「{cardToPlay.name}」が場に出されました");
     }
     #endregion
 
@@ -182,9 +179,9 @@ public class EnemyAiManager : MonoBehaviour
     #region Animation()-アニメーション用のコルーチン
     private IEnumerator Animation(Transform cardToPlay, CardModel cardModel)
     {
+        Destroy(cardToPlay.gameObject);
         yield return StartCoroutine(cardAnimation.RotateCardAnimation(cardModel.cardId, GameManager.instance.enemyField, AnimationField));
         yield return new WaitForSeconds(1f);
-        Destroy(cardToPlay.gameObject);
     }
     #endregion
 }

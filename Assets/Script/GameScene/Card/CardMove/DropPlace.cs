@@ -37,8 +37,8 @@ public class DropPlace : MonoBehaviour, IDropHandler
     #region Animation()-アニメーション用のコルーチン
     private IEnumerator Animation(CardMovement cardMove, CardModel cardModel)
     {
-        yield return StartCoroutine(cardAnimation.RotateCardAnimation(cardModel.cardId, this.transform, AnimationField));
         Destroy(cardMove.gameObject);
+        yield return StartCoroutine(cardAnimation.RotateCardAnimation(cardModel.cardId, this.transform, AnimationField));
     }
     #endregion
 }

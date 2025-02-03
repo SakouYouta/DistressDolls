@@ -21,7 +21,8 @@ public class CardView : MonoBehaviour
     #region InvisibleHand() - ”wŒi‰æ‘œ‚Ì•\¦—Dæ“x‚ğØ‚è‘Ö‚¦‚éƒƒ\ƒbƒh
     public void InvisibleHand(bool isVisible)
     {
-        BackImage.gameObject.SetActive(isVisible); // ”wŒi‰æ‘œ‚ğ—LŒø‰»‚Ü‚½‚Í–³Œø‰»
+        if (BackImage != null && BackImage.gameObject != null)
+            BackImage.gameObject.SetActive(isVisible); // ”wŒi‰æ‘œ‚ğ—LŒø‰»‚Ü‚½‚Í–³Œø‰»
     }
     #endregion
 }
