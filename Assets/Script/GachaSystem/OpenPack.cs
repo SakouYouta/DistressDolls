@@ -62,7 +62,7 @@ public class OpenPack : MonoBehaviour
         }
 
         // 3枚カードを生成する
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 4; i++)
         {
             int cardId = DecisionCardId(selectedPackList); // リストに基づいてランダムにカードIDを取得
             GachaSystemManager.instance.OpenCardCreate(cardId, openedCardTrans); // カード生成
