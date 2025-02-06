@@ -13,28 +13,35 @@ public class OpenPack : MonoBehaviour
 
     private void Start()
     {
-        // 開封ボタンを非表示にする
-        openButton.gameObject.SetActive(false);
+        ResetPackOpening();
+    }
 
-        //パック開封機能をリセット
+    #region ResetPackOpening() - 開封状態をリセットするメソッド
+    public void ResetPackOpening()
+    {
+        // 開封フラグをリセット
         isPackOpened = false;
 
-        //ガチャで出たカードのIDを保存する関数をリセット
+        // 開封ボタンを非表示
+        openButton.gameObject.SetActive(false);
+
+        // ガチャ結果をリセット
         GachaResult = new List<int>();
     }
+    #endregion
 
     #region EnableOpenButton() - 開封ボタンを有効化するメソッド
     public void EnableOpenButton()
     {
-        // すでに開封済みなら処理しない
-        if (isPackOpened) return;
+        // 開封フラグが false ならボタンを表示
+        if (!isPackOpened)
+        {
+            openButton.gameObject.SetActive(true);
 
-        // ボタンを有効化
-        openButton.gameObject.SetActive(true);
-
-        // リスナーが重複しないようにクリア
-        openButton.onClick.RemoveAllListeners();
-        openButton.onClick.AddListener(OpenPacks);
+            // リスナーをクリアして重複を防ぐ
+            openButton.onClick.RemoveAllListeners();
+            openButton.onClick.AddListener(OpenPacks);
+        }
     }
     #endregion
 
@@ -77,6 +84,10 @@ public class OpenPack : MonoBehaviour
 
         // 確定ボタンを表示
         GachaSystemManager.instance.confirmButton.gameObject.SetActive(true);
+        GachaSystemManager.instance.resetButton.gameObject.SetActive(true);
+
+
+
     }
     #endregion
 
