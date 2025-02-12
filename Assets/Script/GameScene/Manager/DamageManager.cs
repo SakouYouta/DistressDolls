@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DamageManager : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class DamageManager : MonoBehaviour
     private float responseTimer = 0f; // ガードカード応答タイマー
     private bool guardApplied = false; // ガードが適用されたかどうかのフラグ
     private bool damageProcessActive = false; // ダメージプロセスが進行中かどうか
+    [SerializeField] private Transform playerLife;         // プレイヤーのHP表示パネル
+    [SerializeField] private Transform enemyLife;        // 敵のHP表示パネル
+    [SerializeField] private EffectManager effectManager;
 
     void Awake()
     {
@@ -130,10 +134,12 @@ public class DamageManager : MonoBehaviour
         if (pendingDamageIsPlayer)
         {
             GameManager.instance.DecreaseHP(true, finalDamage);
+            StartCoroutine(effectManager.ShowDamage(pendingDamageIsPlayer, finalDamage, playerLife));
         }
         else
         {
             GameManager.instance.DecreaseHP(false, finalDamage);
+            StartCoroutine(effectManager.ShowDamage(pendingDamageIsPlayer, finalDamage, enemyLife));
         }
 
         // HPの表示を更新
@@ -193,4 +199,3 @@ public class DamageManager : MonoBehaviour
     }
     #endregion
 }
-

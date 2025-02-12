@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement; // シーン遷移のために必要
+using System.Collections;
 
 
 public class GameManager : MonoBehaviour
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Sprite elemineSprite, dorothySprite, aineSprite;   //リーダーごとの画像
     [SerializeField] private Button changeTurnButton;                           //
     [SerializeField] Text turnText;                                          //現在が何ターン目なのかを表示
+    [SerializeField] GameObject effectFilter;                                      //ダメージエフェクト用のフィルター
 
     public Transform playerHand, enemyHand, playerField, enemyField, playerGraveyard, enemyGraveyard;   //
     public List<int> playerDeck, enemyDeck;                                                             //
@@ -301,6 +303,7 @@ public class GameManager : MonoBehaviour
         {
             enemyHP -= damage;
         }
+        StartCoroutine(DamageEffect(isPlayer));
         ShowLeaderHP();
     }
     #endregion
@@ -346,6 +349,22 @@ public class GameManager : MonoBehaviour
         else
         {
             SceneManager.LoadScene("LoseResultScene"); // 敗北シーンに遷移
+        }
+    }
+    #endregion
+
+    #region DamageEffect()-ダメージエフェクトの表示
+    private IEnumerator DamageEffect(bool playerDamage)
+    {
+        if (playerDamage)
+        {//イメージを点滅させる
+            for(int i = 0; i < 2; i++)
+            {
+                yield return new WaitForSeconds(0.05f);
+                effectFilter.SetActive(true);
+                yield return new WaitForSeconds(0.05f);
+                effectFilter.SetActive(false);
+            }
         }
     }
     #endregion
