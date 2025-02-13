@@ -168,7 +168,7 @@ public static class DataSaveManager
     #region GetSoul()-ƒ\ƒEƒ‹‚ðŽæ“¾
     public static int GetSoul()
     {
-        return PlayerPrefs.GetInt("soul", 0);
+        return PlayerPrefs.GetInt("Soul", 0);
     }
     #endregion
 
@@ -176,6 +176,7 @@ public static class DataSaveManager
     public static void AddSoul(int soul)
     {
         int AllSoul = GetSoul();
+        Debug.Log(AllSoul);
         AllSoul += soul;
         SaveSoul(AllSoul);
     }
@@ -194,5 +195,6 @@ public static class DataSaveManager
         return false;
     }
     #endregion
+    
     #endregion
 }
