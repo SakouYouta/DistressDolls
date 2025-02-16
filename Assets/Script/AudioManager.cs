@@ -4,37 +4,61 @@ using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
-    [SerializeField] private AudioMixer audioMixer; // AudioMixer
-    [SerializeField] private Slider bgmSlider; // BGM音量スライダー
-    [SerializeField] private Slider seSlider; // SE音量スライダー
-    [SerializeField] private GameObject SettingPanel; // 設定パネル
+    [SerializeField] private AudioMixer audioMixer; // AudioMixerの参照
+    [SerializeField] private Slider BGMSlider; // BGM音量スライダー
+    [SerializeField] private Slider SESlider; // SE音量スライダー
+    [SerializeField] private GameObject settingPanel; // 設定パネル
 
     private void Start()
     {
         LoadAudioSettings(); // 設定を読み込む
-        SettingPanel.SetActive(false);
+
+        if (settingPanel != null)
+        {
+            settingPanel.SetActive(false); // 最初はパネルを非表示
+        }
+
+        // BGMの初期値をAudioMixerから取得
+        if (audioMixer.GetFloat("BGMVolume", out float bgmVolume))
+        {
+            BGMSlider.value = Mathf.Pow(10, bgmVolume / 20); // dB → リニア変換
+        }
+
+        // SEの初期値をAudioMixerから取得
+        if (audioMixer.GetFloat("SEVolume", out float seVolume))
+        {
+            SESlider.value = Mathf.Pow(10, seVolume / 20); // dB → リニア変換
+        }
+
+        // スライダーのリスナー登録
+        BGMSlider.onValueChanged.AddListener(SetBGMVolume);
+        SESlider.onValueChanged.AddListener(SetSEVolume);
     }
 
     #region SetBGMVolume() - BGM音量を変更
     public void SetBGMVolume(float volume)
     {
-        audioMixer.SetFloat("BGMVolume", Mathf.Log10(volume) * 20); // dB変換
+        float dB = Mathf.Log10(Mathf.Max(volume, 0.0001f)) * 20; // リニア → dB変換
+        audioMixer.SetFloat("BGMVolume", dB);
+        SaveAudioSettings();
     }
     #endregion
 
     #region SetSEVolume() - SE音量を変更
     public void SetSEVolume(float volume)
     {
-        audioMixer.SetFloat("SEVolume", Mathf.Log10(volume) * 20); // dB変換
+        float dB = Mathf.Log10(Mathf.Max(volume, 0.0001f)) * 20; // リニア → dB変換
+        audioMixer.SetFloat("SEVolume", dB);
+        SaveAudioSettings();
     }
     #endregion
 
     #region SaveAudioSettings() - 設定を適用して保存
-    public void SaveAudioSettings()
+    private void SaveAudioSettings()
     {
-        PlayerPrefs.SetFloat("BGMVolume", bgmSlider.value);
-        PlayerPrefs.SetFloat("SEVolume", seSlider.value);
-        PlayerPrefs.Save();
+        PlayerPrefs.SetFloat("BGMVolume", BGMSlider.value); // スライダーのリニア値を保存
+        PlayerPrefs.SetFloat("SEVolume", SESlider.value);
+        PlayerPrefs.Save(); // 設定を保存
     }
     #endregion
 
@@ -44,25 +68,28 @@ public class AudioManager : MonoBehaviour
         float bgmVol = PlayerPrefs.GetFloat("BGMVolume", 1.0f);
         float seVol = PlayerPrefs.GetFloat("SEVolume", 1.0f);
 
-        bgmSlider.value = bgmVol;
-        seSlider.value = seVol;
-
-        SetBGMVolume(bgmVol);
-        SetSEVolume(seVol);
+        BGMSlider.value = bgmVol;
+        SESlider.value = seVol;
     }
     #endregion
 
     #region ShowSettingPanel() - パネルを表示する
     public void ShowSettingPanel()
     {
-        SettingPanel.SetActive(true);
+        if (settingPanel != null)
+        {
+            settingPanel.SetActive(true);
+        }
     }
     #endregion
 
     #region HideSettingPanel() - パネルを非表示にする
     public void HideSettingPanel()
     {
-        SettingPanel.SetActive(false);
+        if (settingPanel != null)
+        {
+            settingPanel.SetActive(false);
+        }
     }
     #endregion
 }

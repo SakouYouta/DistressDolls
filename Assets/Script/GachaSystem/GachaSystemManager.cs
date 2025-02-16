@@ -39,7 +39,6 @@ public class GachaSystemManager : MonoBehaviour
         pack3Button.onClick.AddListener(() => SelectPack(3));
         ResetGacha(); // シーン開始時にガチャ状態をリセット
         UpdateJueruText(); // 初期ジュエル表示
-        DataSaveManager.AddSoul(120);
     }
 
     #region ResetGacha() - ガチャの状態をリセットするメソッド
