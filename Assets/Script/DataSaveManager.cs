@@ -18,7 +18,6 @@ public static class DataSaveManager
         {
             List<string> lines = new List<string>();
 
-
             // 既存ファイルを読み込む（なければ新規作成）
             if (File.Exists(DataFilePath))
             {

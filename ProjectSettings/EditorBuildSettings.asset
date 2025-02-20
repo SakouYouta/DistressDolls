@@ -26,5 +26,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DeckProduction.unity
     guid: 0d4b248834af04944ba31f9ecd372f8b
+  - enabled: 1
+    path: Assets/Scenes/SelectLeader.unity
+    guid: 2cbf823dc121da2449157bf8658f2e9a
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

@@ -9,15 +9,16 @@ public class DeckProduction : MonoBehaviour
 {
     [SerializeField] private DeckCardView cardView;
     [SerializeField] private SetDeck setDeck;
-    List<int> DeckRegister = new List<int>();         // デッキの保存用リスト
-    List<int> PossessionCard = new List<int>();     // 自分の持っているカード
-    List<int> ViewCard = new List<int>();              // デッキのカードを全体のカードから引いたリスト
     [SerializeField] private Transform DeckPanel;
     [SerializeField] private Transform PossessionPanel;
+    List<int> DeckRegister = new List<int>();         // デッキの保存用リスト
+    List<int> PossessionCard = new List<int>();     // 自分の持っているカード
+    List<int> ViewCard = new List<int>();              // デッキのカードを全体のカードから引いたリス
+
 
     void Start()
     {
-        DeckRegister = DataSaveManager.LoadDeckList();              // 現在のデッキデータを取得
+        DeckRegister = DataSaveManager.LoadDeckList().Skip(1).ToList();    // 現在のデッキデータを取得
         PossessionCard = DataSaveManager.LoadPossessionCard();// 現在の所持カードを取得
         ViewCard = SubtractList(PossessionCard, DeckRegister);// 使っていないカードをリストに格納
 
