@@ -9,7 +9,7 @@ public class EffectManager : MonoBehaviour
     private float distance = 150.0f;                            // 移動させる距離
 
     #region ShowDamage()-ダメージ用の演出
-    public IEnumerator ShowDamage(bool bPlayer, int damage, Transform Life)
+    public IEnumerator ShowDamage(int damage, Transform Life)
     {
         if (damageEffect == null || damage <= 0)// damegaEffectがnullなら処理を飛ばす
             yield break;
@@ -27,25 +27,12 @@ public class EffectManager : MonoBehaviour
         damageEffect.transform.position = Life.position;
 
         float timer = 0;
-        if (bPlayer)// プレイヤーかどうか判定
+        while (timer < damageTime)
         {
-            while (timer < damageTime)
-            {
-                // 時間経過に応じてY軸の位置を増加
-                damageEffect.transform.position += new Vector3(0, (distance / damageTime) * Time.deltaTime, 0);
-                timer += Time.deltaTime;
-                yield return null;
-            }
-        }
-        else
-        {
-            while (timer < damageTime)
-            {
-                // 時間経過に応じてY軸の位置を増加
-                damageEffect.transform.position -= new Vector3(0, (distance / damageTime) * Time.deltaTime, 0);
-                timer += Time.deltaTime;
-                yield return null;
-            }
+            // 時間経過に応じてY軸の位置を増加
+            damageEffect.transform.position += new Vector3(0, (distance / damageTime) * Time.deltaTime, 0);
+            timer += Time.deltaTime;
+            yield return null;
         }
 
         damageEffect.SetActive(false);

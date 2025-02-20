@@ -134,12 +134,12 @@ public class DamageManager : MonoBehaviour
         if (pendingDamageIsPlayer)
         {
             GameManager.instance.DecreaseHP(true, finalDamage);
-            StartCoroutine(effectManager.ShowDamage(pendingDamageIsPlayer, finalDamage, playerLife));
+            StartCoroutine(effectManager.ShowDamage(finalDamage, playerLife));
         }
         else
         {
             GameManager.instance.DecreaseHP(false, finalDamage);
-            StartCoroutine(effectManager.ShowDamage(pendingDamageIsPlayer, finalDamage, enemyLife));
+            StartCoroutine(effectManager.ShowDamage(finalDamage, enemyLife));
         }
 
         // HPÇÃï\é¶ÇçXêV
