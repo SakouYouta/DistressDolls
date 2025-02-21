@@ -9,9 +9,6 @@ public class WinResultSceneManager : MonoBehaviour
     [SerializeField] private Sprite angelSprite; // 天使の画像
     [SerializeField] private Sprite witchSprite; // 魔女の画像
 
-    private enum CharacterType { Researcher, Angel, Witch } // キャラクターの種類
-    [SerializeField] private CharacterType currentCharacter; // 現在のキャラクター
-
     void Start()
     {
         ShowWinDialogue();
