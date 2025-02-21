@@ -326,7 +326,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c259692d5ce9c814f99a81e0795422f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaderImage: []
+  leaderImage:
+  - {fileID: -8622226444975429906, guid: 722ceedb7016a3b4a92c596b55881095, type: 3}
+  - {fileID: -2335630247227523358, guid: 5d74775e3f7b45749a0455e43da228b4, type: 3}
+  - {fileID: -5998592091076801127, guid: 79b72a590b5b78a45a3113c6f41efded, type: 3}
+  changeButton: {fileID: 415535849}
+  selectPanel: {fileID: 1808373800}
+  button1: {fileID: 1991598332}
+  button2: {fileID: 1840712397}
+  button3: {fileID: 684211258}
 --- !u!1 &412856334
 GameObject:
   m_ObjectHideFlags: 0
@@ -487,7 +495,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 415535850}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 356325572}
+        m_TargetAssemblyTypeName: SelectLeader, Assembly-CSharp
+        m_MethodName: ActivePanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &415535850
 MonoBehaviour:
   m_ObjectHideFlags: 0

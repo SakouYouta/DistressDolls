@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0a1a07ff769071d469548afab5399432
+guid: c437d6a763eed574e98f25e84cac1610
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5191169316149617693
-    second: BlackOut_0
+      213: -7854629474860912292
+    second: Damage_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BlackOut_0
+      name: Damage_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1280
-        height: 720
+        x: 191
+        y: 140
+        width: 1181
+        height: 909
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3eb9efdc20345f7b0800000000000000
-      internalID: -5191169316149617693
+      spriteID: c513a94bb10cef290800000000000000
+      internalID: -7854629474860912292
       vertices: []
       indices: 
       edges: []
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      BlackOut_0: -5191169316149617693
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
