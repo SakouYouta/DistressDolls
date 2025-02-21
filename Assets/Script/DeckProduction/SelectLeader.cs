@@ -17,7 +17,7 @@ public class SelectLeader : MonoBehaviour
 
     private void Start()
     {
-        int leader = DataSaveManager.LoadDeckList().FirstOrDefault();
+        int leader = DataSaveManager.LoadLeader();
         ChangeLeader(leader);
         button1.onClick.AddListener(() => ChangeLeader(1));
         button2.onClick.AddListener(() => ChangeLeader(2));

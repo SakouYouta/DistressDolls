@@ -18,7 +18,7 @@ public class DeckProduction : MonoBehaviour
 
     void Start()
     {
-        DeckRegister = DataSaveManager.LoadDeckList().Skip(1).ToList();    // 現在のデッキデータを取得
+        DeckRegister = DataSaveManager.LoadDeckList(); // 現在のデッキデータを取得
         PossessionCard = DataSaveManager.LoadPossessionCard();// 現在の所持カードを取得
         ViewCard = SubtractList(PossessionCard, DeckRegister);// 使っていないカードをリストに格納
 

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
+using System.Linq;
 
 public static class DataSaveManager
 {
@@ -72,8 +73,8 @@ public static class DataSaveManager
     }
     #endregion
 
-    #region LoadDeckList()  デッキデータの読み込み
-    public static List<int> LoadDeckList()
+    #region LoadDeckData()  デッキデータの読み込み
+    public static List<int> LoadDeckData()
     {
         try
         {
@@ -110,6 +111,22 @@ public static class DataSaveManager
             Debug.LogError($"CSV読み込みエラー ({DataFilePath}): " + ex.Message);
             return new List<int>();
         }
+    }
+    #endregion
+
+    #region LoadDeckList()-デッキリストの読み込み
+    public static List<int> LoadDeckList()
+    {
+        List<int> deck = LoadDeckData().Skip(1).ToList();
+        return deck;
+    }
+    #endregion
+
+    #region LoadLeader()-リーダーの読み込み
+    public static int LoadLeader()
+    {
+        int leader = LoadDeckData().FirstOrDefault();
+        return leader;
     }
     #endregion
 
