@@ -19,9 +19,9 @@ public class MenuSceneManager : MonoBehaviour
     {
         string dialogue = "";
 
-        switch (currentCharacter)
+        switch (DataSaveManager.LoadLeader())
         {
-            case CharacterType.Researcher:
+            case 0:
                 dialogue = GetRandomDialogue(new string[]
                 {
                     "ふむ…このカードの組み合わせは興味深いな。",
@@ -31,7 +31,7 @@ public class MenuSceneManager : MonoBehaviour
                 characterImage.sprite = researcherSprite;
                 break;
 
-            case CharacterType.Angel:
+            case 1:
                 dialogue = GetRandomDialogue(new string[]
                 {
                     "あなたの努力は、きっと報われるよ！",
@@ -41,7 +41,7 @@ public class MenuSceneManager : MonoBehaviour
                 characterImage.sprite = angelSprite;
                 break;
 
-            case CharacterType.Witch:
+            case 2:
                 dialogue = GetRandomDialogue(new string[]
                 {
                     "フフ…面白い実験台が来たわね。",
