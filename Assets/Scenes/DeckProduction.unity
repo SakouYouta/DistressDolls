@@ -335,6 +335,7 @@ MonoBehaviour:
   button1: {fileID: 1991598332}
   button2: {fileID: 1840712397}
   button3: {fileID: 684211258}
+  setDeck: {fileID: 651655618}
 --- !u!1 &412856334
 GameObject:
   m_ObjectHideFlags: 0
