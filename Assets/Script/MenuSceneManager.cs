@@ -21,7 +21,7 @@ public class MenuSceneManager : MonoBehaviour
 
         switch (DataSaveManager.LoadLeader())
         {
-            case 0:
+            case 1:
                 dialogue = GetRandomDialogue(new string[]
                 {
                     "ふむ…このカードの組み合わせは興味深いな。",
@@ -31,7 +31,7 @@ public class MenuSceneManager : MonoBehaviour
                 characterImage.sprite = researcherSprite;
                 break;
 
-            case 1:
+            case 2:
                 dialogue = GetRandomDialogue(new string[]
                 {
                     "あなたの努力は、きっと報われるよ！",
@@ -41,7 +41,7 @@ public class MenuSceneManager : MonoBehaviour
                 characterImage.sprite = angelSprite;
                 break;
 
-            case 2:
+            case 3:
                 dialogue = GetRandomDialogue(new string[]
                 {
                     "フフ…面白い実験台が来たわね。",
@@ -71,6 +71,13 @@ public class MenuSceneManager : MonoBehaviour
     private string GetRandomDialogue(string[] dialogues)
     {
         return dialogues[Random.Range(0, dialogues.Length)];
+    }
+    #endregion
+
+    #region GachaCoinGet() - デバックでガチャ石を獲得
+    public void GachaCoinGet()
+    {
+        DataSaveManager.AddSoul(120);
     }
     #endregion
 }

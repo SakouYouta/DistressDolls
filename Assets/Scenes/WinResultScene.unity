@@ -153,7 +153,6 @@ MonoBehaviour:
   researcherSprite: {fileID: -2364971811703851877, guid: bc631a56fbed4524bb7f37fbce5d84f2, type: 3}
   angelSprite: {fileID: -8193067346544889705, guid: ad232619a286fd444824ac9d142e1ee4, type: 3}
   witchSprite: {fileID: -2332713426263800302, guid: 67ebbf4634b5d014897d78474e005b1e, type: 3}
-  currentCharacter: 0
 --- !u!4 &224302698
 Transform:
   m_ObjectHideFlags: 0
@@ -897,7 +896,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -6695950386315148514, guid: 578e865c1792aef42ab9c9ad3fd2f530, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

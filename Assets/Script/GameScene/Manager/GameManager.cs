@@ -27,6 +27,9 @@ public class GameManager : MonoBehaviour
     public int NowTurn = 0;                                                     //今がどちらのターンか　１Player　、２．Enemy
     private int turnCount = 1;                                                  // 何ターン目か
 
+    [SerializeField] private GameObject PlayerTurnPanel;                                         //プレイヤーターン表示パネル
+    [SerializeField] private GameObject EnemyTurnPanel;                                          //敵ターンパネル
+
     public static GameManager instance;
 
     // Awake() - インスタンスの初期化
@@ -55,8 +58,21 @@ public class GameManager : MonoBehaviour
         //無垢な歌姫 ドロシー      ガードした時５０％の確率でカード引く
         //幼魔女 アイネ            攻撃した時ガードされなかったら3ダメージ
 
-        playerLeader = new Character("神秘への探索者 エレミネ", true);  // プレイヤーリーダー
-        enemyLeader = new Character("幼魔女 アイネ", false);  // 敵リーダー
+        // leaderId に応じて適切な Character インスタンスを生成
+        switch (DataSaveManager.LoadLeader())
+        {
+            case 1:
+                playerLeader = new Character("神秘への探索者 エレミネ", true);
+                break;
+            case 2:
+                playerLeader = new Character("無垢な歌姫 ドロシー", true);
+                break;
+            case 3:
+                playerLeader = new Character("幼魔女 アイネ", true);
+                break;
+        }
+
+        enemyLeader = new Character("幼魔女 アイネ", false);
 
         // DollSkillManager のインスタンスを取得して SetLeaders を呼び出す
         DollSkillManager.instance.SetLeaders(playerLeader, enemyLeader); // ここで SetLeaders を呼び出しているか確認
@@ -248,7 +264,9 @@ public class GameManager : MonoBehaviour
     private void PlayerTurn()
     {
         NowTurn = 1;
-        Debug.Log($"Playerのターン開始: NowTurn = {NowTurn}");
+
+        ShowPlayerTurnPanel();
+
         UpdateChangeTurnButton();
 
         DrawCard(playerHand, playerDeck); // 手札を1枚加える
@@ -265,7 +283,9 @@ public class GameManager : MonoBehaviour
     {
         NowTurn = 2;
         turnCount++; // ターンカウントを増やす
-        Debug.Log($"Enemyのターン開始: NowTurn = {NowTurn}");
+
+        ShowEnemyTurnPanel();
+
         UpdateChangeTurnButton();
 
         // 1. 敵がカードを引く
@@ -330,26 +350,24 @@ public class GameManager : MonoBehaviour
     #region EndGame() - ゲーム終了処理
     private async void EndGame(bool isPlayerWinner)
     {
+        await Task.Delay(1000); // 1秒待機
+
         if (isPlayerWinner)
         {
             Debug.Log("ゲーム終了: プレイヤーの勝利！");
+            SceneManager.LoadScene("WinResultScene"); // 勝利シーンに遷移
+
+            DataSaveManager.AddSoul(120);
         }
         else
         {
             Debug.Log("ゲーム終了: エネミーの勝利！");
-        }
-
-        await Task.Delay(1000); // 1秒待機
-
-        // シーン遷移 (勝利と敗北で異なるシーンへ遷移)
-        if (isPlayerWinner)
-        {
-            SceneManager.LoadScene("WinResultScene"); // 勝利シーンに遷移
-        }
-        else
-        {
             SceneManager.LoadScene("LoseResultScene"); // 敗北シーンに遷移
+
+
+            DataSaveManager.AddSoul(60);
         }
+
     }
     #endregion
 
@@ -366,6 +384,29 @@ public class GameManager : MonoBehaviour
                 effectFilter.SetActive(false);
             }
         }
+    }
+    #endregion
+
+    #region ShowPlayerTurnPanel() - プレイヤーターンパネルを2秒間表示するメソッド
+    public void ShowPlayerTurnPanel()
+    {
+        StartCoroutine(ShowPanel(PlayerTurnPanel));
+    }
+    #endregion
+
+    #region ShowEnemyTurnPanel() - 敵ターンパネルを2秒間表示するメソッド
+    public void ShowEnemyTurnPanel()
+    {
+        StartCoroutine(ShowPanel(EnemyTurnPanel));
+    }
+    #endregion
+
+    #region ShowPanel() - 指定したパネルを1秒間表示するコルーチン
+    private IEnumerator ShowPanel(GameObject panel)
+    {
+        panel.SetActive(true); // パネルを表示
+        yield return new WaitForSeconds(1f); // 2秒待機
+        panel.SetActive(false); // パネルを非表示
     }
     #endregion
 }

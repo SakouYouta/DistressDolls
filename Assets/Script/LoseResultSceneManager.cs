@@ -21,7 +21,7 @@ public class LoseResultSceneManager : MonoBehaviour
 
         switch (DataSaveManager.LoadLeader())
         {
-            case 0:
+            case 1:
                 dialogue = GetRandomDialogue(new string[]
                 {
                     "くっ…理論だけでは勝てないのか…。",
@@ -31,7 +31,7 @@ public class LoseResultSceneManager : MonoBehaviour
                 characterImage.sprite = researcherSprite;
                 break;
 
-            case 1:
+            case 2:
                 dialogue = GetRandomDialogue(new string[]
                 {
                     "負けちゃったね…でも次はきっと勝てるよ！",
@@ -41,7 +41,7 @@ public class LoseResultSceneManager : MonoBehaviour
                 characterImage.sprite = angelSprite;
                 break;
 
-            case 2:
+            case 3:
                 dialogue = GetRandomDialogue(new string[]
                 {
                     "あら…負けちゃった？悔しいわね。",

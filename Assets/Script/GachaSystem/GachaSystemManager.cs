@@ -14,6 +14,8 @@ public class GachaSystemManager : MonoBehaviour
     public Button resetButton;                  //ガチャリセットボタン
     private const int Gachacost = 120;          // ガチャの必要ソウル数
 
+    [SerializeField] private GameObject warningPanel;            // ソウル不足警告パネル
+
     // シングルトン化
     public static GachaSystemManager instance;
 
@@ -39,6 +41,9 @@ public class GachaSystemManager : MonoBehaviour
         pack3Button.onClick.AddListener(() => SelectPack(3));
         ResetGacha(); // シーン開始時にガチャ状態をリセット
         UpdateJueruText(); // 初期ジュエル表示
+
+        // ガチャ石警告パネルを初期状態では非表示
+        warningPanel.SetActive(false);
     }
 
     #region ResetGacha() - ガチャの状態をリセットするメソッド
@@ -80,7 +85,7 @@ public class GachaSystemManager : MonoBehaviour
         // ソウルが不足している場合は選択不可
         if (!DataSaveManager.SubtractionSoul(Gachacost))
         {
-            Debug.LogError("ソウルが不足しています！");
+            warningPanel.SetActive(true); // パネルを表示
             return;
         }
 
@@ -158,6 +163,13 @@ public class GachaSystemManager : MonoBehaviour
     {
         int currentJueru = DataSaveManager.GetSoul(); // 現在のソウル数を取得
         jueruText.text = $"{currentJueru}";
+    }
+    #endregion
+
+    #region HideWarningPanel() - 警告パネルを非表示
+    public void HideWarningPanel()
+    {
+        warningPanel.SetActive(false); // パネルを非表示
     }
     #endregion
 }
