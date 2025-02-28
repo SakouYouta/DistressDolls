@@ -11,11 +11,11 @@ public class GameManager : MonoBehaviour
     //フィールドの宣言
     [SerializeField] CardController cardPrefab;                                 //カードのプレハブ
     [SerializeField] Text playerHPText, enemyHPText;                            //お互いのHP状況をテキストで表示
-    [SerializeField] Image playerLeaderImage, enemyLeaderImage;         //お互いのリーダーの画像
+    [SerializeField] Image playerLeaderImage, enemyLeaderImage;                 //お互いのリーダーの画像
     [SerializeField] private Sprite elemineSprite, dorothySprite, aineSprite;   //リーダーごとの画像
-    [SerializeField] private Button changeTurnButton;                           //
-    [SerializeField] Text turnText;                                          //現在が何ターン目なのかを表示
-    [SerializeField] GameObject effectFilter;                                      //ダメージエフェクト用のフィルター
+    [SerializeField] private Button changeTurnButton;                          
+    [SerializeField] Text turnText;                                             //現在が何ターン目なのかを表示
+    [SerializeField] GameObject effectFilter;                                   //ダメージエフェクト用のフィルター
 
     public Transform playerHand, enemyHand, playerField, enemyField, playerGraveyard, enemyGraveyard;   //
     public List<int> playerDeck, enemyDeck;                                                             //
