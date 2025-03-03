@@ -13,7 +13,7 @@ public class DeckProduction : MonoBehaviour
     [SerializeField] private Transform PossessionPanel;
     List<int> DeckRegister = new List<int>();         // デッキの保存用リスト
     List<int> PossessionCard = new List<int>();     // 自分の持っているカード
-    List<int> ViewCard = new List<int>();              // デッキのカードを全体のカードから引いたリス
+    List<int> ViewCard = new List<int>();              // デッキのカードを全体のカードから引いたリスト
 
 
     void Start()
@@ -25,13 +25,16 @@ public class DeckProduction : MonoBehaviour
         // カードの表示
         cardView.DisplayCards(ViewCard, PossessionPanel);
         cardView.DisplayCards(DeckRegister, DeckPanel);
+        //cardView.RemoveDisplayedCards(DeckPanel);
     }
 
     #region SaveDeck()　デッキを保存
     public void SaveDeck()
     {
         DeckRegister.Clear();
-        foreach (int deck in setDeck.Deck)
+        List<int> deckList = setDeck.deck;
+        deckList.Insert(0, setDeck.leader);
+        foreach (int deck in deckList)
         {
             DeckRegister.Add(deck);
         }

@@ -18,4 +18,14 @@ public class DeckCardView : MonoBehaviour
         }
     }
     #endregion
+
+    #region RemoveDisplayedCards() 表示されたカードを削除する
+    public void RemoveDisplayedCards(Transform panel)
+    {
+        foreach (Transform cards in panel)
+        {
+            Destroy(cards.gameObject);
+        }
+    }
+    #endregion
 }

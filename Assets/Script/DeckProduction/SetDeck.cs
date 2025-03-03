@@ -8,6 +8,7 @@ using Debug = UnityEngine.Debug;
 public class SetDeck : MonoBehaviour, IDropHandler
 {
     public List<int> deck = new List<int>();
+    public int leader = 0;
     [SerializeField] private Transform deckPanel;
     [SerializeField] private Transform PossessionPanel;
 

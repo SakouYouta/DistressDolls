@@ -89,7 +89,7 @@ public static class DataSaveManager
             // 指定行が範囲外なら空リストを返す
             if (DeckIndex >= lines.Length)
             {
-                Debug.LogWarning($"指定行 ({DeckIndex}) はファイルの範囲外です: {DataFilePath}");
+                Debug.LogWarning($"指定行 ({DeckIndex}) はファイルの範囲外です: LoadDeckData");
                 return new List<int>();
             }
 
@@ -146,7 +146,7 @@ public static class DataSaveManager
             // 指定行が範囲外なら空リストを返す
             if (PossessinoIndex >= lines.Length)
             {
-                Debug.LogWarning($"指定行 ({PossessinoIndex}) はファイルの範囲外です: {DataFilePath}");
+                Debug.LogWarning($"指定行 ({PossessinoIndex}) はファイルの範囲外です: LoadPossessionCard");
                 return new List<int>();
             }
 
