@@ -17,6 +17,11 @@ public class ExcludeDeck : MonoBehaviour, IDropHandler
     [SerializeField] public GameObject AnimationField;
     private CardModel cardModel;
 
+    void start()
+    {
+
+    }
+
     #region OnDrop() カードがドロップされた際に呼ばれる
     public void OnDrop(PointerEventData eventData)
     {
@@ -29,7 +34,7 @@ public class ExcludeDeck : MonoBehaviour, IDropHandler
             if (cardController != null && deck.Count > 1)
             {
                 cardModel = cardController.model;
-                if (cardModel != null)// カードIDを削除
+                if (cardModel != null && deck.Count <= 30)// カードIDを削除
                 {
                     deck.Remove(cardModel.cardId);
                     setDeck.deck = deck;
@@ -39,7 +44,11 @@ public class ExcludeDeck : MonoBehaviour, IDropHandler
                     StartCoroutine(Animation(cardMove, cardModel));
                 }
                 else
+                {
                     Debug.Log("カードモデル情報の取得に失敗しました");
+                    Debug.Log("カードが30枚以下になってしまいました!");
+                    //SetDeck.OpenWarningPanel();
+                }
             }
             else Debug.Log("カードコントローラー情報の取得に失敗しました");
         }

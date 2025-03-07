@@ -61,7 +61,7 @@ public class OpenPack : MonoBehaviour
             return;
         }
 
-        // 3枚カードを生成する
+        // 4枚カードを生成する
         for (int i = 0; i < 4; i++)
         {
             int cardId = DecisionCardId(selectedPackList); // リストに基づいてランダムにカードIDを取得

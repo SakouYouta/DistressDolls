@@ -1,30 +1,39 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
 public class SetDeck : MonoBehaviour, IDropHandler
 {
     public List<int> deck = new List<int>();
-    public int leader = 0;
+    public int leader = 1;
+    [SerializeField] private GameObject warningPanel;
+    [SerializeField] private Text warningText;
+    [SerializeField] private bool active = true;
     [SerializeField] private Transform deckPanel;
-    [SerializeField] private Transform PossessionPanel;
+    [SerializeField] private Transform possessionPanel;
 
     //外部から変更を加えられないように
     public ReadOnlyCollection<int> Deck => deck.AsReadOnly();
 
     void Start()
-    {// デッキデータ読み込み
+    {
+        warningPanel.SetActive(active);
+
+        // デッキデータ読み込み   
         deck = DataSaveManager.LoadDeckList();
+        leader = DataSaveManager.LoadLeader();
     }
 
     #region OnDrop() カードがドロップされた際に呼ばれる
     public void OnDrop(PointerEventData eventData)
     {
         CardMovement cardMove = eventData.pointerDrag.GetComponent<CardMovement>();
-        if (cardMove != null && cardMove.cardParent == PossessionPanel)
+        if (cardMove != null && cardMove.cardParent == possessionPanel)
         {
             CardController cardController = cardMove.GetComponent<CardController>();
             if (cardController != null)
@@ -32,7 +41,7 @@ public class SetDeck : MonoBehaviour, IDropHandler
                 CardModel cardModel = cardController.model;
                 if (cardModel != null)
                 {// カードIDを登録
-                    if (deck.Count < 30)
+                    if (deck.Count <= 30)
                     {// デッキのカードが30枚までになるように
                         cardMove.drag = false;
                         deck.Add(cardModel.cardId); // カードをデッキに追加
@@ -44,6 +53,7 @@ public class SetDeck : MonoBehaviour, IDropHandler
                     {
                         cardMove.drag = true;
                         Debug.Log("カードが30枚以上です");
+                        OpenWarningPanel();
                     }
                 }
                 else
@@ -54,8 +64,19 @@ public class SetDeck : MonoBehaviour, IDropHandler
         }
         else if (cardMove == null)
             Debug.Log("カードムーブ情報の取得に失敗しました");
-        else if (cardMove.cardParent == PossessionPanel)
+        else if (cardMove.cardParent == possessionPanel)
             Debug.Log("カードの親情報の取得に失敗しました");
+    }
+    #endregion
+
+    #region OpenWarningPanel() warningPanelを表示、非表示
+    public void OpenWarningPanel()
+    {
+        if (active == false)
+            active = true;
+        else
+            active = false;
+        warningPanel.SetActive(active);
     }
     #endregion
 }
