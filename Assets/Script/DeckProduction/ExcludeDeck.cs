@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 public class ExcludeDeck : MonoBehaviour, IDropHandler
 {
@@ -16,11 +17,6 @@ public class ExcludeDeck : MonoBehaviour, IDropHandler
     [SerializeField] private CardAnimation cardAnimation;
     [SerializeField] public GameObject AnimationField;
     private CardModel cardModel;
-
-    void start()
-    {
-
-    }
 
     #region OnDrop() カードがドロップされた際に呼ばれる
     public void OnDrop(PointerEventData eventData)
@@ -47,7 +43,7 @@ public class ExcludeDeck : MonoBehaviour, IDropHandler
                 {
                     Debug.Log("カードモデル情報の取得に失敗しました");
                     Debug.Log("カードが30枚以下になってしまいました!");
-                    //SetDeck.OpenWarningPanel();
+                    setDeck.OpenWarningPanel();
                 }
             }
             else Debug.Log("カードコントローラー情報の取得に失敗しました");

@@ -11,9 +11,10 @@ public class SetDeck : MonoBehaviour, IDropHandler
 {
     public List<int> deck = new List<int>();
     public int leader = 1;
-    [SerializeField] private GameObject warningPanel;
-    [SerializeField] private Text warningText;
-    [SerializeField] private bool active = true;
+    public GameObject warningPanel;
+    public GameObject blackOut;
+    public Text warningText;
+    public bool active = true;
     [SerializeField] private Transform deckPanel;
     [SerializeField] private Transform possessionPanel;
 
@@ -23,6 +24,7 @@ public class SetDeck : MonoBehaviour, IDropHandler
     void Start()
     {
         warningPanel.SetActive(active);
+        blackOut.SetActive(active);
 
         // デッキデータ読み込み   
         deck = DataSaveManager.LoadDeckList();
@@ -77,6 +79,7 @@ public class SetDeck : MonoBehaviour, IDropHandler
         else
             active = false;
         warningPanel.SetActive(active);
+        blackOut.SetActive(active);
     }
     #endregion
 }
