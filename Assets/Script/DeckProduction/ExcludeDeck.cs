@@ -30,7 +30,7 @@ public class ExcludeDeck : MonoBehaviour, IDropHandler
             if (cardController != null && deck.Count > 1)
             {
                 cardModel = cardController.model;
-                if (cardModel != null && deck.Count <= 30)// カードIDを削除
+                if (cardModel != null && deck.Count < 30)// カードIDを削除
                 {
                     deck.Remove(cardModel.cardId);
                     setDeck.deck = deck;
@@ -43,7 +43,7 @@ public class ExcludeDeck : MonoBehaviour, IDropHandler
                 {
                     Debug.Log("カードモデル情報の取得に失敗しました");
                     Debug.Log("カードが30枚以下になってしまいました!");
-                    setDeck.OpenWarningPanel();
+                    setDeck.OpenWarningPanel(false);
                 }
             }
             else Debug.Log("カードコントローラー情報の取得に失敗しました");

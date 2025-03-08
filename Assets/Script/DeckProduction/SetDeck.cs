@@ -43,7 +43,7 @@ public class SetDeck : MonoBehaviour, IDropHandler
                 CardModel cardModel = cardController.model;
                 if (cardModel != null)
                 {// カードIDを登録
-                    if (deck.Count <= 30)
+                    if (deck.Count < 30)
                     {// デッキのカードが30枚までになるように
                         cardMove.drag = false;
                         deck.Add(cardModel.cardId); // カードをデッキに追加
@@ -55,7 +55,7 @@ public class SetDeck : MonoBehaviour, IDropHandler
                     {
                         cardMove.drag = true;
                         Debug.Log("カードが30枚以上です");
-                        OpenWarningPanel();
+                        OpenWarningPanel(true);
                     }
                 }
                 else
@@ -72,12 +72,16 @@ public class SetDeck : MonoBehaviour, IDropHandler
     #endregion
 
     #region OpenWarningPanel() warningPanelを表示、非表示
-    public void OpenWarningPanel()
+    public void OpenWarningPanel(bool checkDeck)
     {
         if (active == false)
             active = true;
         else
             active = false;
+        if (checkDeck)
+            warningText.text = "カードが30枚以上です";
+        else
+            warningText.text = "カードが30枚以下です";
         warningPanel.SetActive(active);
         blackOut.SetActive(active);
     }
